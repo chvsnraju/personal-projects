@@ -1,0 +1,41 @@
+{
+  "firestore": [
+    {
+      "database": "raju-planner",
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
+    }
+  ],
+  "hosting": [
+    {
+      "site": "gen-lang-client-0912596020",
+      "redirects": [
+        {
+          "source": "**",
+          "destination": "https://rajuplanner.web.app",
+          "type": 301
+        }
+      ]
+    },
+    {
+      "site": "rajuplanner",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "supabase_schema.sql",
+        "Dockerfile",
+        "cloudbuild.yaml",
+        "config.json.example",
+        "config.json"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

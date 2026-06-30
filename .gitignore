@@ -1,0 +1,23 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Firebase cache and logs
+.firebase/
+**/.firebase/
+*-debug.log
+**/*-debug.log
+
+# Operating system files
+.DS_Store
+**/.DS_Store
+
+# Secrets and credentials
+.env
+*.env
+**/.env
+**/*.env
+config.json
+**/config.json
+service-account.json
+**/service-account.json

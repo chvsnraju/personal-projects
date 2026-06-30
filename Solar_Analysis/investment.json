@@ -1,0 +1,10 @@
+{
+  "invoice_amount": 26777.00,
+  "actual_paid": 24777.60,
+  "federal_tax_credit": 8033.10,
+  "peco_rebate": 500.00,
+  "net_investment": 16244.50,
+  "contract_file": "investment_docs/Raju Chekuri contract.pdf",
+  "invoice_file": "investment_docs/Solar_Install_RegalSolarEnergy.pdf",
+  "rebate_file": "investment_docs/PECO_500_Rebate.pdf"
+}

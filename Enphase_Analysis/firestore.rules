@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Config documents are completely private (only server/Admin SDK can read/write)
+    match /configs/{document} {
+      allow read, write: if false;
+    }
+    
+    // Daily production history can only be read by you, and only updated by server
+    match /daily_production/{document} {
+      allow read: if request.auth != null && request.auth.token.email == "raju.chekuri@gmail.com";
+      allow write: if false;
+    }
+  }
+}

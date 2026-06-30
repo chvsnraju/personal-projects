@@ -1,0 +1,15 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "daily_production",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

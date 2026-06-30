@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /user_configs/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /items/{itemId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /containers/{containerId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /locations/{locationId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /workspaces/{workspaceId} {
+      allow read: if request.auth != null && (resource == null || resource.data.ownerId == request.auth.uid);
+      allow write: if request.auth != null && (resource == null || resource.data.ownerId == request.auth.uid) && request.resource.data.ownerId == request.auth.uid;
+    }
+    match /item_notes/{noteId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /shopping_list/{shoppingId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /tool_loans/{loanId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /maintenance_reminders/{reminderId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    match /workspace_members/{memberId} {
+      allow read: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid);
+      allow write: if request.auth != null && (resource == null || resource.data.userId == request.auth.uid) && request.resource.data.userId == request.auth.uid;
+    }
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
