@@ -9,7 +9,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "default",
+      "codebase": "enphase",
       "ignore": [
         "node_modules",
         ".git",

@@ -5,15 +5,15 @@ const https_1 = require("firebase-functions/v2/https");
 const app_1 = require("firebase-admin/app");
 const generative_ai_1 = require("@google/generative-ai");
 (0, app_1.initializeApp)();
-const geminiApiKey = process.env.GEMINI_API_KEY || "";
-const ai = new generative_ai_1.GoogleGenerativeAI(geminiApiKey);
 // 1. Multimodal AI Generation Function (Gemini API Integration)
-exports.generateAiContent = (0, https_1.onCall)({ cors: true }, async (request) => {
+exports.generateAiContent = (0, https_1.onCall)({ cors: true, secrets: ["GEMINI_API_KEY"] }, async (request) => {
     if (!request.auth) {
         throw new https_1.HttpsError("unauthenticated", "User must be authenticated.");
     }
     const { prompt, imageData, responseMimeType, responseSchema } = request.data;
     try {
+        const geminiApiKey = process.env.GEMINI_API_KEY || "";
+        const ai = new generative_ai_1.GoogleGenerativeAI(geminiApiKey);
         const model = ai.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
         const parts = [{ text: prompt }];
         if (imageData && imageData.base64) {

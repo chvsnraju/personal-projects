@@ -4,11 +4,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 initializeApp();
 
-const geminiApiKey = process.env.GEMINI_API_KEY || "";
-const ai = new GoogleGenerativeAI(geminiApiKey);
-
 // 1. Multimodal AI Generation Function (Gemini API Integration)
-export const generateAiContent = onCall({ cors: true }, async (request) => {
+export const generateAiContent = onCall({ cors: true, secrets: ["GEMINI_API_KEY"] }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "User must be authenticated.");
   }
@@ -21,6 +18,8 @@ export const generateAiContent = onCall({ cors: true }, async (request) => {
   };
 
   try {
+    const geminiApiKey = process.env.GEMINI_API_KEY || "";
+    const ai = new GoogleGenerativeAI(geminiApiKey);
     const model = ai.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
     const parts: any[] = [{ text: prompt }];
 

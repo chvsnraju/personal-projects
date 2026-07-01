@@ -30,7 +30,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "default",
+      "codebase": "hometools",
       "ignore": [
         "node_modules",
         ".git",
