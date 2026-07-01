@@ -1,15 +1,23 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Config documents are completely private (only server/Admin SDK can read/write)
-    match /configs/{document} {
+    // Configs: configs/enphase remains private, configs/investments is accessible by Raju
+    match /configs/investments {
+      allow read, write: if request.auth != null && request.auth.token.email == "raju.chekuri@gmail.com";
+    }
+    match /configs/enphase {
       allow read, write: if false;
     }
     
-    // Daily production history can only be read by you, and only updated by server
+    // Daily production history can only be read by Raju, and only updated by server
     match /daily_production/{document} {
       allow read: if request.auth != null && request.auth.token.email == "raju.chekuri@gmail.com";
       allow write: if false;
+    }
+    
+    // Monthly billing data can be read/written by Raju
+    match /monthly_billing/{document} {
+      allow read, write: if request.auth != null && request.auth.token.email == "raju.chekuri@gmail.com";
     }
     
     // Default deny rule
@@ -18,3 +26,4 @@ service cloud.firestore {
     }
   }
 }
+

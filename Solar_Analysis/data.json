@@ -172,8 +172,8 @@
     "month": "Jun 2026",
     "bill_file": "PECO_Bill_2026-06.pdf",
     "image_file": "Enphase_Reading_2026-06.png",
-    "solar_gats_kwh": 1430.0,
-    "solar_est_kwh": 1430.0,
+    "solar_gats_kwh": 1630.0,
+    "solar_est_kwh": 1645.9,
     "bill_date": "N/A",
     "service_period": "05/22/2026 - 06/23/2026",
     "import_kwh": 602.0,
@@ -182,9 +182,9 @@
     "customer_charge": 11.3,
     "dist_rate": 0.09655,
     "supply_rate": 0.1,
-    "solar_kwh": 1430.0,
-    "cons_kwh": 757.0,
-    "cost_no_solar": 160.08835000000002,
-    "savings": 148.78835
+    "solar_kwh": 1645.9,
+    "cons_kwh": 972.9000000000001,
+    "cost_no_solar": 202.52349500000003,
+    "savings": 191.223495
   }
 ]

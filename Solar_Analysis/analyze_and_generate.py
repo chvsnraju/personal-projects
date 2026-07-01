@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 # Paths
-folder = "/Users/a081057/Development/poc_projects/Solar_Analysis"
+folder = os.path.dirname(os.path.abspath(__file__))
 data_file = os.path.join(folder, "data.json")
 investment_file = os.path.join(folder, "investment.json")
 html_file = os.path.join(folder, "Solar_Analysis_Dashboard.html")

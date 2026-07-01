@@ -1,6 +1,7 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 initializeApp();
 const db = getFirestore("enphase-solar");
@@ -214,3 +215,125 @@ export const syncCloudHistory = onCall({ cors: true }, async (request) => {
     count: addedOrUpdatedCount,
   };
 });
+
+/**
+ * HTTPS Callable Cloud Function to parse a PECO electric bill PDF (base64) using Gemini.
+ */
+export const parsePecoBill = onCall({ cors: true, secrets: ["GEMINI_API_KEY"] }, async (request) => {
+  // Enforce authentication & whitelisted email
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "The function must be called by an authenticated user.");
+  }
+  if (request.auth.token.email !== "raju.chekuri@gmail.com") {
+    throw new HttpsError("permission-denied", "Unauthorized email address.");
+  }
+
+  const { fileBase64 } = request.data as { fileBase64: string };
+  if (!fileBase64) {
+    throw new HttpsError("invalid-argument", "Missing fileBase64 data.");
+  }
+
+  try {
+    const geminiApiKey = process.env.GEMINI_API_KEY || "";
+    const ai = new GoogleGenerativeAI(geminiApiKey);
+    const model = ai.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
+
+    const prompt = `You are an expert utility bill analyzer. Analyze this PECO electric bill PDF document and extract the following details precisely as JSON:
+- month: "MMM YYYY" (e.g. "Jun 2026") corresponding to the billing statement month.
+- service_period: "MM/DD/YYYY - MM/DD/YYYY" (e.g., "05/22/2026 - 06/23/2026")
+- import_kwh: Number (total kWh imported/received from grid, labeled "kwh from grid" or "Total kWh Used")
+- export_kwh: Number (total kWh exported/delivered to grid, labeled "kwh to grid")
+- actual_charge: Number (current period charges for electricity; if there is a credit balance or a negative amount, include a minus sign)
+- customer_charge: Number (the fixed customer charge, usually 11.30)
+- dist_rate: Number (distribution charge rate per kWh, usually 0.09655)
+- supply_rate: Number (generation/supply rate per kWh, usually 0.10)
+- supplier_refund: Number (if there's any generation credit or refund shown, e.g. 209.95, otherwise 0)
+
+Respond ONLY with a valid JSON object matching this schema. Do not wrap the response in markdown code blocks.`;
+
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: prompt },
+            {
+              inlineData: {
+                mimeType: "application/pdf",
+                data: fileBase64
+              }
+            }
+          ]
+        }
+      ],
+      generationConfig: {
+        responseMimeType: "application/json"
+      }
+    });
+
+    const text = result.response.text();
+    return JSON.parse(text);
+  } catch (error: any) {
+    console.error("Error parsing PECO bill:", error);
+    throw new HttpsError("internal", `PECO bill parsing failed: ${error.message}`);
+  }
+});
+
+/**
+ * HTTPS Callable Cloud Function to parse an Enphase monthly production screenshot (base64) using Gemini.
+ */
+export const parseEnphaseScreenshot = onCall({ cors: true, secrets: ["GEMINI_API_KEY"] }, async (request) => {
+  // Enforce authentication & whitelisted email
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "The function must be called by an authenticated user.");
+  }
+  if (request.auth.token.email !== "raju.chekuri@gmail.com") {
+    throw new HttpsError("permission-denied", "Unauthorized email address.");
+  }
+
+  const { fileBase64, mimeType } = request.data as { fileBase64: string; mimeType?: string };
+  if (!fileBase64) {
+    throw new HttpsError("invalid-argument", "Missing fileBase64 data.");
+  }
+
+  try {
+    const geminiApiKey = process.env.GEMINI_API_KEY || "";
+    const ai = new GoogleGenerativeAI(geminiApiKey);
+    const model = ai.getGenerativeModel({ model: "gemini-3.1-flash-lite" });
+
+    const prompt = `You are an expert solar production screenshot analyzer. Analyze this Enphase screenshot image showing monthly solar generation.
+Extract the following details precisely as JSON:
+- month: "MMM YYYY" (e.g., "Jun 2026") shown at the top of the screenshot (capitalize first letter, e.g. "Jun 2026", "Nov 2025").
+- solar_gats_kwh: Number (the total "Production" value in kWh, if shown in MWh convert to kWh by multiplying by 1000)
+- panel_values: Array of Numbers (find the microinverter physical layout grid and extract all the individual panel numeric generation values shown in each panel tile, e.g., 68.2, 70.1, etc. There should be up to 24 panel values).
+
+Respond ONLY with a valid JSON object matching this schema. Do not wrap the response in markdown code blocks.`;
+
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: prompt },
+            {
+              inlineData: {
+                mimeType: mimeType || "image/jpeg",
+                data: fileBase64
+              }
+            }
+          ]
+        }
+      ],
+      generationConfig: {
+        responseMimeType: "application/json"
+      }
+    });
+
+    const text = result.response.text();
+    return JSON.parse(text);
+  } catch (error: any) {
+    console.error("Error parsing Enphase screenshot:", error);
+    throw new HttpsError("internal", `Enphase screenshot parsing failed: ${error.message}`);
+  }
+});
+

@@ -40,7 +40,7 @@ When you add new files, update the database and dashboard in one step:
 
 1. Open a terminal in the project directory:
    ```bash
-   cd /Users/a081057/Development/poc_projects/Solar_Analysis
+   cd /Users/a081057/Development/poc_projects/Personal_Projects/Firebase/Solar_Analysis
    ```
 2. Run the update script:
    ```bash
