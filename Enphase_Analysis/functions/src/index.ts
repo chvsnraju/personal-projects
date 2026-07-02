@@ -1,4 +1,5 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onSchedule } from "firebase-functions/v2/scheduler";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -23,7 +24,7 @@ async function refreshCloudTokens(configRef: FirebaseFirestore.DocumentReference
   console.log("Refreshing Enphase Cloud OAuth tokens...");
 
   if (!config.refreshToken) {
-    throw new HttpsError("failed-precondition", "Refresh token is missing from Enphase configuration.");
+    throw new Error("Refresh token is missing from Enphase configuration.");
   }
 
   const basicAuth = Buffer.from(
@@ -45,8 +46,7 @@ async function refreshCloudTokens(configRef: FirebaseFirestore.DocumentReference
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new HttpsError(
-      "aborted",
+    throw new Error(
       `Token refresh failed (HTTP ${response.status}): ${errorText}`
     );
   }
@@ -73,30 +73,20 @@ async function refreshCloudTokens(configRef: FirebaseFirestore.DocumentReference
 }
 
 /**
- * HTTPS Callable Cloud Function to synchronize solar production history from Enphase Cloud into Firestore.
+ * Shared helper to perform the Enphase synchronization logic.
  */
-export const syncCloudHistory = onCall({ cors: true }, async (request) => {
-  // 1. Enforce Authentication & Whitelisted Email
-  if (!request.auth) {
-    throw new HttpsError("unauthenticated", "The function must be called by an authenticated user.");
-  }
-  if (request.auth.token.email !== "raju.chekuri@gmail.com") {
-    throw new HttpsError("permission-denied", "Unauthorized email address.");
-  }
-
-  console.log(`Sync requested by user: ${request.auth.uid}`);
-
-  // 2. Fetch global Enphase Configuration from Firestore
+async function performEnphaseSync(): Promise<{ success: boolean; count: number }> {
+  // Fetch global Enphase Configuration from Firestore
   const configRef = db.collection("configs").doc("enphase");
   const configDoc = await configRef.get();
 
   if (!configDoc.exists) {
-    throw new HttpsError("failed-precondition", "Enphase configuration not initialized in configs/enphase.");
+    throw new Error("Enphase configuration not initialized in configs/enphase.");
   }
 
   const config = configDoc.data() as EnphaseConfig;
 
-  // 3. Ensure we have valid tokens (refresh if needed)
+  // Ensure we have valid tokens (refresh if needed)
   const expiresAt = config.expiresAt || 0;
   let accessToken = config.accessToken || "";
 
@@ -109,7 +99,7 @@ export const syncCloudHistory = onCall({ cors: true }, async (request) => {
     config.systemId = updatedConfig.systemId;
   }
 
-  // 4. Auto-discover System ID if not already present
+  // Auto-discover System ID if not already present
   let systemId = config.systemId || "";
   if (!systemId) {
     console.log("System ID not set. Attempting auto-discovery...");
@@ -135,10 +125,10 @@ export const syncCloudHistory = onCall({ cors: true }, async (request) => {
   }
 
   if (!systemId) {
-    throw new HttpsError("failed-precondition", "System ID is not set and could not be auto-discovered.");
+    throw new Error("System ID is not set and could not be auto-discovered.");
   }
 
-  // 5. Fetch energy lifetime data from Enphase Cloud
+  // Fetch energy lifetime data from Enphase Cloud
   console.log(`Requesting energy_lifetime for system: ${systemId}`);
   const energyUrl = `https://api.enphaseenergy.com/api/v4/systems/${systemId}/energy_lifetime`;
 
@@ -151,10 +141,7 @@ export const syncCloudHistory = onCall({ cors: true }, async (request) => {
 
   if (!energyResponse.ok) {
     const errText = await energyResponse.text();
-    throw new HttpsError(
-      "internal",
-      `Energy API returned HTTP ${energyResponse.status}: ${errText}`
-    );
+    throw new Error(`Energy API returned HTTP ${energyResponse.status}: ${errText}`);
   }
 
   const energyJson = (await energyResponse.json()) as {
@@ -163,14 +150,14 @@ export const syncCloudHistory = onCall({ cors: true }, async (request) => {
   };
 
   if (!energyJson.production || !Array.isArray(energyJson.production)) {
-    throw new HttpsError("internal", "No production data returned from Enphase Cloud.");
+    throw new Error("No production data returned from Enphase Cloud.");
   }
 
   const production = energyJson.production;
   const startDateStr = energyJson.start_date || "";
 
   if (!startDateStr) {
-    throw new HttpsError("internal", "Start date is missing from Enphase Cloud response.");
+    throw new Error("Start date is missing from Enphase Cloud response.");
   }
 
   const start = new Date(startDateStr + "T00:00:00");
@@ -214,6 +201,111 @@ export const syncCloudHistory = onCall({ cors: true }, async (request) => {
     success: true,
     count: addedOrUpdatedCount,
   };
+}
+
+/**
+ * Helper to compute yesterday's date in America/New_York (ET) format YYYY-MM-DD
+ */
+function getYesterdayETString(): string {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  });
+  const etTodayStr = formatter.format(new Date());
+  const [year, month, day] = etTodayStr.split("-").map(Number);
+  
+  const etToday = new Date(year, month - 1, day);
+  const etYesterday = new Date(etToday.getTime() - 24 * 60 * 60 * 1000);
+  
+  const y = etYesterday.getFullYear();
+  const m = String(etYesterday.getMonth() + 1).padStart(2, "0");
+  const d = String(etYesterday.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * HTTPS Callable Cloud Function to synchronize solar production history from Enphase Cloud into Firestore.
+ */
+export const syncCloudHistory = onCall({ cors: true }, async (request) => {
+  // 1. Enforce Authentication & Whitelisted Email
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "The function must be called by an authenticated user.");
+  }
+  if (request.auth.token.email !== "raju.chekuri@gmail.com") {
+    throw new HttpsError("permission-denied", "Unauthorized email address.");
+  }
+
+  console.log(`Sync requested by user: ${request.auth.uid}`);
+  try {
+    return await performEnphaseSync();
+  } catch (error: any) {
+    throw new HttpsError("internal", error.message);
+  }
+});
+
+/**
+ * Daily Scheduled Cloud Function to synchronize Enphase readings at 6:00 AM Eastern Time
+ * and email a report using the Resend API.
+ */
+export const dailyEnphaseSync = onSchedule({
+  schedule: "0 6 * * *",
+  timeZone: "America/New_York",
+  secrets: ["RESEND_API_KEY"]
+}, async (event) => {
+  console.log("Starting daily Enphase sync scheduler...");
+  try {
+    const result = await performEnphaseSync();
+    console.log(`Scheduled sync complete. Synced ${result.count} entries.`);
+    
+    // Get yesterday's date in Eastern Time
+    const yesterdayStr = getYesterdayETString();
+    
+    // Fetch production for yesterday
+    const doc = await db.collection("daily_production").doc(yesterdayStr).get();
+    let productionDetails = "No data found for yesterday.";
+    if (doc.exists) {
+      const data = doc.data();
+      if (data && typeof data.productionWh === "number") {
+        const kwh = (data.productionWh / 1000).toFixed(2);
+        productionDetails = `Yesterday's production: <strong>${kwh} kWh</strong>`;
+      }
+    }
+    
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error("RESEND_API_KEY environment variable is not set.");
+      return;
+    }
+    
+    console.log(`Sending email notification to raju.chekuri@gmail.com for date: ${yesterdayStr}`);
+    const emailResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: "Solar Dashboard <onboarding@resend.dev>",
+        to: "raju.chekuri@gmail.com",
+        subject: `Daily Solar Production Report - ${yesterdayStr}`,
+        html: `<h3>Daily Solar Sync Report</h3>
+               <p>${productionDetails}</p>
+               <p>Successfully synced ${result.count} history entries from Enphase Cloud.</p>
+               <p>Check the dashboard at <a href="https://chekuri-solar.web.app">chekuri-solar.web.app</a>.</p>`
+      })
+    });
+    
+    if (!emailResponse.ok) {
+      const errText = await emailResponse.text();
+      console.error(`Failed to send email via Resend API: ${emailResponse.status} - ${errText}`);
+    } else {
+      console.log("Sync report email sent successfully.");
+    }
+  } catch (error: any) {
+    console.error("Error running daily Enphase sync scheduler:", error);
+  }
 });
 
 /**
