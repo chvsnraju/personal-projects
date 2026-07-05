@@ -40,5 +40,7 @@ export interface InvestmentData {
     contract_file: string;
     invoice_file: string;
     rebate_file: string;
+    srec_price?: number;
+    srec_broker_fee_pct?: number;
 }
 

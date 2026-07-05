@@ -8,6 +8,7 @@ import { Metrics } from "./Metrics";
 import { Tables } from "./Tables";
 import { MonthlyBilling } from "./MonthlyBilling";
 import { DataManager } from "./DataManager";
+import { LifetimeProduction } from "./LifetimeProduction";
 
 interface DashboardProps {
     user: User;
@@ -18,7 +19,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     const [history, setHistory] = useState<DailyProduction[]>([]);
     const [monthlyData, setMonthlyData] = useState<MonthlyBillingData[]>([]);
     const [investment, setInvestment] = useState<InvestmentData | null>(null);
-    const [activeTab, setActiveTab] = useState<"daily" | "monthly_billing" | "data_manager">("daily");
+    const [activeTab, setActiveTab] = useState<"daily" | "lifetime_production" | "monthly_billing" | "data_manager">("daily");
     
     const [loading, setLoading] = useState(true);
     const [syncing, setSyncing] = useState(false);
@@ -141,6 +142,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                         📈 Daily Production
                     </button>
                     <button
+                        className={`tab-btn ${activeTab === "lifetime_production" ? "active" : ""}`}
+                        onClick={() => setActiveTab("lifetime_production")}
+                    >
+                        📊 Lifetime Production
+                    </button>
+                    <button
                         className={`tab-btn ${activeTab === "monthly_billing" ? "active" : ""}`}
                         onClick={() => setActiveTab("monthly_billing")}
                     >
@@ -187,6 +194,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                             <Tables history={history} />
                             {lastSyncLabel && <p className="last-sync">{lastSyncLabel}</p>}
                         </>
+                    )}
+
+                    {activeTab === "lifetime_production" && (
+                        <LifetimeProduction history={history} investment={investment} />
                     )}
 
                     {activeTab === "monthly_billing" && (

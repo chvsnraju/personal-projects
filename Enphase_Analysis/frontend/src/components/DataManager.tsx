@@ -38,7 +38,9 @@ export const DataManager: React.FC<DataManagerProps> = ({ monthlyData, investmen
     peco_rebate: investment?.peco_rebate || 500,
     contract_file: investment?.contract_file || "investment_docs/Raju Chekuri contract.pdf",
     invoice_file: investment?.invoice_file || "investment_docs/Solar_Install_RegalSolarEnergy.pdf",
-    rebate_file: investment?.rebate_file || "investment_docs/PECO_500_Rebate.pdf"
+    rebate_file: investment?.rebate_file || "investment_docs/PECO_500_Rebate.pdf",
+    srec_price: investment?.srec_price !== undefined ? investment.srec_price : 25.0,
+    srec_broker_fee_pct: investment?.srec_broker_fee_pct !== undefined ? investment.srec_broker_fee_pct : 10.0
   });
   const [showInvEditor, setShowInvEditor] = useState(false);
 
@@ -256,7 +258,9 @@ export const DataManager: React.FC<DataManagerProps> = ({ monthlyData, investmen
         net_investment: netInv,
         contract_file: invForm.contract_file || "",
         invoice_file: invForm.invoice_file || "",
-        rebate_file: invForm.rebate_file || ""
+        rebate_file: invForm.rebate_file || "",
+        srec_price: invForm.srec_price !== undefined ? Number(invForm.srec_price) : 25.0,
+        srec_broker_fee_pct: invForm.srec_broker_fee_pct !== undefined ? Number(invForm.srec_broker_fee_pct) : 10.0
       };
 
       console.log("Saving investment configs to Firestore:", finalInv);
@@ -619,6 +623,31 @@ export const DataManager: React.FC<DataManagerProps> = ({ monthlyData, investmen
               </div>
             </div>
 
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div>
+                <label style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-secondary)" }}>SREC Price ($/MWh)</label>
+                <input
+                  type="number"
+                  step="any"
+                  required
+                  value={invForm.srec_price !== undefined ? invForm.srec_price : 25}
+                  onChange={(e) => setInvForm({ ...invForm, srec_price: Number(e.target.value) })}
+                  style={{ width: "100%", padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-color)", color: "var(--text-primary)" }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-secondary)" }}>Broker Commission (%)</label>
+                <input
+                  type="number"
+                  step="any"
+                  required
+                  value={invForm.srec_broker_fee_pct !== undefined ? invForm.srec_broker_fee_pct : 10}
+                  onChange={(e) => setInvForm({ ...invForm, srec_broker_fee_pct: Number(e.target.value) })}
+                  style={{ width: "100%", padding: "0.5rem", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-color)", color: "var(--text-primary)" }}
+                />
+              </div>
+            </div>
+
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.75rem", marginTop: "1rem" }}>
               <button
                 type="button"
@@ -656,7 +685,9 @@ export const DataManager: React.FC<DataManagerProps> = ({ monthlyData, investmen
                 peco_rebate: investment?.peco_rebate || 500,
                 contract_file: investment?.contract_file || "",
                 invoice_file: investment?.invoice_file || "",
-                rebate_file: investment?.rebate_file || ""
+                rebate_file: investment?.rebate_file || "",
+                srec_price: investment?.srec_price !== undefined ? investment.srec_price : 25.0,
+                srec_broker_fee_pct: investment?.srec_broker_fee_pct !== undefined ? investment.srec_broker_fee_pct : 10.0
               });
               setShowInvEditor(true);
             }}>

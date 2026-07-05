@@ -95,25 +95,35 @@ export const MonthlyBilling: React.FC<MonthlyBillingProps> = ({ monthlyData, inv
     };
   }, [filteredData]);
 
-  // ROI / All-time payback calculations (always uses full dataset to show real ROI)
   const investmentKpi = useMemo(() => {
     const netInv = investment?.net_investment || 16244.50;
     const grossInv = investment?.actual_paid || 24777.60;
     const federalTaxCredit = investment?.federal_tax_credit || 8033.10;
     const pecoRebate = investment?.peco_rebate || 500.00;
     const totalRebates = federalTaxCredit + pecoRebate;
+    const srecPrice = investment?.srec_price !== undefined ? investment.srec_price : 25.0;
+    const srecBrokerFeePct = investment?.srec_broker_fee_pct !== undefined ? investment.srec_broker_fee_pct : 10.0;
 
     let allTimeSavings = 0;
+    let allTimeSolar = 0;
     sortedData.forEach(m => {
       allTimeSavings += m.savings;
+      allTimeSolar += m.solar_kwh || 0;
     });
 
+    const estSrecRevenue = (allTimeSolar / 1000) * srecPrice * (1 - srecBrokerFeePct / 100);
+    const netInvWithSrec = netInv - estSrecRevenue;
+
     const pctRecovered = netInv > 0 ? (allTimeSavings / netInv) * 100 : 0;
+    const pctRecoveredWithSrec = netInv > 0 ? ((allTimeSavings + estSrecRevenue) / netInv) * 100 : 0;
     const outstanding = netInv - allTimeSavings;
+    const outstandingWithSrec = netInv - allTimeSavings - estSrecRevenue;
+
     const activeMonthsCount = sortedData.length;
     const avgMonthlySavings = activeMonthsCount > 0 ? (allTimeSavings / activeMonthsCount) : 0;
     const annualizedSavings = avgMonthlySavings * 12;
     const paybackYears = annualizedSavings > 0 ? (netInv / annualizedSavings) : 0;
+    const paybackYearsWithSrec = annualizedSavings > 0 ? (netInvWithSrec / annualizedSavings) : 0;
 
     let breakevenDateStr = "N/A";
     if (paybackYears > 0) {
@@ -125,6 +135,16 @@ export const MonthlyBilling: React.FC<MonthlyBillingProps> = ({ monthlyData, inv
       breakevenDateStr = `${monthNames[breakevenDate.getMonth()]} ${breakevenDate.getFullYear()}`;
     }
 
+    let breakevenDateWithSrecStr = "N/A";
+    if (paybackYearsWithSrec > 0) {
+      const startYear = 2025;
+      const startMonth = 10; // November
+      const monthsNeeded = Math.round(paybackYearsWithSrec * 12);
+      const breakevenDate = new Date(startYear, startMonth + monthsNeeded, 1);
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      breakevenDateWithSrecStr = `${monthNames[breakevenDate.getMonth()]} ${breakevenDate.getFullYear()}`;
+    }
+
     return {
       netInv,
       grossInv,
@@ -132,12 +152,21 @@ export const MonthlyBilling: React.FC<MonthlyBillingProps> = ({ monthlyData, inv
       pecoRebate,
       totalRebates,
       allTimeSavings,
+      allTimeSolar,
+      srecPrice,
+      srecBrokerFeePct,
+      estSrecRevenue,
+      netInvWithSrec,
       pctRecovered,
+      pctRecoveredWithSrec,
       outstanding,
+      outstandingWithSrec,
       avgMonthlySavings,
       annualizedSavings,
       paybackYears,
-      breakevenDateStr
+      paybackYearsWithSrec,
+      breakevenDateStr,
+      breakevenDateWithSrecStr
     };
   }, [sortedData, investment]);
 
@@ -332,6 +361,21 @@ export const MonthlyBilling: React.FC<MonthlyBillingProps> = ({ monthlyData, inv
             <span className="card-footer-val" style={{ color: kpi.totalSupplierRefund > 0 ? "var(--color-cloud)" : "inherit" }}>
               {formatCurrency(kpi.totalActualCost)} / -{formatCurrency(kpi.totalSupplierRefund)}
             </span>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <span className="card-title">Total Solar Production</span>
+            <span className="card-icon">☀️</span>
+          </div>
+          <div className="card-value" style={{ color: "var(--color-solar)" }}>
+            <span>{kpi.totalSolar.toLocaleString(undefined, { maximumFractionDigits: 1 })}</span>
+            <span className="card-unit"> kWh</span>
+          </div>
+          <div className="card-footer">
+            <span>All-Time Production</span>
+            <span className="card-footer-val">{(investmentKpi.allTimeSolar / 1000).toFixed(3)} MWh</span>
           </div>
         </div>
 
@@ -621,9 +665,21 @@ export const MonthlyBilling: React.FC<MonthlyBillingProps> = ({ monthlyData, inv
                   <td>Total utility savings generated since November 2025</td>
                 </tr>
                 <tr>
+                  <td className="text-bold">Accrued SREC Credits (Pending)</td>
+                  <td style={{ fontWeight: "700", color: "var(--color-cloud)" }}>{formatCurrency(investmentKpi.estSrecRevenue)}</td>
+                  <td>
+                    Estimated net value of {(investmentKpi.allTimeSolar / 1000).toFixed(2)} SRECs accrued at {formatCurrency(investmentKpi.srecPrice)}/MWh net of {investmentKpi.srecBrokerFeePct}% commission ({formatCurrency(investmentKpi.srecPrice * (1 - investmentKpi.srecBrokerFeePct / 100))} net/MWh)
+                  </td>
+                </tr>
+                <tr>
                   <td className="text-bold">Outstanding Capital Balance</td>
                   <td style={{ fontWeight: "700" }}>{formatCurrency(investmentKpi.outstanding)}</td>
-                  <td>Remaining capital investment outstanding ({ (100 - investmentKpi.pctRecovered).toFixed(1) }%)</td>
+                  <td>Remaining capital investment outstanding from utility savings ({ (100 - investmentKpi.pctRecovered).toFixed(1) }%)</td>
+                </tr>
+                <tr style={{ background: "rgba(16, 185, 129, 0.05)" }}>
+                  <td className="text-bold">Net Outstanding (With SRECs)</td>
+                  <td style={{ fontWeight: "700", color: "var(--color-cloud)" }}>{formatCurrency(investmentKpi.outstandingWithSrec)}</td>
+                  <td>Remaining capital investment if accrued SRECs are sold ({ (100 - investmentKpi.pctRecoveredWithSrec).toFixed(1) }%)</td>
                 </tr>
                 <tr>
                   <td className="text-bold">Average Monthly Return</td>
@@ -636,9 +692,14 @@ export const MonthlyBilling: React.FC<MonthlyBillingProps> = ({ monthlyData, inv
                   <td>Estimated annual savings rate based on monthly averages</td>
                 </tr>
                 <tr style={{ background: "var(--table-header-bg)", fontWeight: "bold" }}>
-                  <td className="text-bold">Total Payback Expectation</td>
-                  <td style={{ color: "var(--color-solar)" }}>{investmentKpi.paybackYears.toFixed(2)} Years</td>
-                  <td>Estimated break-even date: {investmentKpi.breakevenDateStr}</td>
+                  <td className="text-bold">Payback Period (Savings Only)</td>
+                  <td style={{ color: "var(--text-secondary)" }}>{investmentKpi.paybackYears.toFixed(2)} Years</td>
+                  <td>Estimated break-even: {investmentKpi.breakevenDateStr}</td>
+                </tr>
+                <tr style={{ background: "rgba(234, 88, 12, 0.05)", fontWeight: "bold" }}>
+                  <td className="text-bold">Payback Period (With SRECs)</td>
+                  <td style={{ color: "var(--color-solar)" }}>{investmentKpi.paybackYearsWithSrec.toFixed(2)} Years</td>
+                  <td>Estimated break-even: {investmentKpi.breakevenDateWithSrecStr}</td>
                 </tr>
               </tbody>
             </table>

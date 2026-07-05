@@ -264,12 +264,11 @@ export const dailyEnphaseSync = onSchedule({
     
     // Fetch production for yesterday
     const doc = await db.collection("daily_production").doc(yesterdayStr).get();
-    let productionDetails = "No data found for yesterday.";
+    let kwhVal = "0.00";
     if (doc.exists) {
       const data = doc.data();
       if (data && typeof data.productionWh === "number") {
-        const kwh = (data.productionWh / 1000).toFixed(2);
-        productionDetails = `Yesterday's production: <strong>${kwh} kWh</strong>`;
+        kwhVal = (data.productionWh / 1000).toFixed(2);
       }
     }
     
@@ -278,6 +277,81 @@ export const dailyEnphaseSync = onSchedule({
       console.error("RESEND_API_KEY environment variable is not set.");
       return;
     }
+
+    const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Solar Production Report</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025); border: 1px solid #e2e8f0;">
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #1e293b; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 32px 40px; text-align: center;">
+              <span style="font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: -0.025em; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                ☀️ Solar Dashboard
+              </span>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="margin: 0 0 24px 0; font-size: 20px; font-weight: 600; color: #0f172a; text-align: center;">
+                Daily Production Report
+              </h2>
+              
+              <!-- Metric Widget -->
+              <div style="background-color: #fef9c3; border: 1px solid #fef08a; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px;">
+                <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #713f12; text-transform: uppercase; letter-spacing: 0.05em;">Yesterday's Generation</p>
+                <h1 style="margin: 0; font-size: 44px; font-weight: 800; color: #854d0e;">
+                  ${kwhVal} <span style="font-size: 24px; font-weight: 600;">kWh</span>
+                </h1>
+              </div>
+              
+              <!-- Status Section -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
+                <tr>
+                  <td style="vertical-align: top; width: 24px; font-size: 16px; line-height: 1;">
+                    ✅
+                  </td>
+                  <td style="padding-left: 12px; font-size: 14px; line-height: 1.5; color: #475569;">
+                    <strong>Enphase Sync:</strong> Successfully imported and updated <strong>${result.count}</strong> history entries to your Firestore database for <strong>${yesterdayStr}</strong>.
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- CTA Button -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="center">
+                    <a href="https://chekuri-solar.web.app" target="_blank" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-weight: 600; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.2);">
+                      View Live Dashboard
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 24px 40px; text-align: center; font-size: 12px; color: #94a3b8; line-height: 1.5;">
+              This is an automated daily report sent from your Firebase project.<br>
+              © 2026 Raju Chekuri Solar Analysis. All rights reserved.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
     
     console.log(`Sending email notification to raju.chekuri@gmail.com for date: ${yesterdayStr}`);
     const emailResponse = await fetch("https://api.resend.com/emails", {
@@ -290,10 +364,7 @@ export const dailyEnphaseSync = onSchedule({
         from: "Solar Dashboard <onboarding@resend.dev>",
         to: "raju.chekuri@gmail.com",
         subject: `Daily Solar Production Report - ${yesterdayStr}`,
-        html: `<h3>Daily Solar Sync Report</h3>
-               <p>${productionDetails}</p>
-               <p>Successfully synced ${result.count} history entries from Enphase Cloud.</p>
-               <p>Check the dashboard at <a href="https://chekuri-solar.web.app">chekuri-solar.web.app</a>.</p>`
+        html: emailHtml
       })
     });
     
