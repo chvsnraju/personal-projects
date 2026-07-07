@@ -30,16 +30,37 @@ function App() {
   if (loading) {
     return (
       <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
-        background: "#0f172a",
-        color: "#94a3b8",
-        fontSize: "1.2rem",
-        fontFamily: "system-ui, sans-serif"
+        background: "var(--bg-color, #f8fafc)",
+        color: "var(--text-primary, #0f172a)",
+        fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+        zIndex: 99999
       }}>
-        Loading solar dashboard...
+        <div style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "50%",
+          border: "3px solid rgba(234, 88, 12, 0.1)",
+          borderTopColor: "var(--color-solar, #ea580c)",
+          animation: "spinAppLoader 0.8s linear infinite",
+          marginBottom: "1.25rem"
+        }} />
+        <style>{`
+          @keyframes spinAppLoader {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+        <span style={{ fontSize: "1.05rem", fontWeight: 500, letterSpacing: "-0.01em" }}>
+          Loading Solar Dashboard...
+        </span>
       </div>
     );
   }
