@@ -87,26 +87,36 @@ async function performMonarchSync(userId: string) {
     console.log(`[Account Diagnostic] Name: "${acc.name}", Display: "${acc.displayName}", Type: "${acc.type?.name || "Unknown"}", Subtype: "${acc.subtype?.display || "None"}", Balance: ${acc.currentBalance}, Institution: "${acc.institution?.name || "Unknown"}"`);
   });
 
-  // Filter down to Fidelity accounts
-  const fidelityAccounts = accounts.filter((acc: any) => {
+  // Filter down to Fidelity accounts OR Pennsylvania State Employee plans
+  const targetAccounts = accounts.filter((acc: any) => {
     const instName = acc.institution?.name?.toLowerCase() || "";
     const accName = acc.name?.toLowerCase() || "";
     const dispName = acc.displayName?.toLowerCase() || "";
-    return instName.includes("fidelity") || accName.includes("fidelity") || dispName.includes("fidelity");
+    
+    const isFidelity = instName.includes("fidelity") || accName.includes("fidelity") || dispName.includes("fidelity");
+    const isPaStateEmployees = accName.includes("pennsylvania state employees") || dispName.includes("pennsylvania state employees");
+    
+    return isFidelity || isPaStateEmployees;
   });
 
-  console.log(`Found ${fidelityAccounts.length} Fidelity accounts.`);
+  console.log(`Found ${targetAccounts.length} relevant accounts.`);
 
   let total401k = 0;
+  let total401kSpouse = 0;
   let totalRoth = 0;
+  let totalRothSpouse = 0;
   let totalHsa = 0;
   let totalTaxable = 0;
+  let totalTaxableSpouse = 0;
 
   let has401k = false;
+  let has401kSpouse = false;
   let hasRoth = false;
+  let hasRothSpouse = false;
   let hasTaxable = false;
+  let hasTaxableSpouse = false;
 
-  fidelityAccounts.forEach((acc: any) => {
+  targetAccounts.forEach((acc: any) => {
     const name = (acc.name || "").toLowerCase();
     const displayName = (acc.displayName || "").toLowerCase();
     
@@ -116,83 +126,124 @@ async function performMonarchSync(userId: string) {
       return;
     }
 
+    const isSpouse = name.includes("anuradha") || displayName.includes("anuradha") || 
+                     name.includes("pennsylvania state employees") || displayName.includes("pennsylvania state employees");
+
     const subtypeName = (acc.subtype?.display || "").toLowerCase();
     const typeName = (acc.type?.name || "").toLowerCase();
     
-    // Check if Roth
-    const isRoth = subtypeName === "roth" || subtypeName === "roth_ira" || name.includes("roth") || displayName.includes("roth");
-    
-    // Check if HSA
-    const isHsa = subtypeName === "hsa" || name.includes("hsa") || displayName.includes("hsa") || name.includes("health savings") || displayName.includes("health savings");
-    
-    // Check if 401(k) / Tax-Deferred
-    const is401k = !isRoth && !isHsa && (
-      subtypeName === "401k" || 
-      subtypeName === "403b" || 
-      subtypeName === "sep_ira" || 
-      subtypeName === "simple_ira" || 
-      subtypeName === "traditional_ira" || 
-      subtypeName === "retirement" ||
-      name.includes("401k") || 
-      name.includes("401(k)") || 
-      name.includes("deferred") || 
-      name.includes("traditional") || 
-      name.includes("ira") ||
-      displayName.includes("401k") || 
-      displayName.includes("401(k)") || 
-      displayName.includes("deferred") || 
-      displayName.includes("traditional") || 
-      displayName.includes("ira")
-    );
+    // Explicit Overrides for specific accounts
+    let isRoth = false;
+    let isHsa = false;
+    let is401k = false;
+    let isTaxable = false;
 
-    // Check if taxable brokerage
-    const isTaxable = !isRoth && !isHsa && !is401k && (
-      subtypeName === "brokerage" || 
-      subtypeName === "investment" ||
-      name.includes("brokerage") || 
-      name.includes("taxable") || 
-      name.includes("individual") || 
-      name.includes("joint") ||
-      displayName.includes("brokerage") || 
-      displayName.includes("taxable") || 
-      displayName.includes("individual") || 
-      displayName.includes("joint")
-    );
+    if (displayName.includes("7801") || name.includes("7801")) {
+      isTaxable = true;
+    } else if (displayName.includes("7803") || name.includes("7803")) {
+      is401k = true;
+    } else {
+      // Standard matching logic
+      isRoth = subtypeName === "roth" || subtypeName === "roth_ira" || name.includes("roth") || displayName.includes("roth");
+      isHsa = subtypeName === "hsa" || name.includes("hsa") || displayName.includes("hsa") || name.includes("health savings") || displayName.includes("health savings");
+      is401k = !isRoth && !isHsa && (
+        subtypeName === "401k" || 
+        subtypeName === "401a" ||
+        subtypeName === "403b" || 
+        subtypeName === "sep_ira" || 
+        subtypeName === "simple_ira" || 
+        subtypeName === "traditional_ira" || 
+        subtypeName === "retirement" ||
+        name.includes("401k") || 
+        name.includes("401(k)") || 
+        name.includes("deferred") || 
+        name.includes("defined contribution") ||
+        name.includes("traditional") || 
+        name.includes("ira") ||
+        name.includes("pennsylvania state employees") ||
+        displayName.includes("401k") || 
+        displayName.includes("401(k)") || 
+        displayName.includes("deferred") || 
+        displayName.includes("defined contribution") ||
+        displayName.includes("traditional") || 
+        displayName.includes("ira") ||
+        displayName.includes("pennsylvania state employees")
+      );
+      isTaxable = !isRoth && !isHsa && !is401k && (
+        subtypeName === "brokerage" || 
+        subtypeName === "investment" ||
+        name.includes("brokerage") || 
+        name.includes("taxable") || 
+        name.includes("individual") || 
+        name.includes("joint") ||
+        displayName.includes("brokerage") || 
+        displayName.includes("taxable") || 
+        displayName.includes("individual") || 
+        displayName.includes("joint")
+      );
+    }
 
     const balance = acc.currentBalance || 0;
 
     if (isRoth) {
-      totalRoth += balance;
-      hasRoth = true;
-      console.log(`Matched Roth: "${acc.displayName || acc.name}" = $${balance}`);
+      if (isSpouse) {
+        totalRothSpouse += balance;
+        hasRothSpouse = true;
+        console.log(`Matched Spouse Roth: "${acc.displayName || acc.name}" = $${balance}`);
+      } else {
+        totalRoth += balance;
+        hasRoth = true;
+        console.log(`Matched Primary Roth: "${acc.displayName || acc.name}" = $${balance}`);
+      }
     } else if (isHsa) {
       totalHsa += balance;
       console.log(`Matched HSA: "${acc.displayName || acc.name}" = $${balance}`);
     } else if (is401k) {
-      total401k += balance;
-      has401k = true;
-      console.log(`Matched 401k/Deferred: "${acc.displayName || acc.name}" = $${balance}`);
+      if (isSpouse) {
+        total401kSpouse += balance;
+        has401kSpouse = true;
+        console.log(`Matched Spouse 401k/Deferred: "${acc.displayName || acc.name}" = $${balance}`);
+      } else {
+        total401k += balance;
+        has401k = true;
+        console.log(`Matched Primary 401k/Deferred: "${acc.displayName || acc.name}" = $${balance}`);
+      }
     } else if (isTaxable) {
-      totalTaxable += balance;
-      hasTaxable = true;
-      console.log(`Matched Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
+      if (isSpouse) {
+        totalTaxableSpouse += balance;
+        hasTaxableSpouse = true;
+        console.log(`Matched Spouse Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
+      } else {
+        totalTaxable += balance;
+        hasTaxable = true;
+        console.log(`Matched Primary Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
+      }
     } else {
       // Fallback: treat general investments as taxable brokerage if unmatched
       if (typeName === "investment") {
-        totalTaxable += balance;
-        hasTaxable = true;
-        console.log(`Matched general investment as Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
+        if (isSpouse) {
+          totalTaxableSpouse += balance;
+          hasTaxableSpouse = true;
+          console.log(`Matched general investment as Spouse Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
+        } else {
+          totalTaxable += balance;
+          hasTaxable = true;
+          console.log(`Matched general investment as Primary Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
+        }
       } else {
-        console.log(`Skipped unmatched Fidelity account: "${acc.displayName || acc.name}" (Subtype: ${subtypeName})`);
+        console.log(`Skipped unmatched account: "${acc.displayName || acc.name}" (Subtype: ${subtypeName})`);
       }
     }
   });
 
   console.log("Calculated aggregated totals:");
-  console.log(`- 401k: $${total401k}`);
-  console.log(`- Roth: $${totalRoth}`);
+  console.log(`- Primary 401k: $${total401k}`);
+  console.log(`- Spouse 401k: $${total401kSpouse}`);
+  console.log(`- Primary Roth: $${totalRoth}`);
+  console.log(`- Spouse Roth: $${totalRothSpouse}`);
   console.log(`- HSA: $${totalHsa}`);
-  console.log(`- Taxable: $${totalTaxable}`);
+  console.log(`- Primary Taxable: $${totalTaxable}`);
+  console.log(`- Spouse Taxable: $${totalTaxableSpouse}`);
 
   // Write to Firestore
   const docRef = db.collection("user_configs").doc(userId);
@@ -208,9 +259,12 @@ async function performMonarchSync(userId: string) {
 
     // Update balances (convert to rounded string since UI expects matching values)
     if (has401k) inputs.k401Balance = String(Math.round(total401k));
+    if (has401kSpouse) inputs.k401BalanceSpouse = String(Math.round(total401kSpouse));
     if (hasRoth) inputs.rothBalance = String(Math.round(totalRoth));
-    // hsaBalance is skipped here to preserve manual entry in the UI
+    if (hasRothSpouse) inputs.rothBalanceSpouse = String(Math.round(totalRothSpouse));
+    // hsaBalance is skipped to preserve manual entry in the UI
     if (hasTaxable) inputs.taxableBalance = String(Math.round(totalTaxable));
+    if (hasTaxableSpouse) inputs.taxableBalanceSpouse = String(Math.round(totalTaxableSpouse));
 
     transaction.update(docRef, {
       "config.inputs": inputs
@@ -222,7 +276,7 @@ async function performMonarchSync(userId: string) {
   return {
     success: true,
     userId,
-    syncedFidelityAccountsCount: fidelityAccounts.length,
+    syncedFidelityAccountsCount: targetAccounts.length,
     balances: {
       k401k: has401k ? Math.round(total401k) : null,
       roth: hasRoth ? Math.round(totalRoth) : null,

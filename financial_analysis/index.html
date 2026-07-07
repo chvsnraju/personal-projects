@@ -1473,6 +1473,16 @@
             <main class="content">
                 <section class="summary-grid" aria-label="Portfolio metrics summary">
                     <div class="metric">
+                        <div class="metric-label">Current Gross Value</div>
+                        <div class="metric-value" id="currentGrossTotal">$0</div>
+                        <div class="metric-sub" id="currentGrossSub">Total starting balance</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Current After-Tax Value</div>
+                        <div class="metric-value" id="currentAfterTaxTotal">$0</div>
+                        <div class="metric-sub" id="currentAfterTaxSub">Current spendable balance</div>
+                    </div>
+                    <div class="metric">
                         <div class="metric-label">Projected Gross Value</div>
                         <div class="metric-value" id="grossTotal">$0</div>
                         <div class="metric-sub" id="grossSub">Before exit taxes</div>
@@ -2218,8 +2228,12 @@
                                 </div>
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
-                                        <label for="k401Balance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Current Balance</label>
+                                        <label for="k401Balance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
                                         <div class="input-wrapper"><span>$</span><input id="k401Balance" type="number" min="0" step="any" value="0"></div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="k401BalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
+                                        <div class="input-wrapper"><span>$</span><input id="k401BalanceSpouse" type="number" min="0" step="any" value="0"></div>
                                     </div>
                                     <div class="field">
                                         <label for="k401Monthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Contribution</label>
@@ -2235,7 +2249,7 @@
                                     </div>
                                 </div>
                             </div>
-
+ 
                             <!-- Roth IRA Card -->
                             <div class="account-card" style="border: 1px solid var(--outline-variant); border-left: 4px solid var(--green); background: var(--surface); border-radius: var(--shape-md); padding: 20px; box-shadow: var(--elevation-1);">
                                 <div class="account-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
@@ -2244,8 +2258,12 @@
                                 </div>
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
-                                        <label for="rothBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Current Balance</label>
+                                        <label for="rothBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
                                         <div class="input-wrapper"><span>$</span><input id="rothBalance" type="number" min="0" step="any" value="0"></div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="rothBalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
+                                        <div class="input-wrapper"><span>$</span><input id="rothBalanceSpouse" type="number" min="0" step="any" value="0"></div>
                                     </div>
                                     <div class="field">
                                         <label for="rothMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
@@ -2280,8 +2298,12 @@
                                 </div>
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
-                                        <label for="taxableBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Current Balance</label>
+                                        <label for="taxableBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
                                         <div class="input-wrapper"><span>$</span><input id="taxableBalance" type="number" min="0" step="any" value="0"></div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="taxableBalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBalanceSpouse" type="number" min="0" step="any" value="0"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableBasis" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Cost Basis</label>
@@ -2295,8 +2317,8 @@
                                         <label for="taxDrag" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Annual Tax Drag</label>
                                         <div class="input-wrapper"><input id="taxDrag" type="number" min="0" max="5" step="any" value="0.0"><span>%</span></div>
                                     </div>
-                                    <div class="field" style="grid-column: span 2;">
-                                        <label for="capGainsTax" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Final Long-Term Gains Tax Rate</label>
+                                    <div class="field">
+                                        <label for="capGainsTax" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Final Gains Tax Rate</label>
                                         <div class="input-wrapper"><input id="capGainsTax" type="number" min="0" max="35" step="any" value="15"><span>%</span></div>
                                     </div>
                                 </div>
@@ -2394,14 +2416,17 @@
         withdrawalMonthly: document.getElementById('withdrawalMonthly'),
         capLimits: document.getElementById('capLimits'),
         k401Balance: document.getElementById('k401Balance'),
+        k401BalanceSpouse: document.getElementById('k401BalanceSpouse'),
         k401Monthly: document.getElementById('k401Monthly'),
         k401Match: document.getElementById('k401Match'),
         retirementTax: document.getElementById('retirementTax'),
         rothBalance: document.getElementById('rothBalance'),
+        rothBalanceSpouse: document.getElementById('rothBalanceSpouse'),
         rothMonthly: document.getElementById('rothMonthly'),
         hsaBalance: document.getElementById('hsaBalance'),
         hsaMonthly: document.getElementById('hsaMonthly'),
         taxableBalance: document.getElementById('taxableBalance'),
+        taxableBalanceSpouse: document.getElementById('taxableBalanceSpouse'),
         taxableBasis: document.getElementById('taxableBasis'),
         taxableMonthly: document.getElementById('taxableMonthly'),
         taxDrag: document.getElementById('taxDrag'),
@@ -2448,6 +2473,10 @@
 
     // Text elements
     const out = {
+        currentGrossTotal: document.getElementById('currentGrossTotal'),
+        currentGrossSub: document.getElementById('currentGrossSub'),
+        currentAfterTaxTotal: document.getElementById('currentAfterTaxTotal'),
+        currentAfterTaxSub: document.getElementById('currentAfterTaxSub'),
         grossTotal: document.getElementById('grossTotal'),
         afterTaxTotal: document.getElementById('afterTaxTotal'),
         contributionTotal: document.getElementById('contributionTotal'),
@@ -2647,7 +2676,8 @@
         } else {
             syncAuthProfilesToInputs();
             updateAll();
-            switchToTab('portfolio');
+            const savedTab = localStorage.getItem('active_tab_id');
+            switchToTab(savedTab || 'portfolio');
         }
     }
 
@@ -2717,17 +2747,20 @@
                 capLimits: el.capLimits?.checked,
                 
                 k401Balance: el.k401Balance?.value,
+                k401BalanceSpouse: el.k401BalanceSpouse?.value,
                 k401Monthly: el.k401Monthly?.value,
                 k401Match: el.k401Match?.value,
                 retirementTax: el.retirementTax?.value,
                 
                 rothBalance: el.rothBalance?.value,
+                rothBalanceSpouse: el.rothBalanceSpouse?.value,
                 rothMonthly: el.rothMonthly?.value,
                 
                 hsaBalance: el.hsaBalance?.value,
                 hsaMonthly: el.hsaMonthly?.value,
                 
                 taxableBalance: el.taxableBalance?.value,
+                taxableBalanceSpouse: el.taxableBalanceSpouse?.value,
                 taxableBasis: el.taxableBasis?.value,
                 taxableMonthly: el.taxableMonthly?.value,
                 taxDrag: el.taxDrag?.value,
@@ -2897,6 +2930,7 @@
                 tab.classList.add('active');
                 tab.setAttribute('aria-selected', 'true');
                 const targetId = tab.dataset.tab;
+                localStorage.setItem('active_tab_id', targetId);
                 document.getElementById(targetId).classList.add('active');
                 
                 updateSidebarHeights();
@@ -2972,17 +3006,20 @@
                             capLimits: el.capLimits?.checked,
                             
                             k401Balance: el.k401Balance?.value,
+                            k401BalanceSpouse: el.k401BalanceSpouse?.value,
                             k401Monthly: el.k401Monthly?.value,
                             k401Match: el.k401Match?.value,
                             retirementTax: el.retirementTax?.value,
                             
                             rothBalance: el.rothBalance?.value,
+                            rothBalanceSpouse: el.rothBalanceSpouse?.value,
                             rothMonthly: el.rothMonthly?.value,
                             
                             hsaBalance: el.hsaBalance?.value,
                             hsaMonthly: el.hsaMonthly?.value,
                             
                             taxableBalance: el.taxableBalance?.value,
+                            taxableBalanceSpouse: el.taxableBalanceSpouse?.value,
                             taxableBasis: el.taxableBasis?.value,
                             taxableMonthly: el.taxableMonthly?.value,
                             taxDrag: el.taxDrag?.value,
@@ -3411,10 +3448,10 @@
             rothMonthly: Math.max(0, num('rothMonthly')),
             hsaMonthly: Math.max(0, num('hsaMonthly')),
             taxableMonthly: Math.max(0, num('taxableMonthly')),
-            k401Balance: Math.max(0, num('k401Balance')),
-            rothBalance: Math.max(0, num('rothBalance')),
+            k401Balance: Math.max(0, num('k401Balance')) + Math.max(0, num('k401BalanceSpouse')),
+            rothBalance: Math.max(0, num('rothBalance')) + Math.max(0, num('rothBalanceSpouse')),
             hsaBalance: Math.max(0, num('hsaBalance')),
-            taxableBalance: Math.max(0, num('taxableBalance')),
+            taxableBalance: Math.max(0, num('taxableBalance')) + Math.max(0, num('taxableBalanceSpouse')),
             taxableBasis: Math.max(0, num('taxableBasis')),
             retirementTax: Math.max(0, num('retirementTax')) / 100,
             capGainsTax: Math.max(0, num('capGainsTax')) / 100,
@@ -4045,6 +4082,20 @@
             displayContributions = result.contributions;
             displayGrowth = result.growth;
         }
+
+        const inp = readPortfolioInputs();
+        const currentK401AfterTax = inp.k401Balance * (1 - inp.retirementTax);
+        const currentTaxableGain = Math.max(0, inp.taxableBalance - inp.taxableBasis);
+        const currentTaxableExitTax = currentTaxableGain * inp.capGainsTax;
+        const currentTaxableAfterTax = inp.taxableBalance - currentTaxableExitTax;
+        const currentGross = inp.k401Balance + inp.rothBalance + inp.hsaBalance + inp.taxableBalance;
+        const currentAfterTax = currentK401AfterTax + inp.rothBalance + inp.hsaBalance + currentTaxableAfterTax;
+
+        out.currentGrossTotal.textContent = money(currentGross);
+        out.currentGrossSub.textContent = `${money(inp.k401Balance)} 401(k) + ${money(inp.rothBalance)} Roth + ${money(inp.hsaBalance)} HSA + ${money(inp.taxableBalance)} personal`;
+        
+        out.currentAfterTaxTotal.textContent = money(currentAfterTax);
+        out.currentAfterTaxSub.textContent = `${money(currentK401AfterTax)} 401(k) after tax + ${money(inp.rothBalance)} Roth + ${money(inp.hsaBalance)} HSA + ${money(currentTaxableAfterTax)} personal after gains tax`;
 
         out.grossTotal.textContent = money(displayGross);
         out.afterTaxTotal.textContent = money(displayAfterTax);
