@@ -19,6 +19,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-functions-compat.js"></script>
     
     <style>
         /* Unified Premium Design System */
@@ -1368,6 +1369,24 @@
         </div>
     </div>
 
+    <!-- Beautiful Custom Alert Modal -->
+    <div id="alertOverlay" class="onboarding-overlay" style="display: none; z-index: 2100;">
+        <div class="onboarding-modal glass-card" style="max-width: 450px; text-align: center;">
+            <div class="onboarding-header" style="justify-content: center; border-bottom: 0;">
+                <div class="logo-icon" id="alertIconBg" style="background: linear-gradient(135deg, var(--teal), #004d40); margin: 0 auto;">
+                    <i class="fa-solid fa-circle-check" id="alertIcon" style="font-size: 1.5rem; color: white;"></i>
+                </div>
+            </div>
+            <div style="padding: 0 32px 24px;">
+                <h2 id="alertTitle" style="font-size: 1.25rem; font-weight: 700; margin-top: 8px;">Success</h2>
+                <p id="alertMessage" style="margin-top: 8px; color: var(--muted); line-height: 1.5; font-size: 0.9rem;"></p>
+            </div>
+            <div class="onboarding-actions" style="padding: 20px 32px; background: var(--surface-container-low); display: flex; gap: 12px; justify-content: center;">
+                <button type="button" class="profile-tab-btn" id="alertOkBtn" style="min-width: 120px; min-height: 40px; background: var(--teal); color: white; border-color: transparent; border-radius: var(--shape-md); font-weight: 600;">OK</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Dashboard Container -->
     <div class="app-container">
         
@@ -2327,7 +2346,10 @@
                         </div>
                     </div>
 
-                    <div class="onboarding-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+                    <div class="onboarding-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
+                        <button type="button" class="reset-btn" id="syncMonarchBtn" aria-label="Sync Monarch Money" style="min-height: 42px; border-radius: var(--shape-md); padding: 0 20px; border-color: var(--teal); color: var(--teal); background: transparent; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                            <i class="fa-solid fa-arrows-rotate"></i> Sync Monarch Money
+                        </button>
                         <button type="button" class="reset-btn" id="onboardingResetBtn" aria-label="Reset All Data" style="min-height: 42px; border-radius: var(--shape-md); padding: 0 20px;">
                             <i class="fa-solid fa-rotate-left"></i> Reset Defaults
                         </button>
@@ -2536,6 +2558,40 @@
                     reject(err);
                 }
             );
+        });
+    }
+
+    // Reusable Custom Alert Popup
+    function showAlert(title, message, isError = false) {
+        const overlay = document.getElementById('alertOverlay');
+        const titleEl = document.getElementById('alertTitle');
+        const messageEl = document.getElementById('alertMessage');
+        const iconBg = document.getElementById('alertIconBg');
+        const icon = document.getElementById('alertIcon');
+        const okBtn = document.getElementById('alertOkBtn');
+        
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        
+        if (isError) {
+            iconBg.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            icon.className = 'fa-solid fa-circle-xmark';
+            okBtn.style.background = '#ef4444';
+        } else {
+            iconBg.style.background = 'linear-gradient(135deg, var(--teal), #004d40)';
+            icon.className = 'fa-solid fa-circle-check';
+            okBtn.style.background = 'var(--teal)';
+        }
+        
+        overlay.style.display = 'flex';
+        
+        return new Promise((resolve) => {
+            const handleOk = () => {
+                overlay.style.display = 'none';
+                okBtn.removeEventListener('click', handleOk);
+                resolve();
+            };
+            okBtn.addEventListener('click', handleOk);
         });
     }
 
@@ -3057,9 +3113,9 @@
                         5000,
                         "Database connection timed out. Please verify that you have clicked 'Create Database' in your Firebase Console under 'Firestore Database', and that your Firestore Security Rules are published."
                     );
-                } catch (err) {
+                 } catch (err) {
                     console.error("Instant save to Firestore failed:", err);
-                    alert("Failed to save settings to Cloud: " + err.message);
+                    showAlert("Save Failed", "Failed to save settings to Cloud: " + err.message, true);
                 }
             }
             
@@ -3075,6 +3131,32 @@
         const resetHandler = () => {
             confirmOverlay.style.display = 'flex';
         };
+        
+        const syncMonarchBtn = document.getElementById('syncMonarchBtn');
+        if (syncMonarchBtn) {
+            syncMonarchBtn.addEventListener('click', async () => {
+                if (!fbUser) {
+                    showAlert("Authentication Required", "Please log in first to sync Monarch Money data.", true);
+                    return;
+                }
+                
+                const originalHtml = syncMonarchBtn.innerHTML;
+                syncMonarchBtn.disabled = true;
+                syncMonarchBtn.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin"></i> Syncing...';
+                
+                try {
+                    const syncFn = firebase.functions().httpsCallable('syncBalancesOnDemand');
+                    await syncFn();
+                    await showAlert("Success", "Monarch Money data synced successfully! Reloading planner to update values...");
+                    window.location.reload();
+                } catch (err) {
+                    console.error("Monarch Money sync failed:", err);
+                    showAlert("Sync Failed", "Monarch Money sync failed: " + (err.message || err), true);
+                    syncMonarchBtn.disabled = false;
+                    syncMonarchBtn.innerHTML = originalHtml;
+                }
+            });
+        }
         
         document.getElementById('onboardingResetBtn').addEventListener('click', resetHandler);
         document.getElementById('confirmCancelBtn').addEventListener('click', () => confirmOverlay.style.display = 'none');
