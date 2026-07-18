@@ -41,6 +41,8 @@
             --secondary: #00796b;
             --secondary-container: #ccfbf1;
             --on-secondary-container: #00201c;
+            --teal: #00796b;
+            --on-teal: #ffffff;
             --tertiary: #d97706;
             --tertiary-container: #fef3c7;
             
@@ -86,6 +88,8 @@
             --secondary: #2dd4bf;
             --secondary-container: #115e59;
             --on-secondary-container: #ccfbf1;
+            --teal: #2dd4bf;
+            --on-teal: #00201c;
             
             --blue: #60a5fa;
             --green: #34d399;
@@ -2248,15 +2252,15 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="k401Balance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401Balance" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="k401Balance" type="number" min="0" step="any" value="779137"></div>
                                     </div>
                                     <div class="field">
                                         <label for="k401BalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401BalanceSpouse" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="k401BalanceSpouse" type="number" min="0" step="any" value="5804"></div>
                                     </div>
                                     <div class="field">
                                         <label for="k401Monthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Contribution</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401Monthly" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="k401Monthly" type="number" min="0" step="any" value="2041.67"></div>
                                     </div>
                                     <div class="field">
                                         <label for="k401Match" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Employer Match / mo</label>
@@ -2278,15 +2282,19 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="rothBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="rothBalance" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="rothBalance" type="number" min="0" step="any" value="98625"></div>
                                     </div>
                                     <div class="field">
                                         <label for="rothBalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="rothBalanceSpouse" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="rothBalanceSpouse" type="number" min="0" step="any" value="38296"></div>
                                     </div>
                                     <div class="field">
-                                        <label for="rothMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
-                                        <div class="input-wrapper"><span>$</span><input id="rothMonthly" type="number" min="0" step="any" value="0"></div>
+                                        <label for="rothMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Monthly Addition</label>
+                                        <div class="input-wrapper"><span>$</span><input id="rothMonthly" type="number" min="0" step="any" value="625.00"></div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="rothMonthlySpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Monthly Addition</label>
+                                        <div class="input-wrapper"><span>$</span><input id="rothMonthlySpouse" type="number" min="0" step="any" value="625.00"></div>
                                     </div>
                                 </div>
                             </div>
@@ -2300,11 +2308,11 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="hsaBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Current Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="hsaBalance" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="hsaBalance" type="number" min="0" step="any" value="81000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="hsaMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
-                                        <div class="input-wrapper"><span>$</span><input id="hsaMonthly" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="hsaMonthly" type="number" min="0" step="any" value="729.17"></div>
                                     </div>
                                 </div>
                             </div>
@@ -2318,15 +2326,15 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="taxableBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBalance" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBalance" type="number" min="0" step="any" value="621905"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableBalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBalanceSpouse" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBalanceSpouse" type="number" min="0" step="any" value="10168"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableBasis" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Cost Basis</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBasis" type="number" min="0" step="any" value="0"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBasis" type="number" min="0" step="any" value="600000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
@@ -2445,6 +2453,7 @@
         rothBalance: document.getElementById('rothBalance'),
         rothBalanceSpouse: document.getElementById('rothBalanceSpouse'),
         rothMonthly: document.getElementById('rothMonthly'),
+        rothMonthlySpouse: document.getElementById('rothMonthlySpouse'),
         hsaBalance: document.getElementById('hsaBalance'),
         hsaMonthly: document.getElementById('hsaMonthly'),
         taxableBalance: document.getElementById('taxableBalance'),
@@ -2562,7 +2571,7 @@
     }
 
     // Reusable Custom Alert Popup
-    function showAlert(title, message, isError = false) {
+    function showAlert(title, message, isError = false, timeoutMs = null) {
         const overlay = document.getElementById('alertOverlay');
         const titleEl = document.getElementById('alertTitle');
         const messageEl = document.getElementById('alertMessage');
@@ -2577,21 +2586,29 @@
             iconBg.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
             icon.className = 'fa-solid fa-circle-xmark';
             okBtn.style.background = '#ef4444';
+            okBtn.style.color = '#ffffff';
         } else {
             iconBg.style.background = 'linear-gradient(135deg, var(--teal), #004d40)';
             icon.className = 'fa-solid fa-circle-check';
             okBtn.style.background = 'var(--teal)';
+            okBtn.style.color = 'var(--on-teal, #ffffff)';
         }
         
         overlay.style.display = 'flex';
         
         return new Promise((resolve) => {
+            let timer = null;
             const handleOk = () => {
+                if (timer) clearTimeout(timer);
                 overlay.style.display = 'none';
                 okBtn.removeEventListener('click', handleOk);
                 resolve();
             };
             okBtn.addEventListener('click', handleOk);
+            
+            if (timeoutMs !== null) {
+                timer = setTimeout(handleOk, timeoutMs);
+            }
         });
     }
 
@@ -2811,6 +2828,7 @@
                 rothBalance: el.rothBalance?.value,
                 rothBalanceSpouse: el.rothBalanceSpouse?.value,
                 rothMonthly: el.rothMonthly?.value,
+                rothMonthlySpouse: el.rothMonthlySpouse?.value,
                 
                 hsaBalance: el.hsaBalance?.value,
                 hsaMonthly: el.hsaMonthly?.value,
@@ -3070,6 +3088,7 @@
                             rothBalance: el.rothBalance?.value,
                             rothBalanceSpouse: el.rothBalanceSpouse?.value,
                             rothMonthly: el.rothMonthly?.value,
+                            rothMonthlySpouse: el.rothMonthlySpouse?.value,
                             
                             hsaBalance: el.hsaBalance?.value,
                             hsaMonthly: el.hsaMonthly?.value,
@@ -3125,6 +3144,65 @@
             // Redirect back to main portfolio tab upon save
             switchToTab('portfolio');
         });
+
+        // Dynamic age-based IRS limit default populator
+        const handleBirthDateChange = () => {
+            const bm1 = parseInt(document.getElementById('birthMonth1').value, 10);
+            const by1 = parseInt(document.getElementById('birthYear1').value, 10);
+            const age1 = calculateAge(bm1, by1) || 45;
+
+            const bm2 = parseInt(document.getElementById('birthMonth2').value, 10);
+            const by2 = parseInt(document.getElementById('birthYear2').value, 10);
+            const age2 = calculateAge(bm2, by2) || 0;
+            const hasSpouse = !!(document.getElementById('name2').value.trim() || by2 > 0);
+
+            // Update temporary userConfig ages
+            userConfig.p1.age = age1;
+            userConfig.p2.age = age2;
+
+            // 401(k)
+            const limit401_under50 = 24500;
+            const limit401_over50 = 32500;
+            const val401 = parseFloat(el.k401Monthly.value) || 0;
+            if (val401 === 0 || val401 === parseFloat((limit401_under50 / 12).toFixed(2)) || val401 === parseFloat((limit401_over50 / 12).toFixed(2))) {
+                const limit401 = age1 >= 50 ? limit401_over50 : limit401_under50;
+                el.k401Monthly.value = (limit401 / 12).toFixed(2);
+            }
+
+            // Roth Primary
+            const limitRoth_under50 = 7500;
+            const limitRoth_over50 = 8600;
+            const valRoth1 = parseFloat(el.rothMonthly.value) || 0;
+            if (valRoth1 === 0 || valRoth1 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth1 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
+                const limitRoth1 = age1 >= 50 ? limitRoth_over50 : limitRoth_under50;
+                el.rothMonthly.value = (limitRoth1 / 12).toFixed(2);
+            }
+
+            // Roth Spouse
+            const valRoth2 = parseFloat(el.rothMonthlySpouse.value) || 0;
+            if (valRoth2 === 0 || valRoth2 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth2 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
+                const limitRoth2 = (hasSpouse && age2 >= 50) ? limitRoth_over50 : limitRoth_under50;
+                el.rothMonthlySpouse.value = (limitRoth2 / 12).toFixed(2);
+            }
+
+            // HSA
+            const limitHsa_under55 = 8750;
+            const limitHsa_over55 = 9750;
+            const valHsa = parseFloat(el.hsaMonthly.value) || 0;
+            if (valHsa === 0 || valHsa === parseFloat((limitHsa_under55 / 12).toFixed(2)) || valHsa === parseFloat((limitHsa_over55 / 12).toFixed(2))) {
+                const limitHsa = (age1 >= 55 || (hasSpouse && age2 >= 55)) ? limitHsa_over55 : limitHsa_under55;
+                el.hsaMonthly.value = (limitHsa / 12).toFixed(2);
+            }
+        };
+
+        // Attach listeners
+        ['birthMonth1', 'birthYear1', 'birthMonth2', 'birthYear2', 'name2'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('change', handleBirthDateChange);
+                element.addEventListener('input', handleBirthDateChange);
+            }
+        });
         
         // Confirmation Modals
         const confirmOverlay = document.getElementById('confirmOverlay');
@@ -3147,7 +3225,7 @@
                 try {
                     const syncFn = firebase.functions().httpsCallable('syncBalancesOnDemand');
                     await syncFn();
-                    await showAlert("Success", "Monarch Money data synced successfully! Reloading planner to update values...");
+                    await showAlert("Success", "Monarch Money data synced successfully! Click OK or wait a moment to reload...", false, 3500);
                     window.location.reload();
                 } catch (err) {
                     console.error("Monarch Money sync failed:", err);
@@ -3450,7 +3528,7 @@
             checkbox.addEventListener('change', updateAll);
         });
         
-        [el.k401Balance, el.k401Monthly, el.k401Match, el.rothBalance, el.rothMonthly, el.hsaBalance, el.hsaMonthly, el.taxableBalance, el.taxableBasis, el.taxableMonthly, el.taxDrag, el.capGainsTax, el.externalIncomeInput].forEach(field => {
+        [el.k401Balance, el.k401Monthly, el.k401Match, el.rothBalance, el.rothMonthly, el.rothMonthlySpouse, el.hsaBalance, el.hsaMonthly, el.taxableBalance, el.taxableBasis, el.taxableMonthly, el.taxDrag, el.capGainsTax, el.externalIncomeInput].forEach(field => {
             field.addEventListener('input', debounce(updateAll, 200));
         });
         
@@ -3528,6 +3606,7 @@
             k401Monthly: Math.max(0, num('k401Monthly')),
             k401Match: Math.max(0, num('k401Match')),
             rothMonthly: Math.max(0, num('rothMonthly')),
+            rothMonthlySpouse: Math.max(0, num('rothMonthlySpouse')),
             hsaMonthly: Math.max(0, num('hsaMonthly')),
             taxableMonthly: Math.max(0, num('taxableMonthly')),
             k401Balance: Math.max(0, num('k401Balance')) + Math.max(0, num('k401BalanceSpouse')),
@@ -3538,7 +3617,9 @@
             retirementTax: Math.max(0, num('retirementTax')) / 100,
             capGainsTax: Math.max(0, num('capGainsTax')) / 100,
             taxDrag: Math.max(0, num('taxDrag')),
-            capLimits: el.capLimits.checked
+            capLimits: el.capLimits.checked,
+            spouseAge: Math.max(0, userConfig.p2.age || 0),
+            hasSpouse: !!(userConfig.p2.name || userConfig.p2.age > 0)
         };
     }
 
@@ -3583,22 +3664,42 @@
 
             let currentK401Employee = inp.k401Monthly * contributionGrowthFactor;
             let currentK401Match = inp.k401Match * contributionGrowthFactor;
-            let currentRoth = inp.rothMonthly * contributionGrowthFactor;
+            let currentRothPrimary = inp.rothMonthly * contributionGrowthFactor;
+            let currentRothSpouse = inp.rothMonthlySpouse * contributionGrowthFactor;
+            let currentRoth = currentRothPrimary + currentRothSpouse;
             let currentHsa = inp.hsaMonthly * contributionGrowthFactor;
             let currentTaxable = inp.taxableMonthly * contributionGrowthFactor;
 
             if (inp.capLimits) {
                 const annualEmp401 = currentK401Employee * 12;
-                const cappedAnnualEmp401 = Math.min(annualEmp401, IRS_2026_401K_AGE50_LIMIT);
+                const limit401 = (currentAge + yearIndex) >= 50 ? 32500 : 24500;
+                const cappedAnnualEmp401 = Math.min(annualEmp401, limit401);
                 const overflow401 = (annualEmp401 - cappedAnnualEmp401) / 12;
                 currentK401Employee = cappedAnnualEmp401 / 12;
 
-                const annualRoth = currentRoth * 12;
-                const cappedAnnualRoth = Math.min(annualRoth, IRS_2026_IRA_AGE50_LIMIT);
-                const overflowRoth = (annualRoth - cappedAnnualRoth) / 12;
-                currentRoth = cappedAnnualRoth / 12;
+                const annualRothPrimary = currentRothPrimary * 12;
+                const limitRoth1 = (currentAge + yearIndex) >= 50 ? 8600 : 7500;
+                const cappedAnnualRothPrimary = Math.min(annualRothPrimary, limitRoth1);
+                const overflowRothPrimary = (annualRothPrimary - cappedAnnualRothPrimary) / 12;
+                currentRothPrimary = cappedAnnualRothPrimary / 12;
 
-                currentTaxable += overflow401 + overflowRoth;
+                const annualRothSpouse = currentRothSpouse * 12;
+                const limitRoth2 = (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 50) ? 8600 : 7500;
+                const cappedAnnualRothSpouse = Math.min(annualRothSpouse, limitRoth2);
+                const overflowRothSpouse = (annualRothSpouse - cappedAnnualRothSpouse) / 12;
+                currentRothSpouse = cappedAnnualRothSpouse / 12;
+                currentRoth = currentRothPrimary + currentRothSpouse;
+
+                const annualHsa = currentHsa * 12;
+                let limitHsa = 8750;
+                if ((currentAge + yearIndex) >= 55 || (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 55)) {
+                    limitHsa += 1000;
+                }
+                const cappedAnnualHsa = Math.min(annualHsa, limitHsa);
+                const overflowHsa = (annualHsa - cappedAnnualHsa) / 12;
+                currentHsa = cappedAnnualHsa / 12;
+
+                currentTaxable += overflow401 + overflowRothPrimary + overflowRothSpouse + overflowHsa;
             }
             const currentK401MonthlyTotal = currentK401Employee + currentK401Match;
 
@@ -3658,7 +3759,7 @@
             taxableExitTax,
             taxableGain,
             k401MonthlyTotal: inp.k401Monthly + inp.k401Match,
-            rothMonthly: inp.rothMonthly,
+            rothMonthly: inp.rothMonthly + inp.rothMonthlySpouse,
             hsaMonthly: inp.hsaMonthly,
             taxableMonthly: inp.taxableMonthly
         };
@@ -3754,22 +3855,42 @@
                 const factor = stepUpFactors[yearIndex];
                 let currentK401Employee = inp.k401Monthly * factor;
                 let currentK401Match = inp.k401Match * factor;
-                let currentRoth = inp.rothMonthly * factor;
+                let currentRothPrimary = inp.rothMonthly * factor;
+                let currentRothSpouse = inp.rothMonthlySpouse * factor;
+                let currentRoth = currentRothPrimary + currentRothSpouse;
                 let currentHsa = inp.hsaMonthly * factor;
                 let currentTaxable = inp.taxableMonthly * factor;
 
                 if (inp.capLimits) {
                     const annualEmp = currentK401Employee * 12;
-                    const cappedEmp = Math.min(annualEmp, IRS_2026_401K_AGE50_LIMIT);
+                    const limit401 = (currentAge + yearIndex) >= 50 ? 32500 : 24500;
+                    const cappedEmp = Math.min(annualEmp, limit401);
                     const overflow401 = (annualEmp - cappedEmp) / 12;
                     currentK401Employee = cappedEmp / 12;
 
-                    const annualRoth = currentRoth * 12;
-                    const cappedRoth = Math.min(annualRoth, IRS_2026_IRA_AGE50_LIMIT);
-                    const overflowRoth = (annualRoth - cappedRoth) / 12;
-                    currentRoth = cappedRoth / 12;
+                    const annualRothPrimary = currentRothPrimary * 12;
+                    const limitRoth1 = (currentAge + yearIndex) >= 50 ? 8600 : 7500;
+                    const cappedRothPrimary = Math.min(annualRothPrimary, limitRoth1);
+                    const overflowRothPrimary = (annualRothPrimary - cappedRothPrimary) / 12;
+                    currentRothPrimary = cappedRothPrimary / 12;
 
-                    currentTaxable += overflow401 + overflowRoth;
+                    const annualRothSpouse = currentRothSpouse * 12;
+                    const limitRoth2 = (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 50) ? 8600 : 7500;
+                    const cappedRothSpouse = Math.min(annualRothSpouse, limitRoth2);
+                    const overflowRothSpouse = (annualRothSpouse - cappedRothSpouse) / 12;
+                    currentRothSpouse = cappedRothSpouse / 12;
+                    currentRoth = currentRothPrimary + currentRothSpouse;
+
+                    const annualHsa = currentHsa * 12;
+                    let limitHsa = 8750;
+                    if ((currentAge + yearIndex) >= 55 || (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 55)) {
+                        limitHsa += 1000;
+                    }
+                    const cappedHsa = Math.min(annualHsa, limitHsa);
+                    const overflowHsa = (annualHsa - cappedHsa) / 12;
+                    currentHsa = cappedHsa / 12;
+
+                    currentTaxable += overflow401 + overflowRothPrimary + overflowRothSpouse + overflowHsa;
                 }
 
                 row.k401 += (currentK401Employee + currentK401Match);
@@ -4191,17 +4312,35 @@
         out.growthSub.textContent = `${pct(annualReturn)} return; personal taxable account utilizes ${pct(Math.max(0, annualReturn - num('taxDrag')))} net returns`;
         out.realAfterTaxSub.textContent = `Discounted by ${pct(num('inflationRate'))} inflation over ${result.years} years`;
 
-        // Warnings / bounds
+        const age1 = userConfig.p1.age || 45;
+        const age2 = userConfig.p2.age || 0;
+        const hasSpouse = !!(userConfig.p2.name || userConfig.p2.age > 0);
+
+        const limit401 = age1 >= 50 ? 32500 : 24500;
+        const limitRoth1 = age1 >= 50 ? 8600 : 7500;
+        const limitRoth2 = age2 >= 50 ? 8600 : 7500;
+
+        let limitHsa = 8750;
+        if (age1 >= 55 || (hasSpouse && age2 >= 55)) {
+            limitHsa += 1000;
+        }
+
         const k401AnnualEmployee = num('k401Monthly') * 12;
-        const rothAnnual = num('rothMonthly') * 12;
+        const rothAnnualPrimary = num('rothMonthly') * 12;
+        const rothAnnualSpouse = num('rothMonthlySpouse') * 12;
         const hsaAnnual = num('hsaMonthly') * 12;
+
         const limitWarnings = [];
         if (el.capLimits.checked) {
-            if (k401AnnualEmployee > IRS_2026_401K_AGE50_LIMIT + 1) limitWarnings.push(`<span class="badge good">401(k) capped at ${money(IRS_2026_401K_AGE50_LIMIT)}/yr. Excess overflows to taxable.</span>`);
-            if (rothAnnual > IRS_2026_IRA_AGE50_LIMIT + 1) limitWarnings.push(`<span class="badge good">Roth IRA capped at ${money(IRS_2026_IRA_AGE50_LIMIT)}/yr. Excess overflows to taxable.</span>`);
+            if (k401AnnualEmployee > limit401 + 1) limitWarnings.push(`<span class="badge good">401(k) capped at ${money(limit401)}/yr. Excess overflows to taxable.</span>`);
+            if (rothAnnualPrimary > limitRoth1 + 1) limitWarnings.push(`<span class="badge good">Primary Roth IRA capped at ${money(limitRoth1)}/yr. Excess overflows to taxable.</span>`);
+            if (hasSpouse && rothAnnualSpouse > limitRoth2 + 1) limitWarnings.push(`<span class="badge good">Spouse Roth IRA capped at ${money(limitRoth2)}/yr. Excess overflows to taxable.</span>`);
+            if (hsaAnnual > limitHsa + 1) limitWarnings.push(`<span class="badge good">HSA capped at ${money(limitHsa)}/yr. Excess overflows to taxable.</span>`);
         } else {
-            if (k401AnnualEmployee > IRS_2026_401K_AGE50_LIMIT + 1) limitWarnings.push(`<span class="badge bad">401(k) exceeds IRS limits of ${money(IRS_2026_401K_AGE50_LIMIT)}/yr.</span>`);
-            if (rothAnnual > IRS_2026_IRA_AGE50_LIMIT + 1) limitWarnings.push(`<span class="badge bad">Roth IRA exceeds IRS limits of ${money(IRS_2026_IRA_AGE50_LIMIT)}/yr.</span>`);
+            if (k401AnnualEmployee > limit401 + 1) limitWarnings.push(`<span class="badge bad">401(k) exceeds IRS limits of ${money(limit401)}/yr.</span>`);
+            if (rothAnnualPrimary > limitRoth1 + 1) limitWarnings.push(`<span class="badge bad">Primary Roth IRA exceeds IRS limits of ${money(limitRoth1)}/yr.</span>`);
+            if (hasSpouse && rothAnnualSpouse > limitRoth2 + 1) limitWarnings.push(`<span class="badge bad">Spouse Roth IRA exceeds IRS limits of ${money(limitRoth2)}/yr.</span>`);
+            if (hsaAnnual > limitHsa + 1) limitWarnings.push(`<span class="badge bad">HSA exceeds IRS limits of ${money(limitHsa)}/yr.</span>`);
         }
         
         const warningText = limitWarnings.length ? `<br>${limitWarnings.join(' ')}` : '';
@@ -5155,22 +5294,42 @@
                 const factor = stepUpFactors[yearIndex];
                 let currentK401Employee = inp.k401Monthly * factor;
                 let currentK401Match = inp.k401Match * factor;
-                let currentRoth = inp.rothMonthly * factor;
+                let currentRothPrimary = inp.rothMonthly * factor;
+                let currentRothSpouse = inp.rothMonthlySpouse * factor;
+                let currentRoth = currentRothPrimary + currentRothSpouse;
                 let currentHsa = inp.hsaMonthly * factor;
                 let currentTaxable = inp.taxableMonthly * factor;
 
                 if (inp.capLimits) {
                     const annualEmp = currentK401Employee * 12;
-                    const cappedEmp = Math.min(annualEmp, IRS_2026_401K_AGE50_LIMIT);
+                    const limit401 = (currentAge + yearIndex) >= 50 ? 32500 : 24500;
+                    const cappedEmp = Math.min(annualEmp, limit401);
                     const overflow401 = (annualEmp - cappedEmp) / 12;
                     currentK401Employee = cappedEmp / 12;
 
-                    const annualRoth = currentRoth * 12;
-                    const cappedRoth = Math.min(annualRoth, IRS_2026_IRA_AGE50_LIMIT);
-                    const overflowRoth = (annualRoth - cappedRoth) / 12;
-                    currentRoth = cappedRoth / 12;
+                    const annualRothPrimary = currentRothPrimary * 12;
+                    const limitRoth1 = (currentAge + yearIndex) >= 50 ? 8600 : 7500;
+                    const cappedRothPrimary = Math.min(annualRothPrimary, limitRoth1);
+                    const overflowRothPrimary = (annualRothPrimary - cappedRothPrimary) / 12;
+                    currentRothPrimary = cappedRothPrimary / 12;
 
-                    currentTaxable += overflow401 + overflowRoth;
+                    const annualRothSpouse = currentRothSpouse * 12;
+                    const limitRoth2 = (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 50) ? 8600 : 7500;
+                    const cappedRothSpouse = Math.min(annualRothSpouse, limitRoth2);
+                    const overflowRothSpouse = (annualRothSpouse - cappedRothSpouse) / 12;
+                    currentRothSpouse = cappedRothSpouse / 12;
+                    currentRoth = currentRothPrimary + currentRothSpouse;
+
+                    const annualHsa = currentHsa * 12;
+                    let limitHsa = 8750;
+                    if ((currentAge + yearIndex) >= 55 || (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 55)) {
+                        limitHsa += 1000;
+                    }
+                    const cappedHsa = Math.min(annualHsa, limitHsa);
+                    const overflowHsa = (annualHsa - cappedHsa) / 12;
+                    currentHsa = cappedHsa / 12;
+
+                    currentTaxable += overflow401 + overflowRothPrimary + overflowRothSpouse + overflowHsa;
                 }
 
                 row.k401 += (currentK401Employee + currentK401Match);
