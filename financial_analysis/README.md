@@ -317,4 +317,6 @@ npx -y firebase-tools deploy --only hosting:rajuplanner
 - Federal Social Security provisional-income thresholds are modeled; state taxes, deductions, filing-status changes, IRMAA, RMDs, NIIT, and detailed tax brackets are not.
 - Roth IRA income phase-outs and future inflation adjustments to contribution limits are not modeled. The current 2026 nominal limits are reused in future projection years.
 - HSA balances are treated as tax-free spendable assets and contribution caps assume family coverage. Non-qualified withdrawals and coverage eligibility are not modeled.
-- Monarch account classification depends on account names/subtypes and configured match rules. Review sync output in the UI before relying on aggregated balances.
+- Survivor benefits are approximated as the larger of the two ARF-adjusted streams, paid immediately upon the first death; survivor claiming-age rules (eligibility from age 60, survivor-specific reductions) are not modeled.
+- In the drawdown simulator, Social Security income above the inflation-adjusted spending target is treated as spent, not reinvested.
+- Monarch account classification depends on account names/subtypes and configured match rules. Exclude rules match against the institution name as well as account names. Review sync output in the UI before relying on aggregated balances.

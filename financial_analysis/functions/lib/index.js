@@ -107,6 +107,8 @@ async function performMonarchSync(userId) {
         const accName = acc.name?.toLowerCase() || "";
         const dispName = acc.displayName?.toLowerCase() || "";
         const searchableName = `${instName} ${accName} ${dispName}`;
+        if (matchesRule(searchableName, accountRules.exclude))
+            return false;
         const isFidelity = instName.includes("fidelity") || accName.includes("fidelity") || dispName.includes("fidelity");
         return isFidelity || matchesRule(searchableName, accountRules.include);
     });
@@ -124,13 +126,11 @@ async function performMonarchSync(userId) {
     let hasRothSpouse = false;
     let hasTaxable = false;
     let hasTaxableSpouse = false;
+    let appliedAccountsCount = 0;
     targetAccounts.forEach((acc) => {
         const name = (acc.name || "").toLowerCase();
         const displayName = (acc.displayName || "").toLowerCase();
         const searchableName = `${name} ${displayName}`;
-        if (matchesRule(searchableName, accountRules.exclude)) {
-            return;
-        }
         const isSpouse = matchesRule(searchableName, accountRules.spouse);
         const subtypeName = (acc.subtype?.display || "").toLowerCase();
         const typeName = (acc.type?.name || "").toLowerCase();
@@ -193,8 +193,11 @@ async function performMonarchSync(userId) {
                 totalRoth += balance;
                 hasRoth = true;
             }
+            appliedAccountsCount++;
         }
         else if (isHsa) {
+            // HSA totals are computed but never persisted (manual entry preserved),
+            // so HSA accounts do not count as applied.
             totalHsa += balance;
         }
         else if (is401k) {
@@ -206,6 +209,7 @@ async function performMonarchSync(userId) {
                 total401k += balance;
                 has401k = true;
             }
+            appliedAccountsCount++;
         }
         else if (isTaxable) {
             if (isSpouse) {
@@ -216,6 +220,7 @@ async function performMonarchSync(userId) {
                 totalTaxable += balance;
                 hasTaxable = true;
             }
+            appliedAccountsCount++;
         }
         else {
             // Fallback: treat general investments as taxable brokerage if unmatched
@@ -228,6 +233,7 @@ async function performMonarchSync(userId) {
                     totalTaxable += balance;
                     hasTaxable = true;
                 }
+                appliedAccountsCount++;
             }
         }
     });
@@ -316,7 +322,8 @@ async function performMonarchSync(userId) {
     console.info("Firestore balance update committed successfully.");
     return {
         success: true,
-        syncedFidelityAccountsCount: targetAccounts.length,
+        relevantAccountsCount: targetAccounts.length,
+        appliedAccountsCount,
         balances: {
             k401k: has401k ? Math.round(total401k) : null,
             roth: hasRoth ? Math.round(totalRoth) : null,
@@ -369,7 +376,7 @@ exports.dailyMonarchSync = (0, scheduler_1.onSchedule)({
     console.info("Starting scheduled daily Monarch sync.");
     try {
         const result = await performMonarchSync(targetUserId);
-        console.info(`Scheduled sync completed for ${result.syncedFidelityAccountsCount} relevant accounts.`);
+        console.info(`Scheduled sync completed: ${result.appliedAccountsCount} of ${result.relevantAccountsCount} relevant accounts applied.`);
     }
     catch (error) {
         console.error("Scheduled sync failed:", error);

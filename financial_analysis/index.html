@@ -2071,7 +2071,7 @@
             <main class="results-dashboard">
                 <section class="summary-grid">
                     <div class="metric">
-                        <div class="metric-label">Runway with Social Security</div>
+                        <div class="metric-label" id="ddPrimaryLabel" data-auto-id="text-drawdown-primary-runway-label">Runway with Social Security</div>
                         <div class="metric-value" id="ddRunwayWithSS">Never Depleted</div>
                         <div class="metric-sub" id="ddRunwayWithSSSub">Asset balance at age 95: $0</div>
                     </div>
@@ -2087,7 +2087,7 @@
                     </div>
                     <div class="metric" style="grid-column: span 3; min-height: auto;">
                         <div class="metric-label" style="margin-bottom: 4px;">Social Security Contribution Analysis</div>
-                        <div class="metric-sub" id="ddSsaContributionSummary" style="font-size: 0.85rem; font-weight: 500; color: var(--text);">
+                        <div class="metric-sub" id="ddSsaContributionSummary" data-auto-id="text-drawdown-ssa-contribution-summary" style="font-size: 0.85rem; font-weight: 500; color: var(--text);">
                             Social Security offsets <strong>45%</strong> of your target retirement spending, preserving <strong>$1,850,000</strong> of portfolio capital over your lifetime.
                         </div>
                     </div>
@@ -2100,7 +2100,7 @@
                             <p>Comparison of total spendable portfolio wealth over your retirement lifecycle.</p>
                         </div>
                         <div class="legend">
-                            <span><span class="dot" style="background: var(--color-early);"></span>With Social Security Strategy</span>
+                            <span id="ddLegendPrimary" data-auto-id="text-drawdown-legend-primary"><span class="dot" style="background: var(--color-early);"></span>With Social Security Strategy</span>
                             <span><span class="dot" style="background: var(--red);"></span>Without Social Security</span>
                         </div>
                     </div>
@@ -2111,7 +2111,7 @@
 
                 <section class="table-panel panel">
                     <div class="panel-header">
-                        <h2>Drawdown Cash Flow Projection (With Social Security)</h2>
+                        <h2 id="ddTableTitle" data-auto-id="text-drawdown-table-title">Drawdown Cash Flow Projection (With Social Security)</h2>
                         <p>Detailed year-by-year cash flows, compounding interest, and account liquidations during retirement.</p>
                     </div>
                     <div class="table-wrap">
@@ -5362,8 +5362,8 @@
             Math.round(refWithdrawal * 0.75 / 250) * 250,
             baseWithdrawal,
             Math.round(refWithdrawal * 1.25 / 250) * 250,
-            Math.round(refWithdrawal * 1.25 / 250) * 250,
             Math.round(refWithdrawal * 1.5 / 250) * 250,
+            Math.round(refWithdrawal * 1.75 / 250) * 250,
             Math.round(refWithdrawal * 2.0 / 250) * 250
         ].filter(v => v > 0))).sort((a,b)=>a-b);
 
@@ -5895,7 +5895,7 @@
         }
 
         // Insights Summary updates
-        updateSocialInsights(outcome62, outcomeCustom, outcome70, customAge, stopWorkAge, cross62vCustom, cross62v70, timelineEndAge);
+        updateSocialInsights(outcome62, outcomeCustom, outcome70, customAge, stopWorkAge, cross62vCustom, cross62v70, timelineEndAge, wealth62[totalMonths], wealth70[totalMonths]);
 
         // Load milestones table
         const milestoneBody = document.getElementById('milestoneTableBody');
@@ -5971,7 +5971,7 @@
         };
     }
 
-    function updateSocialInsights(out62, outCustom, out70, customAge, stopAge, cross62custom, cross62v70, maxAge) {
+    function updateSocialInsights(out62, outCustom, out70, customAge, stopAge, cross62custom, cross62v70, maxAge, lifetime62, lifetime70) {
         // Earnings test
         const earnEl = document.getElementById('insightEarningsVal');
         const activeSalary = activeProfile === 'p1' ? userConfig.p1.salary : (activeProfile === 'p2' ? userConfig.p2.salary : userConfig.p1.salary + userConfig.p2.salary);
@@ -5998,14 +5998,17 @@
         else if (cross62custom) beEl.textContent = `62 vs ${customAge} breaks even at Age ${cross62custom.years}`;
         else beEl.textContent = `No crossover within planning expectancy (${maxAge})`;
 
-        // Delta
+        // Delta: compare full simulated lifetime accumulation (includes the 8 years of early checks)
         const deltaEl = document.getElementById('insightLifetimeVal');
-        const delta = (out70.monthlyBenefit - out62.monthlyBenefit) * 12 * Math.max(0, maxAge - 70);
-        if (delta > 0) {
-            deltaEl.textContent = `+${money(delta)} accumulated extra at Age 70`;
+        const delta = (lifetime70 || 0) - (lifetime62 || 0);
+        if (Math.abs(delta) < 1) {
+            deltaEl.textContent = 'Equal lifetime totals';
+            deltaEl.style.color = 'var(--muted)';
+        } else if (delta > 0) {
+            deltaEl.textContent = `+${money(delta)} lifetime by claiming at 70`;
             deltaEl.style.color = 'var(--color-delayed)';
         } else {
-            deltaEl.textContent = `Age 62 accumulates more overall`;
+            deltaEl.textContent = `+${money(-delta)} lifetime by claiming at 62`;
             deltaEl.style.color = 'var(--color-early)';
         }
 
@@ -6015,13 +6018,13 @@
             advisory.push(`<strong>Earnings test penalty:</strong> Working while collecting pre-FRA offsets checks, but triggers ARF recalculations at FRA, reclaiming lost benefits.`);
         }
         if (cross62v70 && cross62v70.years <= maxAge) {
-            advisory.push(`Claiming at <strong>Age 70</strong> breaks even at <strong>Age ${cross62v70.years}</strong>. If you expect to live past that, delaying optimization maximizing lifetime household wealth.`);
+            advisory.push(`Claiming at <strong>Age 70</strong> breaks even at <strong>Age ${cross62v70.years}</strong>. If you expect to live past that, delaying maximizes lifetime household wealth.`);
         }
         const taxRate = parseFloat(el.taxInput.value);
         if (taxRate > 15) {
             advisory.push(`With an effective tax rate of <strong>${taxRate}%</strong>, up to 85% of Social Security checks will be taxed. Optimize portfolio withdrawals to keep overall taxes low.`);
         }
-        document.getElementById('insightRecommendationText').innerHTML = advisory.length ? advisory.join(' | ') : 'All plans check out. Try adjusting expecting longevity bounds to optimize strategy crossovers.';
+        document.getElementById('insightRecommendationText').innerHTML = advisory.length ? advisory.join(' | ') : 'All plans check out. Try adjusting expected longevity bounds to optimize strategy crossovers.';
     }
 
     function findOptimalClaimingStrategy() {
@@ -6238,10 +6241,13 @@
         let cumulativeWithdrawals = 0;
         let cumulativeSS = 0;
         let cumulativeTargetSpending = 0;
+        let ssAppliedToSpending = 0;
         let yearlyWithdrawals = 0;
         let yearlySS = 0;
         let yearlyTaxPaid = 0;
-        
+        let yearlyContrib = 0;
+        let yearlyTargetSpending = 0;
+
         const totalMonths = years * 12;
         const baseWithdrawal = parseFloat(el.ddWithdrawalMonthly.value) || 0;
 
@@ -6323,20 +6329,25 @@
                 row.hsa += currentHsa;
                 row.taxable += currentTaxable;
                 row.taxableBasis += currentTaxable;
-                
+                yearlyContrib += currentK401Employee + currentK401Match + currentRoth + currentHsa + currentTaxable;
+
                 // If they claimed SS while still working, invest it into taxable
                 if (monthlySS > 0) {
                     row.taxable += monthlySS;
                     row.taxableBasis += monthlySS;
+                    yearlyContrib += monthlySS;
                 }
-            } else if (!row.depleted) {
-                // Retirement expenses inflated over time
+            } else {
+                // Retirement expenses inflated over time; target accrues every retired
+                // month through the horizon, funded or not, so offset ratios stay honest.
                 const targetSpending = baseWithdrawal * cFactor;
                 cumulativeTargetSpending += targetSpending;
+                yearlyTargetSpending += targetSpending;
+                ssAppliedToSpending += Math.min(monthlySS, targetSpending);
                 // SS reduces required portfolio withdrawal
                 const netWithdrawalNeeded = Math.max(0, targetSpending - monthlySS);
-                
-                if (netWithdrawalNeeded > 0) {
+
+                if (!row.depleted && netWithdrawalNeeded > 0) {
                     let rem = netWithdrawalNeeded;
                     const taxableWithdrawal = withdrawFromTaxable(row, rem, capGainsTaxRate);
                     rem = taxableWithdrawal.remaining;
@@ -6373,6 +6384,8 @@
                     annualWithdrawal: yearlyWithdrawals,
                     annualSS: yearlySS,
                     annualTaxPaid: yearlyTaxPaid,
+                    annualContrib: yearlyContrib,
+                    annualTargetSpending: yearlyTargetSpending,
                     grossTotal,
                     afterTaxTotal: atv,
                     realAfterTaxTotal: atv / Math.pow(1 + inflationRate, year),
@@ -6382,6 +6395,8 @@
                 yearlyWithdrawals = 0;
                 yearlySS = 0;
                 yearlyTaxPaid = 0;
+                yearlyContrib = 0;
+                yearlyTargetSpending = 0;
             }
         }
 
@@ -6392,49 +6407,69 @@
             depletedAge: row.depletedAge,
             cumulativeSS,
             cumulativeTargetSpending,
+            ssAppliedToSpending,
             final: rows[rows.length - 1]
         };
     }
 
     function runDrawdownSimulation() {
-        const inp = readPortfolioInputs();
-        const hasSS = projectDrawdownLifecycle(true);
-        const noSS = projectDrawdownLifecycle(false);
+        // Toggle off -> primary scenario runs without SS income; reuse it as the
+        // baseline instead of simulating the identical scenario twice.
+        const ssEnabled = el.ddEnableSS.checked;
+        const hasSS = projectDrawdownLifecycle(ssEnabled);
+        const noSS = ssEnabled ? projectDrawdownLifecycle(false) : hasSS;
+
+        // Relabel presentation when the SS offset is disabled
+        document.getElementById('ddPrimaryLabel').textContent = ssEnabled ? 'Runway with Social Security' : 'Runway (SS Offset Disabled)';
+        document.getElementById('ddLegendPrimary').style.display = ssEnabled ? '' : 'none';
+        document.getElementById('ddTableTitle').textContent = ssEnabled ? 'Drawdown Cash Flow Projection (With Social Security)' : 'Drawdown Cash Flow Projection (Social Security Disabled)';
 
         // Update card metrics
-        const formatDepletion = (depletedAge) => depletedAge ? `Age ${depletedAge.toFixed(1)}` : 'Never Depleted (95+)';
-        
+        const horizonAge = hasSS.endAge;
+        const formatDepletion = (depletedAge) => depletedAge ? `Age ${depletedAge.toFixed(1)}` : `Not depleted through ${horizonAge}`;
+
         document.getElementById('ddRunwayWithSS').textContent = formatDepletion(hasSS.depletedAge);
-        document.getElementById('ddRunwayWithSSSub').textContent = hasSS.depletedAge ? 'Assets fully depleted' : `Assets at age 95: ${money(hasSS.final.afterTaxTotal)}`;
+        document.getElementById('ddRunwayWithSSSub').textContent = hasSS.depletedAge ? 'Assets fully depleted' : `Assets at age ${horizonAge}: ${money(hasSS.final.afterTaxTotal)}`;
 
         document.getElementById('ddRunwayNoSS').textContent = formatDepletion(noSS.depletedAge);
-        document.getElementById('ddRunwayNoSSSub').textContent = noSS.depletedAge ? 'Assets fully depleted' : `Assets at age 95: ${money(noSS.final.afterTaxTotal)}`;
+        document.getElementById('ddRunwayNoSSSub').textContent = noSS.depletedAge ? 'Assets fully depleted' : `Assets at age ${horizonAge}: ${money(noSS.final.afterTaxTotal)}`;
 
         // runway extension val
         const extensionVal = document.getElementById('ddExtensionVal');
-        if (!hasSS.depletedAge && !noSS.depletedAge) {
-            extensionVal.textContent = "+0 Years";
-            extensionVal.parentElement.querySelector('.metric-sub').textContent = 'Both models last past 95+';
+        if (!ssEnabled) {
+            extensionVal.textContent = "N/A";
+            extensionVal.parentElement.querySelector('.metric-sub').textContent = 'Social Security offset disabled';
+        } else if (!hasSS.depletedAge && !noSS.depletedAge) {
+            extensionVal.textContent = "Beyond Horizon";
+            extensionVal.parentElement.querySelector('.metric-sub').textContent = `Neither model depletes through age ${horizonAge}`;
         } else if (!hasSS.depletedAge && noSS.depletedAge) {
-            const ext = 95 - noSS.depletedAge;
-            extensionVal.textContent = `+${ext.toFixed(1)} Years`;
-            extensionVal.parentElement.querySelector('.metric-sub').textContent = 'Social Security prevents depletion';
+            const ext = horizonAge - noSS.depletedAge;
+            extensionVal.textContent = `At least +${ext.toFixed(1)} Years`;
+            extensionVal.parentElement.querySelector('.metric-sub').textContent = 'Social Security prevents depletion within horizon';
         } else if (hasSS.depletedAge && noSS.depletedAge) {
             const ext = hasSS.depletedAge - noSS.depletedAge;
-            extensionVal.textContent = `+${ext.toFixed(1)} Years`;
-            extensionVal.parentElement.querySelector('.metric-sub').textContent = 'Adds substantial portfolio runway';
+            if (Math.abs(ext) < 0.05) {
+                extensionVal.textContent = "+0 Years";
+                extensionVal.parentElement.querySelector('.metric-sub').textContent = 'No longevity change detected';
+            } else {
+                extensionVal.textContent = `+${ext.toFixed(1)} Years`;
+                extensionVal.parentElement.querySelector('.metric-sub').textContent = 'Social Security extends portfolio runway';
+            }
         } else {
             extensionVal.textContent = "+0 Years";
             extensionVal.parentElement.querySelector('.metric-sub').textContent = 'No longevity change detected';
         }
 
         // Drawdown contribution Analysis summary
-        const grossSsaContribution = hasSS.cumulativeSS;
-        const pctSavings = hasSS.cumulativeTargetSpending > 0
-            ? (grossSsaContribution / hasSS.cumulativeTargetSpending) * 100
+        // SS applied is capped against each month's target, so this ratio never exceeds 100%.
+        const ssApplied = hasSS.ssAppliedToSpending;
+        const pctCovered = hasSS.cumulativeTargetSpending > 0
+            ? (ssApplied / hasSS.cumulativeTargetSpending) * 100
             : 0;
-        
-        document.getElementById('ddSsaContributionSummary').innerHTML = `Social Security strategy offsets <strong>${pctSavings.toFixed(1)}%</strong> of your projected retirement target spending, saving your portfolio <strong>${money(grossSsaContribution)}</strong> of active capital liquidation over your lifecycle.`;
+
+        document.getElementById('ddSsaContributionSummary').innerHTML = ssEnabled
+            ? `Social Security covers <strong>${pctCovered.toFixed(1)}%</strong> (<strong>${money(ssApplied)}</strong>) of your projected retirement target spending across the simulated horizon.`
+            : `Social Security offset is <strong>disabled</strong>; projected withdrawals rely solely on available portfolio assets.`;
 
         // Load Drawdown trajectories Chart
         if (drawdownChartInstance) {
@@ -6452,6 +6487,8 @@
             drawdownChartInstance.data.labels = labels;
             drawdownChartInstance.data.datasets[0].data = dWith;
             drawdownChartInstance.data.datasets[1].data = dNo;
+            // Toggle off -> both series identical; show only the no-SS line
+            drawdownChartInstance.data.datasets[0].hidden = !ssEnabled;
             
             // Reapply style configurations
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -6470,17 +6507,16 @@
         tableBody.innerHTML = '';
         const drawdownRows = hasSS.rows.slice(1);
         
-        drawdownRows.forEach(r => {
+        drawdownRows.forEach((r, idx) => {
             const age = r.age;
-            const isRetired = age >= hasSS.retirementAge;
-            const startBal = r.grossTotal + (r.annualWithdrawal || 0) - (r.annualSS || 0); // approx start
-            const spendingVal = isRetired ? (parseFloat(el.ddWithdrawalMonthly.value) * 12 * Math.pow(1 + inp.inflationRate, r.year)) : 0;
-            const returnEst = r.grossTotal - startBal + r.annualWithdrawal - r.annualSS;
-            
+            const startBal = hasSS.rows[idx].grossTotal; // previous year-end balance
+            const spendingVal = r.annualTargetSpending || 0;
+            const returnEst = r.grossTotal - startBal - (r.annualContrib || 0) + (r.annualWithdrawal || 0) + (r.annualTaxPaid || 0);
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>Age ${age}</td>
-                <td>${money(r.grossTotal + r.annualWithdrawal - r.annualSS)}</td>
+                <td>${money(startBal)}</td>
                 <td>${spendingVal > 0 ? money(spendingVal) : '-'}</td>
                 <td>${r.annualSS > 0 ? money(r.annualSS) : '-'}</td>
                 <td>${r.annualWithdrawal > 0 ? money(r.annualWithdrawal) : '-'}</td>
