@@ -2961,6 +2961,15 @@
             activeProfile = state.activeProfile || activeProfile;
 
             if (state.inputs) {
+                if (state.inputs.retirementTax !== undefined && parseFloat(state.inputs.retirementTax) > 0) {
+                    userConfig.defaults.tax = parseFloat(state.inputs.retirementTax);
+                }
+                if (state.inputs.returnInput !== undefined && parseFloat(state.inputs.returnInput) > 0) {
+                    userConfig.defaults.return = parseFloat(state.inputs.returnInput);
+                }
+                if (state.inputs.inflationRate !== undefined && parseFloat(state.inputs.inflationRate) > 0) {
+                    userConfig.defaults.cola = parseFloat(state.inputs.inflationRate);
+                }
                 for (const [key, val] of Object.entries(state.inputs)) {
                     const element = el[key];
                     if (element) {
@@ -3525,10 +3534,26 @@
         
         // Sync tab 1
         el.currentAge.value = userConfig.p1.age;
-        el.returnInput.value = userConfig.defaults.return;
-        el.returnSlider.value = userConfig.defaults.return;
-        el.inflationRate.value = userConfig.defaults.cola;
-        el.retirementTax.value = userConfig.defaults.tax;
+        if (userConfig.defaults.return) {
+            el.returnInput.value = userConfig.defaults.return;
+            el.returnSlider.value = userConfig.defaults.return;
+            const defaultReturnEl = document.getElementById('defaultReturn');
+            if (defaultReturnEl) defaultReturnEl.value = userConfig.defaults.return;
+        }
+        if (userConfig.defaults.cola) {
+            el.inflationRate.value = userConfig.defaults.cola;
+            el.colaInput.value = userConfig.defaults.cola;
+            el.colaSlider.value = userConfig.defaults.cola;
+            const defaultColaEl = document.getElementById('defaultCola');
+            if (defaultColaEl) defaultColaEl.value = userConfig.defaults.cola;
+        }
+        if (userConfig.defaults.tax) {
+            el.retirementTax.value = userConfig.defaults.tax;
+            el.taxInput.value = userConfig.defaults.tax;
+            el.taxSlider.value = userConfig.defaults.tax;
+            const defaultTaxEl = document.getElementById('defaultTax');
+            if (defaultTaxEl) defaultTaxEl.value = userConfig.defaults.tax;
+        }
         
         // Sync tab 2 Names
         document.getElementById('nameP1Tab').textContent = userConfig.p1.name;
@@ -3543,10 +3568,6 @@
         
         el.ssReturnInput.value = 6.0; // default conservative return for reinvestment
         el.ssReturnSlider.value = 6.0;
-        el.colaInput.value = userConfig.defaults.cola;
-        el.colaSlider.value = userConfig.defaults.cola;
-        el.taxInput.value = userConfig.defaults.tax;
-        el.taxSlider.value = userConfig.defaults.tax;
         
         // Sync tab 3
         el.ddReturnInput.value = 6.0;
@@ -3631,56 +3652,53 @@
         
         // Synced inputs across views
         // Return assumption
-        el.returnInput.addEventListener('input', () => {
-            el.returnSlider.value = el.returnInput.value;
+        const updateReturnVal = (val) => {
+            userConfig.defaults.return = val;
+            el.returnInput.value = val;
+            el.returnSlider.value = val;
+            const defaultReturnEl = document.getElementById('defaultReturn');
+            if (defaultReturnEl) defaultReturnEl.value = val;
             updateSliderGradients();
             updateAll();
-        });
-        el.returnSlider.addEventListener('input', () => {
-            el.returnInput.value = el.returnSlider.value;
-            updateSliderGradients();
-            updateAll();
-        });
-        
+        };
+        el.returnInput.addEventListener('input', () => updateReturnVal(parseFloat(el.returnInput.value) || 0));
+        el.returnSlider.addEventListener('input', () => updateReturnVal(parseFloat(el.returnSlider.value) || 0));
+        const defaultReturnEl = document.getElementById('defaultReturn');
+        if (defaultReturnEl) defaultReturnEl.addEventListener('input', () => updateReturnVal(parseFloat(defaultReturnEl.value) || 0));
+
         // Inflation & COLA
-        el.inflationRate.addEventListener('input', () => {
-            el.colaInput.value = el.inflationRate.value;
-            el.colaSlider.value = el.inflationRate.value;
+        const updateColaVal = (val) => {
+            userConfig.defaults.cola = val;
+            el.inflationRate.value = val;
+            el.colaInput.value = val;
+            el.colaSlider.value = val;
+            const defaultColaEl = document.getElementById('defaultCola');
+            if (defaultColaEl) defaultColaEl.value = val;
             updateSliderGradients();
             updateAll();
-        });
-        el.colaInput.addEventListener('input', () => {
-            el.inflationRate.value = el.colaInput.value;
-            el.colaSlider.value = el.colaInput.value;
-            updateSliderGradients();
-            updateAll();
-        });
-        el.colaSlider.addEventListener('input', () => {
-            el.inflationRate.value = el.colaSlider.value;
-            el.colaInput.value = el.colaSlider.value;
-            updateSliderGradients();
-            updateAll();
-        });
-        
+        };
+        el.inflationRate.addEventListener('input', () => updateColaVal(parseFloat(el.inflationRate.value) || 0));
+        el.colaInput.addEventListener('input', () => updateColaVal(parseFloat(el.colaInput.value) || 0));
+        el.colaSlider.addEventListener('input', () => updateColaVal(parseFloat(el.colaSlider.value) || 0));
+        const defaultColaEl = document.getElementById('defaultCola');
+        if (defaultColaEl) defaultColaEl.addEventListener('input', () => updateColaVal(parseFloat(defaultColaEl.value) || 0));
+
         // Tax rate
-        el.retirementTax.addEventListener('input', () => {
-            el.taxInput.value = el.retirementTax.value;
-            el.taxSlider.value = el.retirementTax.value;
+        const updateTaxVal = (val) => {
+            userConfig.defaults.tax = val;
+            el.retirementTax.value = val;
+            el.taxInput.value = val;
+            el.taxSlider.value = val;
+            const defaultTaxEl = document.getElementById('defaultTax');
+            if (defaultTaxEl) defaultTaxEl.value = val;
             updateSliderGradients();
             updateAll();
-        });
-        el.taxInput.addEventListener('input', () => {
-            el.retirementTax.value = el.taxInput.value;
-            el.taxSlider.value = el.taxInput.value;
-            updateSliderGradients();
-            updateAll();
-        });
-        el.taxSlider.addEventListener('input', () => {
-            el.retirementTax.value = el.taxSlider.value;
-            el.taxInput.value = el.taxSlider.value;
-            updateSliderGradients();
-            updateAll();
-        });
+        };
+        el.retirementTax.addEventListener('input', () => updateTaxVal(parseFloat(el.retirementTax.value) || 0));
+        el.taxInput.addEventListener('input', () => updateTaxVal(parseFloat(el.taxInput.value) || 0));
+        el.taxSlider.addEventListener('input', () => updateTaxVal(parseFloat(el.taxSlider.value) || 0));
+        const defaultTaxEl = document.getElementById('defaultTax');
+        if (defaultTaxEl) defaultTaxEl.addEventListener('input', () => updateTaxVal(parseFloat(defaultTaxEl.value) || 0));
         
         // Current age / Birth year
         el.currentAge.addEventListener('input', () => {
