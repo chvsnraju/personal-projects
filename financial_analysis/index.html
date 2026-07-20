@@ -1683,9 +1683,9 @@
                     </div>
                     <div class="input-wrapper">
                         <span>$</span>
-                        <input type="number" id="piaInput" value="4127" min="500" max="6000" readonly style="opacity: 0.85; cursor: default;">
+                        <input type="number" id="piaInput" value="3000" min="500" max="6000" readonly style="opacity: 0.85; cursor: default;">
                     </div>
-                    <input type="range" id="piaSlider" value="4127" min="500" max="6000" disabled style="opacity: 0.6;">
+                    <input type="range" id="piaSlider" value="3000" min="500" max="6000" disabled aria-label="Full Benefit at FRA 67" data-auto-id="input-pia-slider" style="opacity: 0.6;">
                 </div>
 
                 <div class="input-group" id="spousalGroup">
@@ -1696,7 +1696,7 @@
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Apply Spousal Top-Up (Max 50% of Primary)</span>
                         <label class="switch">
-                            <input type="checkbox" id="spousalToggle" checked>
+                            <input type="checkbox" id="spousalToggle" checked aria-label="Apply Spousal Top-Up" data-auto-id="toggle-spousal-top-up">
                             <span class="slider-pill"></span>
                         </label>
                     </div>
@@ -1712,7 +1712,7 @@
                         <input type="number" id="customAgeInput" value="67" min="62" max="70">
                         <span>Years</span>
                     </div>
-                    <input type="range" id="customAgeSlider" value="67" min="62" max="70" step="1">
+                    <input type="range" id="customAgeSlider" value="67" min="62" max="70" step="1" aria-label="Custom Strategy Claiming Age" data-auto-id="input-claiming-age-slider">
                 </div>
 
                 <div class="input-group" id="splitAgeGroup" style="display: none;">
@@ -1723,7 +1723,7 @@
                         <input type="number" id="customP2AgeInput" value="67" min="62" max="70">
                         <span>Years</span>
                     </div>
-                    <input type="range" id="customP2AgeSlider" value="67" min="62" max="70" step="1">
+                    <input type="range" id="customP2AgeSlider" value="67" min="62" max="70" step="1" aria-label="Spouse Claiming Age" data-auto-id="input-spouse-claiming-age-slider">
                 </div>
 
                 <div class="input-group">
@@ -1735,7 +1735,7 @@
                         <input type="number" id="stopWorkInput" value="67" min="50" max="70">
                         <span>Years</span>
                     </div>
-                    <input type="range" id="stopWorkSlider" value="67" min="50" max="70" step="1">
+                    <input type="range" id="stopWorkSlider" value="67" min="50" max="70" step="1" aria-label="Stop Working Age" data-auto-id="input-stop-work-age-slider">
                 </div>
 
                 <div class="input-group" id="splitStopWorkGroup" style="display: none;">
@@ -1746,7 +1746,7 @@
                         <input type="number" id="p2StopWorkInput" value="67" min="50" max="70">
                         <span>Years</span>
                     </div>
-                    <input type="range" id="p2StopWorkSlider" value="67" min="50" max="70" step="1">
+                    <input type="range" id="p2StopWorkSlider" value="67" min="50" max="70" step="1" aria-label="Spouse Stop Working Age" data-auto-id="input-spouse-stop-work-age-slider">
                 </div>
 
                 <div class="input-group" id="earnWhileClaimingGroup">
@@ -1757,7 +1757,7 @@
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Continue working while collecting SSA</span>
                         <label class="switch">
-                            <input type="checkbox" id="earnWhileClaimingToggle">
+                            <input type="checkbox" id="earnWhileClaimingToggle" aria-label="Continue working while collecting Social Security" data-auto-id="toggle-earn-while-claiming">
                             <span class="slider-pill"></span>
                         </label>
                     </div>
@@ -1768,7 +1768,7 @@
                             <button type="button" class="salary-preset-btn" data-salary="75000">$75k</button>
                             <button type="button" class="salary-preset-btn" data-salary="100000">$100k</button>
                             <button type="button" class="salary-preset-btn" data-salary="150000">$150k</button>
-                            <button type="button" class="salary-preset-btn" id="maxSalaryBtn" data-salary="176100">$176k</button>
+                            <button type="button" class="salary-preset-btn" id="maxSalaryBtn" data-salary="100000">$100k</button>
                         </div>
                         <div class="input-wrapper" style="margin-top: 6px;">
                             <span>$</span>
@@ -1786,7 +1786,7 @@
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Invest & Compound Benefit Checks</span>
                         <label class="switch">
-                            <input type="checkbox" id="investBenefitsToggle" checked>
+                            <input type="checkbox" id="investBenefitsToggle" checked aria-label="Invest and Compound Benefit Checks" data-auto-id="toggle-invest-benefits">
                             <span class="slider-pill"></span>
                         </label>
                     </div>
@@ -1802,7 +1802,7 @@
                         <input type="number" id="ssReturnInput" value="6.0" min="0" max="15" step="0.1">
                         <span>%</span>
                     </div>
-                    <input type="range" id="ssReturnSlider" value="6.0" min="0" max="15" step="0.1">
+                    <input type="range" id="ssReturnSlider" value="6.0" min="0" max="15" step="0.1" aria-label="Compounding Return Rate" data-auto-id="input-social-security-return-slider">
                 </div>
 
                 <div class="input-group">
@@ -1813,7 +1813,7 @@
                         <input type="number" id="investmentTaxInput" value="0.0" min="0" max="40" step="0.5">
                         <span>%</span>
                     </div>
-                    <input type="range" id="investmentTaxSlider" value="0.0" min="0" max="40" step="0.5">
+                    <input type="range" id="investmentTaxSlider" value="0.0" min="0" max="40" step="0.5" aria-label="Investment Tax Drag" data-auto-id="input-investment-tax-slider">
                     <div id="investmentTaxInfoText" class="spousal-info-text" style="font-size: 0.74rem; color: var(--dim);"></div>
                 </div>
 
@@ -1825,7 +1825,7 @@
                         <input type="number" id="colaInput" value="3.0" min="0" max="8" step="0.1">
                         <span>%</span>
                     </div>
-                    <input type="range" id="colaSlider" value="3.0" min="0" max="8" step="0.1">
+                    <input type="range" id="colaSlider" value="3.0" min="0" max="8" step="0.1" aria-label="Annual COLA Inflation" data-auto-id="input-cola-slider">
                 </div>
 
                 <div class="input-group">
@@ -1835,7 +1835,7 @@
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Inflation-Adjust to Today's Dollars</span>
                         <label class="switch">
-                            <input type="checkbox" id="realDollarToggle" checked>
+                            <input type="checkbox" id="realDollarToggle" checked aria-label="Inflation-Adjust to Today's Dollars" data-auto-id="toggle-real-dollar-view">
                             <span class="slider-pill"></span>
                         </label>
                     </div>
@@ -1849,7 +1849,7 @@
                         <input type="number" id="taxInput" value="24.0" min="0" max="45" step="0.5">
                         <span>%</span>
                     </div>
-                    <input type="range" id="taxSlider" value="24.0" min="0" max="45" step="0.5">
+                    <input type="range" id="taxSlider" value="24.0" min="0" max="45" step="0.5" aria-label="Effective Income Tax Rate" data-auto-id="input-effective-tax-slider">
                 </div>
 
                 <div class="input-group">
@@ -1872,7 +1872,7 @@
                         <input type="number" id="maxAgeP1Input" value="85" min="70" max="100">
                         <span>Years</span>
                     </div>
-                    <input type="range" id="maxAgeP1Slider" value="85" min="70" max="100">
+                    <input type="range" id="maxAgeP1Slider" value="85" min="70" max="100" aria-label="Primary Life Expectancy" data-auto-id="input-primary-life-expectancy-slider">
                 </div>
 
                 <div class="input-group">
@@ -1883,7 +1883,7 @@
                         <input type="number" id="maxAgeP2Input" value="85" min="70" max="100">
                         <span>Years</span>
                     </div>
-                    <input type="range" id="maxAgeP2Slider" value="85" min="70" max="100">
+                    <input type="range" id="maxAgeP2Slider" value="85" min="70" max="100" aria-label="Spouse Life Expectancy" data-auto-id="input-spouse-life-expectancy-slider">
                 </div>
 
                 <div class="input-group" id="survivorGroup">
@@ -1893,7 +1893,7 @@
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Apply Survivor Step-Up (Keep Highest)</span>
                         <label class="switch">
-                            <input type="checkbox" id="survivorToggle" checked>
+                            <input type="checkbox" id="survivorToggle" checked aria-label="Apply Survivor Step-Up" data-auto-id="toggle-survivor-step-up">
                             <span class="slider-pill"></span>
                         </label>
                     </div>
@@ -2041,7 +2041,7 @@
                             <input id="ddReturnInput" type="number" min="0" max="15" step="0.1" value="6.0">
                             <span>%</span>
                         </div>
-                        <input type="range" id="ddReturnSlider" min="0" max="15" step="0.1" value="6.0">
+                        <input type="range" id="ddReturnSlider" min="0" max="15" step="0.1" value="6.0" aria-label="Drawdown Compounding Return" data-auto-id="input-drawdown-return-slider">
                         <p style="font-size: 0.74rem; color: var(--dim);">Conservative growth rate during drawdown phase</p>
                     </div>
                     <div class="field">
@@ -2058,7 +2058,7 @@
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Offset with Social Security</span>
                         <label class="switch">
-                            <input type="checkbox" id="ddEnableSS" checked>
+                            <input type="checkbox" id="ddEnableSS" checked aria-label="Offset with Social Security" data-auto-id="toggle-drawdown-social-security">
                             <span class="switch-slider"></span>
                         </label>
                     </div>
@@ -2154,18 +2154,18 @@
                             <h3 class="column-title"><i class="fa-solid fa-user-tie"></i> Person 1 (Primary)</h3>
                             <div class="form-group">
                                 <label for="name1">First Name</label>
-                                <input type="text" id="name1" value="Raju V. Chekuri" placeholder="Enter name" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
+                                <input type="text" id="name1" value="Primary" placeholder="Enter name" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
                             </div>
                             <div class="form-group" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
                                 <div>
                                     <label for="birthMonth1">Birth Month</label>
                                     <select id="birthMonth1" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
                                         <option value="" disabled>Month</option>
-                                        <option value="1">Jan</option>
+                                        <option value="1" selected>Jan</option>
                                         <option value="2">Feb</option>
                                         <option value="3">Mar</option>
                                         <option value="4">Apr</option>
-                                        <option value="5" selected>May</option>
+                                        <option value="5">May</option>
                                         <option value="6">Jun</option>
                                         <option value="7">Jul</option>
                                         <option value="8">Aug</option>
@@ -2177,14 +2177,14 @@
                                 </div>
                                 <div>
                                     <label for="birthYear1">Birth Year</label>
-                                    <input type="number" id="birthYear1" placeholder="YYYY" min="1940" max="2015" value="1975" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
+                                    <input type="number" id="birthYear1" placeholder="YYYY" min="1940" max="2015" value="1980" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 8px;">
                                 <label for="pia1">Full Retirement Benefit (PIA)</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="pia1" value="4127" placeholder="e.g. 3000" min="0" max="6000" required>
+                                    <input type="number" id="pia1" value="3000" placeholder="e.g. 3000" min="0" max="6000" required>
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 14px;">
@@ -2194,36 +2194,36 @@
                                     </summary>
                                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;">
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 62</label>
-                                            <input type="number" id="ssa_p1_62" value="2744" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_62" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 62</label>
+                                            <input type="number" id="ssa_p1_62" value="2100" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 63</label>
-                                            <input type="number" id="ssa_p1_63" value="2970" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_63" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 63</label>
+                                            <input type="number" id="ssa_p1_63" value="2250" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 64</label>
-                                            <input type="number" id="ssa_p1_64" value="3208" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_64" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 64</label>
+                                            <input type="number" id="ssa_p1_64" value="2400" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 65</label>
-                                            <input type="number" id="ssa_p1_65" value="3519" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_65" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 65</label>
+                                            <input type="number" id="ssa_p1_65" value="2600" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 66</label>
-                                            <input type="number" id="ssa_p1_66" value="3826" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_66" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 66</label>
+                                            <input type="number" id="ssa_p1_66" value="2800" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 68</label>
-                                            <input type="number" id="ssa_p1_68" value="4377" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_68" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 68</label>
+                                            <input type="number" id="ssa_p1_68" value="3240" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 69</label>
-                                            <input type="number" id="ssa_p1_69" value="4725" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_69" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 69</label>
+                                            <input type="number" id="ssa_p1_69" value="3480" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 70</label>
-                                            <input type="number" id="ssa_p1_70" value="5186" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p1_70" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 70</label>
+                                            <input type="number" id="ssa_p1_70" value="3720" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                     </div>
                                 </details>
@@ -2232,7 +2232,7 @@
                                 <label for="salary1">Ongoing Annual Salary</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="salary1" value="176100" placeholder="0.00" required>
+                                    <input type="number" id="salary1" value="100000" placeholder="0.00" required>
                                 </div>
                             </div>
                         </div>
@@ -2241,7 +2241,7 @@
                             <h3 class="column-title"><i class="fa-solid fa-user"></i> Person 2 (Spouse)</h3>
                             <div class="form-group">
                                 <label for="name2">First Name</label>
-                                <input type="text" id="name2" value="Anuradha Chekuri" placeholder="Optional" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
+                                <input type="text" id="name2" value="Spouse" placeholder="Optional" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
                             </div>
                             <div class="form-group" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
                                 <div>
@@ -2250,28 +2250,28 @@
                                         <option value="" disabled>Month</option>
                                         <option value="1">Jan</option>
                                         <option value="2">Feb</option>
-                                        <option value="3">Mar</option>
+                                        <option value="3" selected>Mar</option>
                                         <option value="4">Apr</option>
                                         <option value="5">May</option>
                                         <option value="6">Jun</option>
                                         <option value="7">Jul</option>
                                         <option value="8">Aug</option>
                                         <option value="9">Sep</option>
-                                        <option value="10" selected>Oct</option>
+                                        <option value="10">Oct</option>
                                         <option value="11">Nov</option>
                                         <option value="12">Dec</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label for="birthYear2">Birth Year</label>
-                                    <input type="number" id="birthYear2" placeholder="YYYY" min="1940" max="2015" value="1979" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
+                                    <input type="number" id="birthYear2" placeholder="YYYY" min="1940" max="2015" value="1982" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 8px;">
                                 <label for="pia2">Full Retirement Benefit (PIA)</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="pia2" value="1536" placeholder="0.00" min="0" max="6000">
+                                    <input type="number" id="pia2" value="1800" placeholder="0.00" min="0" max="6000">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 14px;">
@@ -2281,36 +2281,36 @@
                                     </summary>
                                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;">
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 62</label>
-                                            <input type="number" id="ssa_p2_62" value="970" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_62" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 62</label>
+                                            <input type="number" id="ssa_p2_62" value="1260" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 63</label>
-                                            <input type="number" id="ssa_p2_63" value="1057" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_63" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 63</label>
+                                            <input type="number" id="ssa_p2_63" value="1350" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 64</label>
-                                            <input type="number" id="ssa_p2_64" value="1153" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_64" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 64</label>
+                                            <input type="number" id="ssa_p2_64" value="1440" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 65</label>
-                                            <input type="number" id="ssa_p2_65" value="1277" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_65" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 65</label>
+                                            <input type="number" id="ssa_p2_65" value="1560" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 66</label>
-                                            <input type="number" id="ssa_p2_66" value="1404" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_66" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 66</label>
+                                            <input type="number" id="ssa_p2_66" value="1680" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 68</label>
-                                            <input type="number" id="ssa_p2_68" value="1599" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_68" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 68</label>
+                                            <input type="number" id="ssa_p2_68" value="1944" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 69</label>
-                                            <input type="number" id="ssa_p2_69" value="1759" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_69" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 69</label>
+                                            <input type="number" id="ssa_p2_69" value="2088" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                         <div>
-                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 70</label>
-                                            <input type="number" id="ssa_p2_70" value="2021" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                            <label for="ssa_p2_70" style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 70</label>
+                                            <input type="number" id="ssa_p2_70" value="2232" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
                                         </div>
                                     </div>
                                 </details>
@@ -2319,7 +2319,7 @@
                                 <label for="salary2">Ongoing Annual Salary</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="salary2" value="41419" placeholder="0.00">
+                                    <input type="number" id="salary2" value="75000" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
@@ -2356,11 +2356,11 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="k401Balance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401Balance" type="number" min="0" step="any" value="779137"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="k401Balance" type="number" min="0" step="any" value="250000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="k401BalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401BalanceSpouse" type="number" min="0" step="any" value="5804"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="k401BalanceSpouse" type="number" min="0" step="any" value="100000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="k401Monthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Contribution</label>
@@ -2386,11 +2386,11 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="rothBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="rothBalance" type="number" min="0" step="any" value="98625"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="rothBalance" type="number" min="0" step="any" value="50000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="rothBalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="rothBalanceSpouse" type="number" min="0" step="any" value="38296"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="rothBalanceSpouse" type="number" min="0" step="any" value="30000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="rothMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Monthly Addition</label>
@@ -2412,7 +2412,7 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="hsaBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Current Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="hsaBalance" type="number" min="0" step="any" value="81000"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="hsaBalance" type="number" min="0" step="any" value="30000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="hsaMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
@@ -2430,15 +2430,15 @@
                                 <div class="field-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
                                     <div class="field">
                                         <label for="taxableBalance" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBalance" type="number" min="0" step="any" value="621905"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBalance" type="number" min="0" step="any" value="150000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableBalanceSpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Balance</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBalanceSpouse" type="number" min="0" step="any" value="10168"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBalanceSpouse" type="number" min="0" step="any" value="50000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableBasis" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Cost Basis</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBasis" type="number" min="0" step="any" value="600000"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBasis" type="number" min="0" step="any" value="150000"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
@@ -2572,8 +2572,13 @@
     let fbUser = null;
     let fbConfig = null;
     const DEFAULT_SP500_RETURN = 11.2;
+    const IRS_2026_401K_LIMIT = 24500;
     const IRS_2026_401K_AGE50_LIMIT = 32500;
+    const IRS_2026_401K_AGE60_TO_63_LIMIT = 35750;
+    const IRS_2026_IRA_LIMIT = 7500;
     const IRS_2026_IRA_AGE50_LIMIT = 8600;
+    const IRS_2026_HSA_FAMILY_LIMIT = 8750;
+    const IRS_2026_HSA_CATCH_UP = 1000;
     const FRA = 67;
     const EARNINGS_TEST_LOWER_EXEMPT_2026 = 24480;
     const EARNINGS_TEST_HIGHER_EXEMPT_2026 = 65160;
@@ -2723,6 +2728,33 @@
     function money(val) { return _moneyFmt.format(val || 0); }
     function pct(val) { return `${Number(val).toFixed(1)}%`; }
     function num(id) { return parseFloat(el[id]?.value) || 0; }
+
+    function escapeHtml(value) {
+        const replacements = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+        return String(value ?? '').replace(/[&<>"']/g, character => replacements[character]);
+    }
+
+    function get401kContributionLimit(age) {
+        if (age >= 60 && age <= 63) return IRS_2026_401K_AGE60_TO_63_LIMIT;
+        return age >= 50 ? IRS_2026_401K_AGE50_LIMIT : IRS_2026_401K_LIMIT;
+    }
+
+    function getIraContributionLimit(age) {
+        return age >= 50 ? IRS_2026_IRA_AGE50_LIMIT : IRS_2026_IRA_LIMIT;
+    }
+
+    function getHsaFamilyContributionLimit(primaryAge, spouseAge, hasSpouse) {
+        let limit = IRS_2026_HSA_FAMILY_LIMIT;
+        if (primaryAge >= 55) limit += IRS_2026_HSA_CATCH_UP;
+        if (hasSpouse && spouseAge >= 55) limit += IRS_2026_HSA_CATCH_UP;
+        return limit;
+    }
 
     function updateSliderGradients() {
         document.querySelectorAll('input[type="range"]').forEach((slider) => {
@@ -3525,36 +3557,36 @@
             userConfig.p2.age = age2;
 
             // 401(k)
-            const limit401_under50 = 24500;
-            const limit401_over50 = 32500;
+            const limit401_under50 = IRS_2026_401K_LIMIT;
+            const limit401_over50 = get401kContributionLimit(age1);
             const val401 = parseFloat(el.k401Monthly.value) || 0;
             if (val401 === 0 || val401 === parseFloat((limit401_under50 / 12).toFixed(2)) || val401 === parseFloat((limit401_over50 / 12).toFixed(2))) {
-                const limit401 = age1 >= 50 ? limit401_over50 : limit401_under50;
+                const limit401 = get401kContributionLimit(age1);
                 el.k401Monthly.value = (limit401 / 12).toFixed(2);
             }
 
             // Roth Primary
-            const limitRoth_under50 = 7500;
-            const limitRoth_over50 = 8600;
+            const limitRoth_under50 = IRS_2026_IRA_LIMIT;
+            const limitRoth_over50 = IRS_2026_IRA_AGE50_LIMIT;
             const valRoth1 = parseFloat(el.rothMonthly.value) || 0;
             if (valRoth1 === 0 || valRoth1 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth1 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
-                const limitRoth1 = age1 >= 50 ? limitRoth_over50 : limitRoth_under50;
+                const limitRoth1 = getIraContributionLimit(age1);
                 el.rothMonthly.value = (limitRoth1 / 12).toFixed(2);
             }
 
             // Roth Spouse
             const valRoth2 = parseFloat(el.rothMonthlySpouse.value) || 0;
             if (valRoth2 === 0 || valRoth2 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth2 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
-                const limitRoth2 = (hasSpouse && age2 >= 50) ? limitRoth_over50 : limitRoth_under50;
+                const limitRoth2 = getIraContributionLimit(hasSpouse ? age2 : 0);
                 el.rothMonthlySpouse.value = (limitRoth2 / 12).toFixed(2);
             }
 
             // HSA
-            const limitHsa_under55 = 8750;
-            const limitHsa_over55 = 9750;
+            const limitHsa_under55 = IRS_2026_HSA_FAMILY_LIMIT;
+            const limitHsa_over55 = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
             const valHsa = parseFloat(el.hsaMonthly.value) || 0;
             if (valHsa === 0 || valHsa === parseFloat((limitHsa_under55 / 12).toFixed(2)) || valHsa === parseFloat((limitHsa_over55 / 12).toFixed(2))) {
-                const limitHsa = (age1 >= 55 || (hasSpouse && age2 >= 55)) ? limitHsa_over55 : limitHsa_under55;
+                const limitHsa = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
                 el.hsaMonthly.value = (limitHsa / 12).toFixed(2);
             }
         };
@@ -3697,17 +3729,17 @@
         }
         
         if (activeProfile === 'p1') {
-            desc.innerHTML = `${userConfig.p1.name} (Age ${userConfig.p1.age}) Statement: Assumed ongoing earnings of <strong>$${userConfig.p1.salary.toLocaleString()}/yr</strong>`;
+            desc.innerHTML = `${escapeHtml(userConfig.p1.name)} (Age ${userConfig.p1.age}) Statement: Assumed ongoing earnings of <strong>$${userConfig.p1.salary.toLocaleString()}/yr</strong>`;
             el.piaInput.value = userConfig.p1.pia;
             el.piaSlider.value = userConfig.p1.pia;
         } else if (activeProfile === 'p2') {
-            desc.innerHTML = `${userConfig.p2.name} (Age ${userConfig.p2.age}) Statement: Assumed ongoing earnings of <strong>$${userConfig.p2.salary.toLocaleString()}/yr</strong>`;
+            desc.innerHTML = `${escapeHtml(userConfig.p2.name)} (Age ${userConfig.p2.age}) Statement: Assumed ongoing earnings of <strong>$${userConfig.p2.salary.toLocaleString()}/yr</strong>`;
             el.piaInput.value = userConfig.p2.pia;
             el.piaSlider.value = userConfig.p2.pia;
         } else {
             const spousalExcess = el.spousalToggle.checked ? Math.max(0, userConfig.p1.pia * 0.5 - userConfig.p2.pia) : 0;
             const combined = Math.round(userConfig.p1.pia + userConfig.p2.pia + spousalExcess);
-            desc.innerHTML = `Combined Household: ${userConfig.p1.name} (${userConfig.p1.age}) + ${userConfig.p2.name} (${userConfig.p2.age}) joint benefit streams`;
+            desc.innerHTML = `Combined Household: ${escapeHtml(userConfig.p1.name)} (${userConfig.p1.age}) + ${escapeHtml(userConfig.p2.name)} (${userConfig.p2.age}) joint benefit streams`;
             el.piaInput.value = combined;
             el.piaSlider.value = combined;
         }
@@ -4008,22 +4040,23 @@
 
         let html = '';
         sortedHistory.forEach(record => {
+            const recordId = escapeHtml(JSON.stringify(String(record.id)));
             html += `
                 <div class="history-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); background: var(--surface); transition: background 0.2s; margin-bottom: 8px;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <button type="button" class="action-btn-favorite" onclick="toggleHistoryFavorite('${record.id}')" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1.0)'" aria-label="Toggle Favorite">
+                        <button type="button" class="action-btn-favorite" onclick="toggleHistoryFavorite(${recordId})" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1.0)'" aria-label="Toggle Favorite">
                             <i class="${record.favorite ? 'fa-solid fa-star' : 'fa-regular fa-star'}" style="color: ${record.favorite ? '#f59e0b' : 'var(--outline)'};"></i>
                         </button>
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-weight: 600; color: var(--text); font-size: 0.9rem;">${record.label}</span>
+                            <span style="font-weight: 600; color: var(--text); font-size: 0.9rem;">${escapeHtml(record.label)}</span>
                             <span style="font-size: 0.72rem; color: var(--muted);"><i class="fa-regular fa-calendar"></i> ${new Date(record.timestamp).toLocaleString()}</span>
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button type="button" class="action-btn-restore" onclick="restoreHistorySettings('${record.id}')" style="background: var(--primary-container); color: var(--on-primary-container); border: none; padding: 6px 12px; border-radius: var(--shape-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <button type="button" class="action-btn-restore" onclick="restoreHistorySettings(${recordId})" style="background: var(--primary-container); color: var(--on-primary-container); border: none; padding: 6px 12px; border-radius: var(--shape-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                             <i class="fa-solid fa-arrows-rotate"></i> Restore
                         </button>
-                        <button type="button" class="action-btn-delete" onclick="deleteHistoryRecord('${record.id}')" style="background: #fee2e2; color: #991b1b; border: none; padding: 6px 12px; border-radius: var(--shape-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <button type="button" class="action-btn-delete" onclick="deleteHistoryRecord(${recordId})" style="background: #fee2e2; color: #991b1b; border: none; padding: 6px 12px; border-radius: var(--shape-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                             <i class="fa-solid fa-trash-can"></i> Delete
                         </button>
                     </div>
@@ -4299,6 +4332,7 @@
         `;
 
         displayList.forEach(snap => {
+            const snapshotId = escapeHtml(JSON.stringify(String(snap.id)));
             const wow = wowMap[snap.id] || { diff: 0, pct: 0, first: true };
             let wowBadge = '<span style="color: var(--muted); font-size: 0.75rem;">Baseline</span>';
             if (!wow.first) {
@@ -4312,15 +4346,15 @@
             }
 
             tableHtml += `
-                <tr style="border-bottom: 1px solid var(--outline-variant); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='transparent'" onclick="openSnapshotDetailModal('${snap.id}')">
+                <tr style="border-bottom: 1px solid var(--outline-variant); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='transparent'" onclick="openSnapshotDetailModal(${snapshotId})">
                     <td style="padding: 12px; border-bottom: 1px solid var(--outline-variant);" onclick="event.stopPropagation();">
-                        <button type="button" onclick="togglePortfolioSnapshotFavorite('${snap.id}')" style="background: transparent; border: none; font-size: 1rem; cursor: pointer; padding: 2px;">
+                        <button type="button" onclick="togglePortfolioSnapshotFavorite(${snapshotId})" style="background: transparent; border: none; font-size: 1rem; cursor: pointer; padding: 2px;">
                             <i class="${snap.favorite ? 'fa-solid fa-star' : 'fa-regular fa-star'}" style="color: ${snap.favorite ? '#f59e0b' : 'var(--outline)'};"></i>
                         </button>
                     </td>
                     <td style="padding: 12px; border-bottom: 1px solid var(--outline-variant);">
-                        <div style="font-weight: 600; color: var(--text);">${snap.dateLabel}</div>
-                        <div style="font-size: 0.72rem; color: var(--muted);">${snap.note || 'Snapshot'}</div>
+                        <div style="font-weight: 600; color: var(--text);">${escapeHtml(snap.dateLabel)}</div>
+                        <div style="font-size: 0.72rem; color: var(--muted);">${escapeHtml(snap.note || 'Snapshot')}</div>
                     </td>
                     <td style="padding: 12px; border-bottom: 1px solid var(--outline-variant); text-align: right; font-weight: 500;">${money(snap.totals.k401Total)}</td>
                     <td style="padding: 12px; border-bottom: 1px solid var(--outline-variant); text-align: right; font-weight: 500;">${money(snap.totals.rothTotal)}</td>
@@ -4330,10 +4364,10 @@
                     <td style="padding: 12px; border-bottom: 1px solid var(--outline-variant); text-align: center;">${wowBadge}</td>
                     <td style="padding: 12px; border-bottom: 1px solid var(--outline-variant); text-align: center;" onclick="event.stopPropagation();">
                         <div style="display: flex; justify-content: center; gap: 6px;">
-                            <button type="button" onclick="openSnapshotDetailModal('${snap.id}')" style="background: var(--primary-container); color: var(--on-primary-container); border: none; padding: 4px 8px; border-radius: var(--shape-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                            <button type="button" onclick="openSnapshotDetailModal(${snapshotId})" style="background: var(--primary-container); color: var(--on-primary-container); border: none; padding: 4px 8px; border-radius: var(--shape-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer;">
                                 <i class="fa-solid fa-eye"></i> View
                             </button>
-                            <button type="button" onclick="deletePortfolioSnapshot('${snap.id}')" style="background: #fee2e2; color: #991b1b; border: none; padding: 4px 8px; border-radius: var(--shape-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+                            <button type="button" onclick="deletePortfolioSnapshot(${snapshotId})" style="background: #fee2e2; color: #991b1b; border: none; padding: 4px 8px; border-radius: var(--shape-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer;">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
@@ -4388,6 +4422,8 @@
         document.getElementById('snapDetailDate').textContent = `Logged on ${new Date(snap.timestamp).toLocaleString()}`;
 
         const b = snap.balances;
+        const primaryName = escapeHtml(userConfig.p1.name);
+        const spouseName = escapeHtml(userConfig.p2.name || 'Spouse');
         let html = `
             <div style="background: var(--surface-variant); padding: 14px; border-radius: var(--shape-md); border: 1px solid var(--outline-variant); margin-bottom: 16px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -4414,25 +4450,25 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">401(k) Primary (${userConfig.p1.name})</td>
+                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">401(k) Primary (${primaryName})</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(b.k401P1)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(curK1)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curK1 - b.k401P1 >= 0 ? '#10b981' : '#ef4444'};">${curK1 - b.k401P1 >= 0 ? '+' : ''}${money(curK1 - b.k401P1)}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">401(k) Spouse (${userConfig.p2.name || 'Spouse'})</td>
+                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">401(k) Spouse (${spouseName})</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(b.k401P2)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(curK2)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curK2 - b.k401P2 >= 0 ? '#10b981' : '#ef4444'};">${curK2 - b.k401P2 >= 0 ? '+' : ''}${money(curK2 - b.k401P2)}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Roth IRA Primary (${userConfig.p1.name})</td>
+                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Roth IRA Primary (${primaryName})</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(b.rothP1)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(curR1)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curR1 - b.rothP1 >= 0 ? '#10b981' : '#ef4444'};">${curR1 - b.rothP1 >= 0 ? '+' : ''}${money(curR1 - b.rothP1)}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Roth IRA Spouse (${userConfig.p2.name || 'Spouse'})</td>
+                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Roth IRA Spouse (${spouseName})</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(b.rothP2)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(curR2)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curR2 - b.rothP2 >= 0 ? '#10b981' : '#ef4444'};">${curR2 - b.rothP2 >= 0 ? '+' : ''}${money(curR2 - b.rothP2)}</td>
@@ -4444,13 +4480,13 @@
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curHsa - b.hsa >= 0 ? '#10b981' : '#ef4444'};">${curHsa - b.hsa >= 0 ? '+' : ''}${money(curHsa - b.hsa)}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Brokerage Primary (${userConfig.p1.name})</td>
+                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Brokerage Primary (${primaryName})</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(b.taxableP1)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(curT1)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curT1 - b.taxableP1 >= 0 ? '#10b981' : '#ef4444'};">${curT1 - b.taxableP1 >= 0 ? '+' : ''}${money(curT1 - b.taxableP1)}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Brokerage Spouse (${userConfig.p2.name || 'Spouse'})</td>
+                        <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant);">Brokerage Spouse (${spouseName})</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(b.taxableP2)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right;">${money(curT2)}</td>
                         <td style="padding: 8px 10px; border-bottom: 1px solid var(--outline-variant); text-align: right; color: ${curT2 - b.taxableP2 >= 0 ? '#10b981' : '#ef4444'};">${curT2 - b.taxableP2 >= 0 ? '+' : ''}${money(curT2 - b.taxableP2)}</td>
@@ -4587,29 +4623,30 @@
 
             if (inp.capLimits) {
                 const annualEmp401 = currentK401Employee * 12;
-                const limit401 = (currentAge + yearIndex) >= 50 ? 32500 : 24500;
+                const limit401 = get401kContributionLimit(currentAge + yearIndex);
                 const cappedAnnualEmp401 = Math.min(annualEmp401, limit401);
                 const overflow401 = (annualEmp401 - cappedAnnualEmp401) / 12;
                 currentK401Employee = cappedAnnualEmp401 / 12;
 
                 const annualRothPrimary = currentRothPrimary * 12;
-                const limitRoth1 = (currentAge + yearIndex) >= 50 ? 8600 : 7500;
+                const limitRoth1 = getIraContributionLimit(currentAge + yearIndex);
                 const cappedAnnualRothPrimary = Math.min(annualRothPrimary, limitRoth1);
                 const overflowRothPrimary = (annualRothPrimary - cappedAnnualRothPrimary) / 12;
                 currentRothPrimary = cappedAnnualRothPrimary / 12;
 
                 const annualRothSpouse = currentRothSpouse * 12;
-                const limitRoth2 = (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 50) ? 8600 : 7500;
+                const limitRoth2 = getIraContributionLimit(inp.hasSpouse ? inp.spouseAge + yearIndex : 0);
                 const cappedAnnualRothSpouse = Math.min(annualRothSpouse, limitRoth2);
                 const overflowRothSpouse = (annualRothSpouse - cappedAnnualRothSpouse) / 12;
                 currentRothSpouse = cappedAnnualRothSpouse / 12;
                 currentRoth = currentRothPrimary + currentRothSpouse;
 
                 const annualHsa = currentHsa * 12;
-                let limitHsa = 8750;
-                if ((currentAge + yearIndex) >= 55 || (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 55)) {
-                    limitHsa += 1000;
-                }
+                const limitHsa = getHsaFamilyContributionLimit(
+                    currentAge + yearIndex,
+                    inp.spouseAge + yearIndex,
+                    inp.hasSpouse
+                );
                 const cappedAnnualHsa = Math.min(annualHsa, limitHsa);
                 const overflowHsa = (annualHsa - cappedAnnualHsa) / 12;
                 currentHsa = cappedAnnualHsa / 12;
@@ -4686,7 +4723,7 @@
     }
 
     function withdrawFromTaxable(row, netNeeded, capGainsTaxRate) {
-        if (netNeeded <= 0 || row.taxable <= 0) return netNeeded;
+        if (netNeeded <= 0 || row.taxable <= 0) return { remaining: netNeeded, taxPaid: 0 };
         const gainRatio = row.taxable > 0 ? Math.max(0, row.taxable - row.taxableBasis) / row.taxable : 0;
         const netPerDollarSold = Math.max(0.01, 1 - gainRatio * capGainsTaxRate);
         const grossSale = Math.min(row.taxable, netNeeded / netPerDollarSold);
@@ -4694,15 +4731,22 @@
         const netRaised = grossSale * netPerDollarSold;
         row.taxable -= grossSale;
         row.taxableBasis = Math.max(0, row.taxableBasis - basisReduction);
-        return Math.max(0, netNeeded - netRaised);
+        return {
+            remaining: Math.max(0, netNeeded - netRaised),
+            taxPaid: grossSale - netRaised
+        };
     }
 
     function withdrawFromTaxDeferred(row, netNeeded, retirementTaxRate) {
-        if (netNeeded <= 0 || row.k401 <= 0) return netNeeded;
+        if (netNeeded <= 0 || row.k401 <= 0) return { remaining: netNeeded, taxPaid: 0 };
         const netPerDollarWithdrawn = Math.max(0.01, 1 - retirementTaxRate);
         const grossWithdrawal = Math.min(row.k401, netNeeded / netPerDollarWithdrawn);
+        const netRaised = grossWithdrawal * netPerDollarWithdrawn;
         row.k401 -= grossWithdrawal;
-        return Math.max(0, netNeeded - grossWithdrawal * netPerDollarWithdrawn);
+        return {
+            remaining: Math.max(0, netNeeded - netRaised),
+            taxPaid: grossWithdrawal - netRaised
+        };
     }
 
     function withdrawFromTaxFree(row, key, netNeeded) {
@@ -4753,6 +4797,7 @@
 
         let cumulativeWithdrawals = 0;
         let yearlyWithdrawals = 0;
+        let yearlyTaxPaid = 0;
         const totalMonths = years * 12;
         
         for (let month = 1; month <= totalMonths; month++) {
@@ -4778,29 +4823,30 @@
 
                 if (inp.capLimits) {
                     const annualEmp = currentK401Employee * 12;
-                    const limit401 = (currentAge + yearIndex) >= 50 ? 32500 : 24500;
+                    const limit401 = get401kContributionLimit(currentAge + yearIndex);
                     const cappedEmp = Math.min(annualEmp, limit401);
                     const overflow401 = (annualEmp - cappedEmp) / 12;
                     currentK401Employee = cappedEmp / 12;
 
                     const annualRothPrimary = currentRothPrimary * 12;
-                    const limitRoth1 = (currentAge + yearIndex) >= 50 ? 8600 : 7500;
+                    const limitRoth1 = getIraContributionLimit(currentAge + yearIndex);
                     const cappedRothPrimary = Math.min(annualRothPrimary, limitRoth1);
                     const overflowRothPrimary = (annualRothPrimary - cappedRothPrimary) / 12;
                     currentRothPrimary = cappedRothPrimary / 12;
 
                     const annualRothSpouse = currentRothSpouse * 12;
-                    const limitRoth2 = (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 50) ? 8600 : 7500;
+                    const limitRoth2 = getIraContributionLimit(inp.hasSpouse ? inp.spouseAge + yearIndex : 0);
                     const cappedRothSpouse = Math.min(annualRothSpouse, limitRoth2);
                     const overflowRothSpouse = (annualRothSpouse - cappedRothSpouse) / 12;
                     currentRothSpouse = cappedRothSpouse / 12;
                     currentRoth = currentRothPrimary + currentRothSpouse;
 
                     const annualHsa = currentHsa * 12;
-                    let limitHsa = 8750;
-                    if ((currentAge + yearIndex) >= 55 || (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 55)) {
-                        limitHsa += 1000;
-                    }
+                    const limitHsa = getHsaFamilyContributionLimit(
+                        currentAge + yearIndex,
+                        inp.spouseAge + yearIndex,
+                        inp.hasSpouse
+                    );
                     const cappedHsa = Math.min(annualHsa, limitHsa);
                     const overflowHsa = (annualHsa - cappedHsa) / 12;
                     currentHsa = cappedHsa / 12;
@@ -4815,8 +4861,12 @@
                 row.taxableBasis += currentTaxable;
             } else if (!row.depleted && withdrawalMonthly > 0) {
                 let rem = withdrawalMonthly;
-                rem = withdrawFromTaxable(row, rem, capGainsTaxRate);
-                rem = withdrawFromTaxDeferred(row, rem, retirementTaxRate);
+                const taxableWithdrawal = withdrawFromTaxable(row, rem, capGainsTaxRate);
+                rem = taxableWithdrawal.remaining;
+                yearlyTaxPaid += taxableWithdrawal.taxPaid;
+                const taxDeferredWithdrawal = withdrawFromTaxDeferred(row, rem, retirementTaxRate);
+                rem = taxDeferredWithdrawal.remaining;
+                yearlyTaxPaid += taxDeferredWithdrawal.taxPaid;
                 rem = withdrawFromTaxFree(row, 'roth', rem);
                 rem = withdrawFromTaxFree(row, 'hsa', rem);
                 if (rem > 1) {
@@ -4842,12 +4892,14 @@
                     age,
                     year,
                     annualWithdrawal: yearlyWithdrawals,
+                    annualTaxPaid: yearlyTaxPaid,
                     grossTotal,
                     afterTaxTotal: atv,
                     realAfterTaxTotal: atv / Math.pow(1 + inflationRate, year),
                     cumulativeWithdrawals
                 });
                 yearlyWithdrawals = 0;
+                yearlyTaxPaid = 0;
             }
         }
 
@@ -5231,14 +5283,10 @@
         const age2 = userConfig.p2.age || 0;
         const hasSpouse = !!(userConfig.p2.name || userConfig.p2.age > 0);
 
-        const limit401 = age1 >= 50 ? 32500 : 24500;
-        const limitRoth1 = age1 >= 50 ? 8600 : 7500;
-        const limitRoth2 = age2 >= 50 ? 8600 : 7500;
-
-        let limitHsa = 8750;
-        if (age1 >= 55 || (hasSpouse && age2 >= 55)) {
-            limitHsa += 1000;
-        }
+        const limit401 = get401kContributionLimit(age1);
+        const limitRoth1 = getIraContributionLimit(age1);
+        const limitRoth2 = getIraContributionLimit(age2);
+        const limitHsa = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
 
         const k401AnnualEmployee = num('k401Monthly') * 12;
         const rothAnnualPrimary = num('rothMonthly') * 12;
@@ -5260,7 +5308,7 @@
         
         const warningText = limitWarnings.length ? `<br>${limitWarnings.join(' ')}` : '';
         const profileName = (activeProfile === 'together' || !userConfig[activeProfile]) ? (userConfig.p1.name || 'User 1') : (userConfig[activeProfile].name || 'User');
-        out.assumptionSummary.innerHTML = `<strong>Scenario Assumptions:</strong> ${profileName} (Age ${result.currentAge}) projecting ${result.years} years to Age ${projectionEndAge}. Expected return ${pct(annualReturn)}, inflation ${pct(num('inflationRate'))}. Monthly inputs: 401(k) ${money(result.k401MonthlyTotal)} (including Employer match), Roth ${money(result.rothMonthly)}, HSA ${money(result.hsaMonthly)}, Taxable ${money(result.taxableMonthly)} with ${pct(num('contributionStepUp'))} annual step-up. Contributions cease at retirement Age ${retirementAge}.${warningText}`;
+        out.assumptionSummary.innerHTML = `<strong>Scenario Assumptions:</strong> ${escapeHtml(profileName)} (Age ${result.currentAge}) projecting ${result.years} years to Age ${projectionEndAge}. Expected return ${pct(annualReturn)}, inflation ${pct(num('inflationRate'))}. Monthly inputs: 401(k) ${money(result.k401MonthlyTotal)} (including Employer match), Roth ${money(result.rothMonthly)}, HSA ${money(result.hsaMonthly)}, Taxable ${money(result.taxableMonthly)} with ${pct(num('contributionStepUp'))} annual step-up. Contributions cease at retirement Age ${retirementAge}.${warningText}`;
 
         const checkpointYears = Math.max(1, retirementAge - result.currentAge);
         const checkpoint = projectPortfolio({ return: annualReturn, years: checkpointYears });
@@ -5428,6 +5476,21 @@
         return { benefit: ownWorker + spousalExcess, ownWorkerBenefit: ownWorker, spousalExcess, penaltyPercent: penalty };
     }
 
+    function calculateTaxableSocialSecurity(annualBenefit, provisionalIncome, isJoint) {
+        const tier1 = isJoint ? 32000 : 25000;
+        const tier2 = isJoint ? 44000 : 34000;
+        if (provisionalIncome <= tier1 || annualBenefit <= 0) return 0;
+        if (provisionalIncome <= tier2) {
+            return Math.min(0.5 * annualBenefit, 0.5 * (provisionalIncome - tier1));
+        }
+
+        const taxableAtSecondTier = Math.min(0.5 * annualBenefit, 0.5 * (tier2 - tier1));
+        return Math.min(
+            0.85 * annualBenefit,
+            taxableAtSecondTier + 0.85 * (provisionalIncome - tier2)
+        );
+    }
+
     function precomputeWithheldMonths(profile, claimAge, stopWorkAge, basePia) {
         if (claimAge >= 67) return 0;
         
@@ -5448,11 +5511,11 @@
         // Tax check
         const extIncome = parseFloat(el.externalIncomeInput.value) || 0;
         const pi = extIncome + 0.5 * (preTaxBenefit * 12);
-        const tier1 = activeProfile === 'together' ? 32000 : 25000;
-        const tier2 = activeProfile === 'together' ? 44000 : 34000;
-        let taxable = 0;
-        if (pi > tier2) taxable = Math.min(0.85 * preTaxBenefit * 12, 0.5 * (tier2 - tier1) + 0.85 * (pi - tier2));
-        else if (pi > tier1) taxable = Math.min(0.5 * preTaxBenefit * 12, 0.5 * (pi - tier1));
+        const taxable = calculateTaxableSocialSecurity(
+            preTaxBenefit * 12,
+            pi,
+            activeProfile === 'together'
+        );
         
         const baseTaxRate = parseFloat(el.taxInput.value) / 100;
         const ssaTax = taxable * baseTaxRate;
@@ -5522,11 +5585,11 @@
         const pi = extIncome + 0.5 * annualSsaBenefit;
         const tier1 = activeProfile === 'together' ? 32000 : 25000;
         const tier2 = activeProfile === 'together' ? 44000 : 34000;
-        
-        let taxable = 0;
-        if (pi > tier2) taxable = Math.min(0.85 * annualSsaBenefit, 0.5 * (tier2 - tier1) + 0.85 * (pi - tier2));
-        else if (pi > tier1) taxable = Math.min(0.5 * annualSsaBenefit, 0.5 * (pi - tier1));
-        taxable = Math.min(taxable, 0.85 * annualSsaBenefit);
+        const taxable = calculateTaxableSocialSecurity(
+            annualSsaBenefit,
+            pi,
+            activeProfile === 'together'
+        );
 
         const baseTaxRate = parseFloat(el.taxInput.value) / 100;
         const ssaTax = taxable * baseTaxRate;
@@ -5578,10 +5641,11 @@
 
         const annualARF = monthlyPreTaxARF * 12;
         const piARF = extIncome + 0.5 * annualARF;
-        let taxableARF = 0;
-        if (piARF > tier2) taxableARF = Math.min(0.85 * annualARF, 0.5 * (tier2 - tier1) + 0.85 * (piARF - tier2));
-        else if (piARF > tier1) taxableARF = Math.min(0.5 * annualARF, 0.5 * (piARF - tier1));
-        taxableARF = Math.min(taxableARF, 0.85 * annualARF);
+        const taxableARF = calculateTaxableSocialSecurity(
+            annualARF,
+            piARF,
+            activeProfile === 'together'
+        );
         
         const arfTax = taxableARF * baseTaxRate;
         const taxFactorARF = annualARF > 0 ? Math.max(0, (annualARF - arfTax) / annualARF) : 1.0;
@@ -5687,9 +5751,9 @@
         const statement70 = calculateSocialStrategyOutcome(70, FRA, basePia, 70, FRA);
 
         // Update assumptions text
-        document.getElementById('assumptionP1').innerHTML = `<strong>${userConfig.p1.name}</strong>: claim Age ${customAge}, stop work Age ${stopWorkAge}, life expectancy ${maxAgeP1}`;
+        document.getElementById('assumptionP1').innerHTML = `<strong>${escapeHtml(userConfig.p1.name)}</strong>: claim Age ${customAge}, stop work Age ${stopWorkAge}, life expectancy ${maxAgeP1}`;
         if (activeProfile === 'together' || activeProfile === 'p2') {
-            document.getElementById('assumptionP2').innerHTML = `<strong>${userConfig.p2.name}</strong>: claim Age ${p2CustomAge}, stop work Age ${p2StopWorkAge}, life expectancy ${maxAgeP2}`;
+            document.getElementById('assumptionP2').innerHTML = `<strong>${escapeHtml(userConfig.p2.name)}</strong>: claim Age ${p2CustomAge}, stop work Age ${p2StopWorkAge}, life expectancy ${maxAgeP2}`;
         } else {
             document.getElementById('assumptionP2').textContent = 'Spouse setup inactive in Person 1 standalone mode.';
         }
@@ -5848,7 +5912,7 @@
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${activeProfile === 'together' ? `${userConfig.p1.name} ${age}/${userConfig.p2.name} ${age-ageGap}` : `Age ${age}`}</td>
+                <td>${activeProfile === 'together' ? `${escapeHtml(userConfig.p1.name)} ${age}/${escapeHtml(userConfig.p2.name)} ${age-ageGap}` : `Age ${age}`}</td>
                 <td class="${w62 === maxW ? 'highlight-optimal' : ''}">${money(w62)}</td>
                 <td class="${wCustom === maxW ? 'highlight-optimal' : ''}">${money(wCustom)}</td>
                 <td class="${w70 === maxW ? 'highlight-optimal' : ''}">${money(w70)}</td>
@@ -6132,7 +6196,7 @@
         // Compute SS outcomes once
         const ssOutcome = calculateSocialStrategyOutcome(customAge, stopWorkAge, basePia, p2CustomAge, p2StopWorkAge);
 
-        const endAge = Math.max(retirementAge + 1, 95);
+        const endAge = Math.max(retirementAge + 1, timelineEndAge);
         const years = Math.round(endAge - currentAge);
         
         // Portfolio inputs
@@ -6173,8 +6237,10 @@
 
         let cumulativeWithdrawals = 0;
         let cumulativeSS = 0;
+        let cumulativeTargetSpending = 0;
         let yearlyWithdrawals = 0;
         let yearlySS = 0;
+        let yearlyTaxPaid = 0;
         
         const totalMonths = years * 12;
         const baseWithdrawal = parseFloat(el.ddWithdrawalMonthly.value) || 0;
@@ -6221,29 +6287,30 @@
 
                 if (inp.capLimits) {
                     const annualEmp = currentK401Employee * 12;
-                    const limit401 = (currentAge + yearIndex) >= 50 ? 32500 : 24500;
+                    const limit401 = get401kContributionLimit(currentAge + yearIndex);
                     const cappedEmp = Math.min(annualEmp, limit401);
                     const overflow401 = (annualEmp - cappedEmp) / 12;
                     currentK401Employee = cappedEmp / 12;
 
                     const annualRothPrimary = currentRothPrimary * 12;
-                    const limitRoth1 = (currentAge + yearIndex) >= 50 ? 8600 : 7500;
+                    const limitRoth1 = getIraContributionLimit(currentAge + yearIndex);
                     const cappedRothPrimary = Math.min(annualRothPrimary, limitRoth1);
                     const overflowRothPrimary = (annualRothPrimary - cappedRothPrimary) / 12;
                     currentRothPrimary = cappedRothPrimary / 12;
 
                     const annualRothSpouse = currentRothSpouse * 12;
-                    const limitRoth2 = (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 50) ? 8600 : 7500;
+                    const limitRoth2 = getIraContributionLimit(inp.hasSpouse ? inp.spouseAge + yearIndex : 0);
                     const cappedRothSpouse = Math.min(annualRothSpouse, limitRoth2);
                     const overflowRothSpouse = (annualRothSpouse - cappedRothSpouse) / 12;
                     currentRothSpouse = cappedRothSpouse / 12;
                     currentRoth = currentRothPrimary + currentRothSpouse;
 
                     const annualHsa = currentHsa * 12;
-                    let limitHsa = 8750;
-                    if ((currentAge + yearIndex) >= 55 || (inp.hasSpouse && (inp.spouseAge + yearIndex) >= 55)) {
-                        limitHsa += 1000;
-                    }
+                    const limitHsa = getHsaFamilyContributionLimit(
+                        currentAge + yearIndex,
+                        inp.spouseAge + yearIndex,
+                        inp.hasSpouse
+                    );
                     const cappedHsa = Math.min(annualHsa, limitHsa);
                     const overflowHsa = (annualHsa - cappedHsa) / 12;
                     currentHsa = cappedHsa / 12;
@@ -6265,13 +6332,18 @@
             } else if (!row.depleted) {
                 // Retirement expenses inflated over time
                 const targetSpending = baseWithdrawal * cFactor;
+                cumulativeTargetSpending += targetSpending;
                 // SS reduces required portfolio withdrawal
                 const netWithdrawalNeeded = Math.max(0, targetSpending - monthlySS);
                 
                 if (netWithdrawalNeeded > 0) {
                     let rem = netWithdrawalNeeded;
-                    rem = withdrawFromTaxable(row, rem, capGainsTaxRate);
-                    rem = withdrawFromTaxDeferred(row, rem, retirementTaxRate);
+                    const taxableWithdrawal = withdrawFromTaxable(row, rem, capGainsTaxRate);
+                    rem = taxableWithdrawal.remaining;
+                    yearlyTaxPaid += taxableWithdrawal.taxPaid;
+                    const taxDeferredWithdrawal = withdrawFromTaxDeferred(row, rem, retirementTaxRate);
+                    rem = taxDeferredWithdrawal.remaining;
+                    yearlyTaxPaid += taxDeferredWithdrawal.taxPaid;
                     rem = withdrawFromTaxFree(row, 'roth', rem);
                     rem = withdrawFromTaxFree(row, 'hsa', rem);
 
@@ -6300,6 +6372,7 @@
                     year,
                     annualWithdrawal: yearlyWithdrawals,
                     annualSS: yearlySS,
+                    annualTaxPaid: yearlyTaxPaid,
                     grossTotal,
                     afterTaxTotal: atv,
                     realAfterTaxTotal: atv / Math.pow(1 + inflationRate, year),
@@ -6308,6 +6381,7 @@
                 });
                 yearlyWithdrawals = 0;
                 yearlySS = 0;
+                yearlyTaxPaid = 0;
             }
         }
 
@@ -6317,6 +6391,7 @@
             endAge,
             depletedAge: row.depletedAge,
             cumulativeSS,
+            cumulativeTargetSpending,
             final: rows[rows.length - 1]
         };
     }
@@ -6354,11 +6429,10 @@
         }
 
         // Drawdown contribution Analysis summary
-        const targetSpending = parseFloat(el.ddWithdrawalMonthly.value) || 0;
-        const totalInflationYears = 95 - userConfig.p1.age;
         const grossSsaContribution = hasSS.cumulativeSS;
-        const targetAnnualSpendingTotal = targetSpending * 12 * totalInflationYears;
-        const pctSavings = targetAnnualSpendingTotal > 0 ? (grossSsaContribution / targetAnnualSpendingTotal) * 100 : 0;
+        const pctSavings = hasSS.cumulativeTargetSpending > 0
+            ? (grossSsaContribution / hasSS.cumulativeTargetSpending) * 100
+            : 0;
         
         document.getElementById('ddSsaContributionSummary').innerHTML = `Social Security strategy offsets <strong>${pctSavings.toFixed(1)}%</strong> of your projected retirement target spending, saving your portfolio <strong>${money(grossSsaContribution)}</strong> of active capital liquidation over your lifecycle.`;
 
@@ -6410,7 +6484,7 @@
                 <td>${spendingVal > 0 ? money(spendingVal) : '-'}</td>
                 <td>${r.annualSS > 0 ? money(r.annualSS) : '-'}</td>
                 <td>${r.annualWithdrawal > 0 ? money(r.annualWithdrawal) : '-'}</td>
-                <td>${money(r.taxableExitTax)}</td>
+                <td>${money(r.annualTaxPaid)}</td>
                 <td>${money(returnEst)}</td>
                 <td>${money(r.grossTotal)} <span style="font-size:0.7rem; color:var(--dim);">(${money(r.afterTaxTotal)} after-tax)</span></td>
             `;

@@ -8,6 +8,34 @@ const firestore_1 = require("firebase-admin/firestore");
 const monarch_money_ts_1 = require("monarch-money-ts");
 (0, app_1.initializeApp)();
 const db = (0, firestore_1.getFirestore)("raju-planner");
+function parseAccountRules() {
+    const defaults = {
+        include: [],
+        exclude: ["529", "education"],
+        spouse: ["spouse"],
+        retirement: [],
+        taxable: [],
+    };
+    const rawRules = process.env.MONARCH_ACCOUNT_RULES;
+    if (!rawRules)
+        return defaults;
+    try {
+        const configured = JSON.parse(rawRules);
+        return {
+            include: configured.include ?? defaults.include,
+            exclude: configured.exclude ?? defaults.exclude,
+            spouse: configured.spouse ?? defaults.spouse,
+            retirement: configured.retirement ?? defaults.retirement,
+            taxable: configured.taxable ?? defaults.taxable,
+        };
+    }
+    catch {
+        throw new Error("MONARCH_ACCOUNT_RULES must be valid JSON.");
+    }
+}
+function matchesRule(value, rules) {
+    return rules.some((rule) => rule.trim() !== "" && value.includes(rule.toLowerCase()));
+}
 /**
  * Helper to fetch accounts using raw GraphQL request to bypass strict Zod validation failures
  * on fields like logoUrl and institution that might be null in the user's Monarch account.
@@ -44,7 +72,7 @@ async function fetchAccountsRaw(auth, client) {
     catch (err) {
         const isAuthErr = client.isAuthError(err);
         if (isAuthErr) {
-            console.log("Token expired or unauthorized. Invalidating token and retrying...");
+            console.info("Monarch authentication expired; refreshing credentials and retrying.");
             await auth.invalidate();
             return await doRequest();
         }
@@ -62,30 +90,27 @@ async function performMonarchSync(userId) {
     if (!email || !password) {
         throw new Error("Monarch credentials are not configured in environment secrets.");
     }
-    console.log("Initializing Monarch Money client...");
+    console.info("Initializing Monarch Money client.");
     const auth = new monarch_money_ts_1.EmailPasswordAuthProvider({
         email,
         password,
         totpKey,
     });
     const client = new monarch_money_ts_1.MonarchGraphQLClient();
-    console.log("Fetching accounts from Monarch (raw request)...");
+    console.info("Fetching accounts from Monarch.");
     const accounts = await fetchAccountsRaw(auth, client);
-    console.log(`Successfully fetched ${accounts.length} accounts from Monarch.`);
-    // Log accounts for diagnostic visibility
-    accounts.forEach((acc) => {
-        console.log(`[Account Diagnostic] Name: "${acc.name}", Display: "${acc.displayName}", Type: "${acc.type?.name || "Unknown"}", Subtype: "${acc.subtype?.display || "None"}", Balance: ${acc.currentBalance}, Institution: "${acc.institution?.name || "Unknown"}"`);
-    });
-    // Filter down to Fidelity accounts OR Pennsylvania State Employee plans
+    const accountRules = parseAccountRules();
+    console.info(`Fetched ${accounts.length} accounts from Monarch.`);
+    // Restrict synchronization to the configured institutions and account names.
     const targetAccounts = accounts.filter((acc) => {
         const instName = acc.institution?.name?.toLowerCase() || "";
         const accName = acc.name?.toLowerCase() || "";
         const dispName = acc.displayName?.toLowerCase() || "";
+        const searchableName = `${instName} ${accName} ${dispName}`;
         const isFidelity = instName.includes("fidelity") || accName.includes("fidelity") || dispName.includes("fidelity");
-        const isPaStateEmployees = accName.includes("pennsylvania state employees") || dispName.includes("pennsylvania state employees");
-        return isFidelity || isPaStateEmployees;
+        return isFidelity || matchesRule(searchableName, accountRules.include);
     });
-    console.log(`Found ${targetAccounts.length} relevant accounts.`);
+    console.info(`Found ${targetAccounts.length} relevant accounts.`);
     let total401k = 0;
     let total401kSpouse = 0;
     let totalRoth = 0;
@@ -102,13 +127,11 @@ async function performMonarchSync(userId) {
     targetAccounts.forEach((acc) => {
         const name = (acc.name || "").toLowerCase();
         const displayName = (acc.displayName || "").toLowerCase();
-        // Exclude Ritsika's accounts (e.g. child/education accounts)
-        if (name.includes("ritsika") || displayName.includes("ritsika")) {
-            console.log(`Excluding Ritsika's account: "${acc.displayName || acc.name}"`);
+        const searchableName = `${name} ${displayName}`;
+        if (matchesRule(searchableName, accountRules.exclude)) {
             return;
         }
-        const isSpouse = name.includes("anuradha") || displayName.includes("anuradha") ||
-            name.includes("pennsylvania state employees") || displayName.includes("pennsylvania state employees");
+        const isSpouse = matchesRule(searchableName, accountRules.spouse);
         const subtypeName = (acc.subtype?.display || "").toLowerCase();
         const typeName = (acc.type?.name || "").toLowerCase();
         // Explicit Overrides for specific accounts
@@ -116,10 +139,10 @@ async function performMonarchSync(userId) {
         let isHsa = false;
         let is401k = false;
         let isTaxable = false;
-        if (displayName.includes("7801") || name.includes("7801")) {
+        if (matchesRule(searchableName, accountRules.taxable)) {
             isTaxable = true;
         }
-        else if (displayName.includes("7803") || name.includes("7803")) {
+        else if (matchesRule(searchableName, accountRules.retirement)) {
             is401k = true;
         }
         else {
@@ -139,14 +162,12 @@ async function performMonarchSync(userId) {
                 name.includes("defined contribution") ||
                 name.includes("traditional") ||
                 name.includes("ira") ||
-                name.includes("pennsylvania state employees") ||
                 displayName.includes("401k") ||
                 displayName.includes("401(k)") ||
                 displayName.includes("deferred") ||
                 displayName.includes("defined contribution") ||
                 displayName.includes("traditional") ||
-                displayName.includes("ira") ||
-                displayName.includes("pennsylvania state employees"));
+                displayName.includes("ira"));
             isTaxable = !isRoth && !isHsa && !is401k && (subtypeName === "brokerage" ||
                 subtypeName === "investment" ||
                 name.includes("brokerage") ||
@@ -158,45 +179,42 @@ async function performMonarchSync(userId) {
                 displayName.includes("individual") ||
                 displayName.includes("joint"));
         }
-        const balance = acc.currentBalance || 0;
+        const balance = Number(acc.currentBalance ?? 0);
+        if (!Number.isFinite(balance)) {
+            console.warn("Skipped an account with a non-numeric current balance.");
+            return;
+        }
         if (isRoth) {
             if (isSpouse) {
                 totalRothSpouse += balance;
                 hasRothSpouse = true;
-                console.log(`Matched Spouse Roth: "${acc.displayName || acc.name}" = $${balance}`);
             }
             else {
                 totalRoth += balance;
                 hasRoth = true;
-                console.log(`Matched Primary Roth: "${acc.displayName || acc.name}" = $${balance}`);
             }
         }
         else if (isHsa) {
             totalHsa += balance;
-            console.log(`Matched HSA: "${acc.displayName || acc.name}" = $${balance}`);
         }
         else if (is401k) {
             if (isSpouse) {
                 total401kSpouse += balance;
                 has401kSpouse = true;
-                console.log(`Matched Spouse 401k/Deferred: "${acc.displayName || acc.name}" = $${balance}`);
             }
             else {
                 total401k += balance;
                 has401k = true;
-                console.log(`Matched Primary 401k/Deferred: "${acc.displayName || acc.name}" = $${balance}`);
             }
         }
         else if (isTaxable) {
             if (isSpouse) {
                 totalTaxableSpouse += balance;
                 hasTaxableSpouse = true;
-                console.log(`Matched Spouse Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
             }
             else {
                 totalTaxable += balance;
                 hasTaxable = true;
-                console.log(`Matched Primary Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
             }
         }
         else {
@@ -205,27 +223,15 @@ async function performMonarchSync(userId) {
                 if (isSpouse) {
                     totalTaxableSpouse += balance;
                     hasTaxableSpouse = true;
-                    console.log(`Matched general investment as Spouse Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
                 }
                 else {
                     totalTaxable += balance;
                     hasTaxable = true;
-                    console.log(`Matched general investment as Primary Taxable Brokerage: "${acc.displayName || acc.name}" = $${balance}`);
                 }
-            }
-            else {
-                console.log(`Skipped unmatched account: "${acc.displayName || acc.name}" (Subtype: ${subtypeName})`);
             }
         }
     });
-    console.log("Calculated aggregated totals:");
-    console.log(`- Primary 401k: $${total401k}`);
-    console.log(`- Spouse 401k: $${total401kSpouse}`);
-    console.log(`- Primary Roth: $${totalRoth}`);
-    console.log(`- Spouse Roth: $${totalRothSpouse}`);
-    console.log(`- HSA: $${totalHsa}`);
-    console.log(`- Primary Taxable: $${totalTaxable}`);
-    console.log(`- Spouse Taxable: $${totalTaxableSpouse}`);
+    console.info("Calculated aggregated balances for matched account categories.");
     // Write to Firestore
     const docRef = db.collection("user_configs").doc(userId);
     await db.runTransaction(async (transaction) => {
@@ -265,7 +271,7 @@ async function performMonarchSync(userId) {
                 return t > max ? t : max;
             }, 0);
             const daysDiff = (now.getTime() - latestTs) / (1000 * 60 * 60 * 24);
-            if (daysDiff >= 6.8) {
+            if (daysDiff >= 7) {
                 shouldCaptureSnapshot = true;
             }
         }
@@ -300,17 +306,16 @@ async function performMonarchSync(userId) {
                     netWorth
                 }
             });
-            console.log(`Auto-captured weekly portfolio snapshot on ${dateLabel} with Net Worth: $${netWorth}`);
+            console.info(`Captured automated weekly portfolio snapshot on ${dateLabel}.`);
         }
         transaction.update(docRef, {
             "config.inputs": inputs,
             "portfolio_history": portfolioHistory
         });
     });
-    console.log("Firestore update committed successfully.");
+    console.info("Firestore balance update committed successfully.");
     return {
         success: true,
-        userId,
         syncedFidelityAccountsCount: targetAccounts.length,
         balances: {
             k401k: has401k ? Math.round(total401k) : null,
@@ -322,17 +327,22 @@ async function performMonarchSync(userId) {
 }
 /**
  * HTTPS Callable Cloud Function to run the Monarch sync on demand.
- * Restricts access to raju.chekuri@gmail.com.
+ * Restricts access to the configured target Firebase user.
  */
 exports.syncBalancesOnDemand = (0, https_1.onCall)({
-    cors: true,
-    secrets: ["MONARCH_EMAIL", "MONARCH_PASSWORD", "MONARCH_MFA_SECRET"]
+    cors: [
+        "https://rajuplanner.web.app",
+        "https://rajuplanner.firebaseapp.com",
+        /^http:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/,
+    ],
+    secrets: ["MONARCH_EMAIL", "MONARCH_PASSWORD", "MONARCH_MFA_SECRET", "MONARCH_ACCOUNT_RULES", "TARGET_USER_ID"]
 }, async (request) => {
     if (!request.auth) {
         throw new https_1.HttpsError("unauthenticated", "User must be authenticated.");
     }
-    if (request.auth.token.email !== "raju.chekuri@gmail.com") {
-        throw new https_1.HttpsError("permission-denied", "Unauthorized user email.");
+    const targetUserId = process.env.TARGET_USER_ID;
+    if (!targetUserId || request.auth.uid !== targetUserId) {
+        throw new https_1.HttpsError("permission-denied", "User is not authorized to synchronize balances.");
     }
     try {
         const userId = request.auth.uid;
@@ -340,7 +350,7 @@ exports.syncBalancesOnDemand = (0, https_1.onCall)({
     }
     catch (error) {
         console.error("Error in syncBalancesOnDemand:", error);
-        throw new https_1.HttpsError("internal", error.message || "An unexpected error occurred.");
+        throw new https_1.HttpsError("internal", "Unable to synchronize balances right now.");
     }
 });
 /**
@@ -349,20 +359,21 @@ exports.syncBalancesOnDemand = (0, https_1.onCall)({
 exports.dailyMonarchSync = (0, scheduler_1.onSchedule)({
     schedule: "0 5 * * *", // 5:00 AM Eastern Time daily
     timeZone: "America/New_York",
-    secrets: ["MONARCH_EMAIL", "MONARCH_PASSWORD", "MONARCH_MFA_SECRET", "TARGET_USER_ID"]
+    secrets: ["MONARCH_EMAIL", "MONARCH_PASSWORD", "MONARCH_MFA_SECRET", "MONARCH_ACCOUNT_RULES", "TARGET_USER_ID"]
 }, async (event) => {
     const targetUserId = process.env.TARGET_USER_ID;
     if (!targetUserId) {
         console.error("TARGET_USER_ID secret is not set. Scheduled sync aborted.");
         return;
     }
-    console.log(`Starting scheduled daily Monarch sync for user ${targetUserId}...`);
+    console.info("Starting scheduled daily Monarch sync.");
     try {
         const result = await performMonarchSync(targetUserId);
-        console.log("Scheduled sync completed successfully:", JSON.stringify(result));
+        console.info(`Scheduled sync completed for ${result.syncedFidelityAccountsCount} relevant accounts.`);
     }
     catch (error) {
         console.error("Scheduled sync failed:", error);
+        throw error;
     }
 });
 //# sourceMappingURL=index.js.map
