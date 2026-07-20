@@ -634,6 +634,17 @@
             gap: 16px;
         }
 
+        .summary-grid-portfolio {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .summary-grid-portfolio { grid-template-columns: repeat(2, 1fr); }
+            .summary-grid-portfolio .metric { grid-column: span 1 !important; }
+        }
+
         @media (max-width: 768px) {
             .summary-grid { grid-template-columns: repeat(2, 1fr); }
             .summary-grid .metric[style*="grid-column: span 3"] {
@@ -644,8 +655,8 @@
             }
         }
         @media (max-width: 480px) {
-            .summary-grid { grid-template-columns: 1fr; }
-            .summary-grid .metric, .summary-grid .insight-card {
+            .summary-grid, .summary-grid-portfolio { grid-template-columns: 1fr; }
+            .summary-grid .metric, .summary-grid .insight-card, .summary-grid-portfolio .metric {
                 grid-column: span 1 !important;
             }
         }
@@ -1494,43 +1505,48 @@
             </aside>
 
             <main class="content">
-                <section class="summary-grid" aria-label="Portfolio metrics summary">
-                    <div class="metric">
+                <section class="summary-grid-portfolio" aria-label="Portfolio metrics summary">
+                    <!-- Row 1: Current Portfolio Values -->
+                    <div class="metric" style="grid-column: span 3;">
                         <div class="metric-label">Current Gross Value</div>
                         <div class="metric-value" id="currentGrossTotal">$0</div>
                         <div class="metric-sub" id="currentGrossSub">Total starting balance</div>
                     </div>
-                    <div class="metric">
+                    <div class="metric" style="grid-column: span 3;">
                         <div class="metric-label">Current After-Tax Value</div>
                         <div class="metric-value" id="currentAfterTaxTotal">$0</div>
                         <div class="metric-sub" id="currentAfterTaxSub">Current spendable balance</div>
                     </div>
-                    <div class="metric">
+
+                    <!-- Row 2: Projected Portfolio Values -->
+                    <div class="metric" style="grid-column: span 2;">
                         <div class="metric-label">Projected Gross Value</div>
                         <div class="metric-value" id="grossTotal">$0</div>
                         <div class="metric-sub" id="grossSub">Before exit taxes</div>
                     </div>
-                    <div class="metric">
+                    <div class="metric" style="grid-column: span 2;">
                         <div class="metric-label">Projected After-Tax Value</div>
                         <div class="metric-value" id="afterTaxTotal">$0</div>
                         <div class="metric-sub" id="afterTaxSub">Spendable at selected horizon</div>
                     </div>
-                    <div class="metric">
-                        <div class="metric-label">Total Contributions</div>
-                        <div class="metric-value" id="contributionTotal">$0</div>
-                        <div class="metric-sub">Accumulated employee + employer additions</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-label">Investment Growth</div>
-                        <div class="metric-value" id="growthTotal">$0</div>
-                        <div class="metric-sub" id="growthSub">Total compounded returns</div>
-                    </div>
-                    <div class="metric">
+                    <div class="metric" style="grid-column: span 2;">
                         <div class="metric-label">After-Tax (Today's Dollars)</div>
                         <div class="metric-value" id="realAfterTaxTotal">$0</div>
                         <div class="metric-sub" id="realAfterTaxSub">Inflation-discounted purchasing power</div>
                     </div>
-                    <div class="metric">
+
+                    <!-- Row 3: Contributions, Growth & Withdrawal Rate -->
+                    <div class="metric" style="grid-column: span 2;">
+                        <div class="metric-label">Total Contributions</div>
+                        <div class="metric-value" id="contributionTotal">$0</div>
+                        <div class="metric-sub">Accumulated employee + employer additions</div>
+                    </div>
+                    <div class="metric" style="grid-column: span 2;">
+                        <div class="metric-label">Investment Growth</div>
+                        <div class="metric-value" id="growthTotal">$0</div>
+                        <div class="metric-sub" id="growthSub">Total compounded returns</div>
+                    </div>
+                    <div class="metric" style="grid-column: span 2;">
                         <div class="metric-label">Retirement Withdrawal Rate</div>
                         <div class="metric-value" id="withdrawalRateMetric">0.0%</div>
                         <div class="metric-sub" id="withdrawalRateSub">Drawdown divided by asset base</div>
@@ -2363,12 +2379,12 @@
                                         <div class="input-wrapper"><span>$</span><input id="k401BalanceSpouse" type="number" min="0" step="any" value="100000"></div>
                                     </div>
                                     <div class="field">
-                                        <label for="k401Monthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Contribution</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401Monthly" type="number" min="0" step="any" value="2041.67"></div>
+                                        <label for="k401Biweekly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Bi-Weekly Contribution</label>
+                                        <div class="input-wrapper"><span>$</span><input id="k401Biweekly" type="number" min="0" step="any" value="942.31"></div>
                                     </div>
                                     <div class="field">
-                                        <label for="k401Match" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Employer Match / mo</label>
-                                        <div class="input-wrapper"><span>$</span><input id="k401Match" type="number" min="0" step="any" value="0"></div>
+                                        <label for="k401MatchBiweekly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Employer Match / bi-weekly</label>
+                                        <div class="input-wrapper"><span>$</span><input id="k401MatchBiweekly" type="number" min="0" step="any" value="0"></div>
                                     </div>
                                     <div class="field">
                                         <label for="retirementTax" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Withdrawal Tax Rate</label>
@@ -2415,8 +2431,8 @@
                                         <div class="input-wrapper"><span>$</span><input id="hsaBalance" type="number" min="0" step="any" value="30000"></div>
                                     </div>
                                     <div class="field">
-                                        <label for="hsaMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
-                                        <div class="input-wrapper"><span>$</span><input id="hsaMonthly" type="number" min="0" step="any" value="729.17"></div>
+                                        <label for="hsaBiweekly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Bi-Weekly Addition</label>
+                                        <div class="input-wrapper"><span>$</span><input id="hsaBiweekly" type="number" min="0" step="any" value="336.54"></div>
                                     </div>
                                 </div>
                             </div>
@@ -2643,15 +2659,15 @@
         capLimits: document.getElementById('capLimits'),
         k401Balance: document.getElementById('k401Balance'),
         k401BalanceSpouse: document.getElementById('k401BalanceSpouse'),
-        k401Monthly: document.getElementById('k401Monthly'),
-        k401Match: document.getElementById('k401Match'),
+        k401Biweekly: document.getElementById('k401Biweekly'),
+        k401MatchBiweekly: document.getElementById('k401MatchBiweekly'),
         retirementTax: document.getElementById('retirementTax'),
         rothBalance: document.getElementById('rothBalance'),
         rothBalanceSpouse: document.getElementById('rothBalanceSpouse'),
         rothMonthly: document.getElementById('rothMonthly'),
         rothMonthlySpouse: document.getElementById('rothMonthlySpouse'),
         hsaBalance: document.getElementById('hsaBalance'),
-        hsaMonthly: document.getElementById('hsaMonthly'),
+        hsaBiweekly: document.getElementById('hsaBiweekly'),
         taxableBalance: document.getElementById('taxableBalance'),
         taxableBalanceSpouse: document.getElementById('taxableBalanceSpouse'),
         taxableBasis: document.getElementById('taxableBasis'),
@@ -3136,8 +3152,8 @@
                 
                 k401Balance: el.k401Balance?.value,
                 k401BalanceSpouse: el.k401BalanceSpouse?.value,
-                k401Monthly: el.k401Monthly?.value,
-                k401Match: el.k401Match?.value,
+                k401Biweekly: el.k401Biweekly?.value,
+                k401MatchBiweekly: el.k401MatchBiweekly?.value,
                 retirementTax: el.retirementTax?.value,
                 
                 rothBalance: el.rothBalance?.value,
@@ -3146,7 +3162,7 @@
                 rothMonthlySpouse: el.rothMonthlySpouse?.value,
                 
                 hsaBalance: el.hsaBalance?.value,
-                hsaMonthly: el.hsaMonthly?.value,
+                hsaBiweekly: el.hsaBiweekly?.value,
                 
                 taxableBalance: el.taxableBalance?.value,
                 taxableBalanceSpouse: el.taxableBalanceSpouse?.value,
@@ -3449,8 +3465,8 @@
                             
                             k401Balance: el.k401Balance?.value,
                             k401BalanceSpouse: el.k401BalanceSpouse?.value,
-                            k401Monthly: el.k401Monthly?.value,
-                            k401Match: el.k401Match?.value,
+                            k401Biweekly: el.k401Biweekly?.value,
+                            k401MatchBiweekly: el.k401MatchBiweekly?.value,
                             retirementTax: el.retirementTax?.value,
                             
                             rothBalance: el.rothBalance?.value,
@@ -3459,7 +3475,7 @@
                             rothMonthlySpouse: el.rothMonthlySpouse?.value,
                             
                             hsaBalance: el.hsaBalance?.value,
-                            hsaMonthly: el.hsaMonthly?.value,
+                            hsaBiweekly: el.hsaBiweekly?.value,
                             
                             taxableBalance: el.taxableBalance?.value,
                             taxableBalanceSpouse: el.taxableBalanceSpouse?.value,
@@ -3556,13 +3572,16 @@
             userConfig.p1.age = age1;
             userConfig.p2.age = age2;
 
-            // 401(k)
+            // 401(k) bi-weekly
             const limit401_under50 = IRS_2026_401K_LIMIT;
             const limit401_over50 = get401kContributionLimit(age1);
-            const val401 = parseFloat(el.k401Monthly.value) || 0;
-            if (val401 === 0 || val401 === parseFloat((limit401_under50 / 12).toFixed(2)) || val401 === parseFloat((limit401_over50 / 12).toFixed(2))) {
+            const val401 = parseFloat(el.k401Biweekly.value) || 0;
+            const bwUnder50 = parseFloat((limit401_under50 / 26).toFixed(2));
+            const bwOver50 = parseFloat((limit401_over50 / 26).toFixed(2));
+
+            if (val401 === 0 || val401 === bwUnder50 || val401 === bwOver50) {
                 const limit401 = get401kContributionLimit(age1);
-                el.k401Monthly.value = (limit401 / 12).toFixed(2);
+                el.k401Biweekly.value = (limit401 / 26).toFixed(2);
             }
 
             // Roth Primary
@@ -3581,13 +3600,16 @@
                 el.rothMonthlySpouse.value = (limitRoth2 / 12).toFixed(2);
             }
 
-            // HSA
+            // HSA bi-weekly
             const limitHsa_under55 = IRS_2026_HSA_FAMILY_LIMIT;
             const limitHsa_over55 = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
-            const valHsa = parseFloat(el.hsaMonthly.value) || 0;
-            if (valHsa === 0 || valHsa === parseFloat((limitHsa_under55 / 12).toFixed(2)) || valHsa === parseFloat((limitHsa_over55 / 12).toFixed(2))) {
+            const valHsa = parseFloat(el.hsaBiweekly.value) || 0;
+            const bwHsaUnder55 = parseFloat((limitHsa_under55 / 26).toFixed(2));
+            const bwHsaOver55 = parseFloat((limitHsa_over55 / 26).toFixed(2));
+
+            if (valHsa === 0 || valHsa === bwHsaUnder55 || valHsa === bwHsaOver55) {
                 const limitHsa = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
-                el.hsaMonthly.value = (limitHsa / 12).toFixed(2);
+                el.hsaBiweekly.value = (limitHsa / 26).toFixed(2);
             }
         };
 
@@ -3928,7 +3950,7 @@
             checkbox.addEventListener('change', updateAll);
         });
         
-        [el.k401Balance, el.k401Monthly, el.k401Match, el.rothBalance, el.rothMonthly, el.rothMonthlySpouse, el.hsaBalance, el.hsaMonthly, el.taxableBalance, el.taxableBasis, el.taxableMonthly, el.taxDrag, el.capGainsTax, el.externalIncomeInput].forEach(field => {
+        [el.k401Balance, el.k401Biweekly, el.k401MatchBiweekly, el.rothBalance, el.rothMonthly, el.rothMonthlySpouse, el.hsaBalance, el.hsaBiweekly, el.taxableBalance, el.taxableBasis, el.taxableMonthly, el.taxDrag, el.capGainsTax, el.externalIncomeInput].forEach(field => {
             field.addEventListener('input', debounce(updateAll, 200));
         });
         
@@ -4554,11 +4576,14 @@
             contributionStepUp: Math.max(0, num('contributionStepUp')) / 100,
             retirementAge: Math.max(num('currentAge'), Math.round(num('targetAge'))),
             withdrawalMonthly: Math.max(0, num('withdrawalMonthly')),
-            k401Monthly: Math.max(0, num('k401Monthly')),
-            k401Match: Math.max(0, num('k401Match')),
+            k401Biweekly: Math.max(0, num('k401Biweekly')),
+            k401MatchBiweekly: Math.max(0, num('k401MatchBiweekly')),
+            hsaBiweekly: Math.max(0, num('hsaBiweekly')),
+            k401Monthly: (Math.max(0, num('k401Biweekly')) * 26) / 12,
+            k401Match: (Math.max(0, num('k401MatchBiweekly')) * 26) / 12,
             rothMonthly: Math.max(0, num('rothMonthly')),
             rothMonthlySpouse: Math.max(0, num('rothMonthlySpouse')),
-            hsaMonthly: Math.max(0, num('hsaMonthly')),
+            hsaMonthly: (Math.max(0, num('hsaBiweekly')) * 26) / 12,
             taxableMonthly: Math.max(0, num('taxableMonthly')),
             k401Balance: Math.max(0, num('k401Balance')) + Math.max(0, num('k401BalanceSpouse')),
             rothBalance: Math.max(0, num('rothBalance')) + Math.max(0, num('rothBalanceSpouse')),
@@ -4710,8 +4735,10 @@
             taxableAfterTax,
             taxableExitTax,
             taxableGain,
+            k401BiweeklyTotal: inp.k401Biweekly + inp.k401MatchBiweekly,
             k401MonthlyTotal: inp.k401Monthly + inp.k401Match,
             rothMonthly: inp.rothMonthly + inp.rothMonthlySpouse,
+            hsaBiweekly: inp.hsaBiweekly,
             hsaMonthly: inp.hsaMonthly,
             taxableMonthly: inp.taxableMonthly
         };
@@ -5288,10 +5315,10 @@
         const limitRoth2 = getIraContributionLimit(age2);
         const limitHsa = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
 
-        const k401AnnualEmployee = num('k401Monthly') * 12;
+        const k401AnnualEmployee = num('k401Biweekly') * 26;
         const rothAnnualPrimary = num('rothMonthly') * 12;
         const rothAnnualSpouse = num('rothMonthlySpouse') * 12;
-        const hsaAnnual = num('hsaMonthly') * 12;
+        const hsaAnnual = num('hsaBiweekly') * 26;
 
         const limitWarnings = [];
         if (el.capLimits.checked) {
@@ -5308,7 +5335,7 @@
         
         const warningText = limitWarnings.length ? `<br>${limitWarnings.join(' ')}` : '';
         const profileName = (activeProfile === 'together' || !userConfig[activeProfile]) ? (userConfig.p1.name || 'User 1') : (userConfig[activeProfile].name || 'User');
-        out.assumptionSummary.innerHTML = `<strong>Scenario Assumptions:</strong> ${escapeHtml(profileName)} (Age ${result.currentAge}) projecting ${result.years} years to Age ${projectionEndAge}. Expected return ${pct(annualReturn)}, inflation ${pct(num('inflationRate'))}. Monthly inputs: 401(k) ${money(result.k401MonthlyTotal)} (including Employer match), Roth ${money(result.rothMonthly)}, HSA ${money(result.hsaMonthly)}, Taxable ${money(result.taxableMonthly)} with ${pct(num('contributionStepUp'))} annual step-up. Contributions cease at retirement Age ${retirementAge}.${warningText}`;
+        out.assumptionSummary.innerHTML = `<strong>Scenario Assumptions:</strong> ${escapeHtml(profileName)} (Age ${result.currentAge}) projecting ${result.years} years to Age ${projectionEndAge}. Expected return ${pct(annualReturn)}, inflation ${pct(num('inflationRate'))}. Inputs: 401(k) ${money(result.k401BiweeklyTotal)}/bi-weekly (including Employer match), Roth ${money(result.rothMonthly)}/mo, HSA ${money(result.hsaBiweekly)}/bi-weekly, Taxable ${money(result.taxableMonthly)}/mo with ${pct(num('contributionStepUp'))} annual step-up. Contributions cease at retirement Age ${retirementAge}.${warningText}`;
 
         const checkpointYears = Math.max(1, retirementAge - result.currentAge);
         const checkpoint = projectPortfolio({ return: annualReturn, years: checkpointYears });

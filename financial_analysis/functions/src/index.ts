@@ -17,15 +17,17 @@ interface AccountRules {
   spouse: string[];
   retirement: string[];
   taxable: string[];
+  roth: string[];
 }
 
 function parseAccountRules(): AccountRules {
   const defaults: AccountRules = {
     include: [],
-    exclude: ["529", "education"],
+    exclude: ["529", "education", "esa", "coverdell", "ritsika"],
     spouse: ["spouse"],
     retirement: [],
     taxable: [],
+    roth: [],
   };
   const rawRules = process.env.MONARCH_ACCOUNT_RULES;
   if (!rawRules) return defaults;
@@ -38,6 +40,7 @@ function parseAccountRules(): AccountRules {
       spouse: configured.spouse ?? defaults.spouse,
       retirement: configured.retirement ?? defaults.retirement,
       taxable: configured.taxable ?? defaults.taxable,
+      roth: configured.roth ?? defaults.roth,
     };
   } catch {
     throw new Error("MONARCH_ACCOUNT_RULES must be valid JSON.");
@@ -118,6 +121,25 @@ async function performMonarchSync(userId: string) {
   const accounts = await fetchAccountsRaw(auth, client);
   const accountRules = parseAccountRules();
 
+  // Dynamically extract spouse name from user_configs Firestore document to improve spouse account matching
+  try {
+    const userDocSnap = await db.collection("user_configs").doc(userId).get();
+    if (userDocSnap.exists) {
+      const uData = userDocSnap.data();
+      const p2Name = uData?.config?.userConfig?.p2?.name;
+      if (p2Name && typeof p2Name === "string") {
+        const firstName = p2Name.trim().split(/\s+/)[0]?.toLowerCase();
+        if (firstName && firstName.length > 2 && firstName !== "spouse" && firstName !== "user") {
+          if (!accountRules.spouse.includes(firstName)) {
+            accountRules.spouse.push(firstName);
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Could not fetch userConfig for dynamic spouse name matching:", err);
+  }
+
   console.info(`Fetched ${accounts.length} accounts from Monarch.`);
 
   // Restrict synchronization to the configured institutions and account names.
@@ -151,15 +173,15 @@ async function performMonarchSync(userId: string) {
   let appliedAccountsCount = 0;
 
   targetAccounts.forEach((acc: any) => {
+    const instName = (acc.institution?.name || "").toLowerCase();
     const name = (acc.name || "").toLowerCase();
     const displayName = (acc.displayName || "").toLowerCase();
-
-    const searchableName = `${name} ${displayName}`;
-    const isSpouse = matchesRule(searchableName, accountRules.spouse);
-
     const subtypeName = (acc.subtype?.display || "").toLowerCase();
     const typeName = (acc.type?.name || "").toLowerCase();
-    
+
+    const searchableName = `${instName} ${name} ${displayName} ${subtypeName}`;
+    const isSpouse = matchesRule(searchableName, accountRules.spouse);
+
     // Explicit Overrides for specific accounts
     let isRoth = false;
     let isHsa = false;
@@ -170,43 +192,54 @@ async function performMonarchSync(userId: string) {
       isTaxable = true;
     } else if (matchesRule(searchableName, accountRules.retirement)) {
       is401k = true;
+    } else if (matchesRule(searchableName, accountRules.roth)) {
+      isRoth = true;
     } else {
-      // Standard matching logic
-      isRoth = subtypeName === "roth" || subtypeName === "roth_ira" || name.includes("roth") || displayName.includes("roth");
-      isHsa = subtypeName === "hsa" || name.includes("hsa") || displayName.includes("hsa") || name.includes("health savings") || displayName.includes("health savings");
-      is401k = !isRoth && !isHsa && (
-        subtypeName === "401k" || 
-        subtypeName === "401a" ||
-        subtypeName === "403b" || 
-        subtypeName === "sep_ira" || 
-        subtypeName === "simple_ira" || 
-        subtypeName === "traditional_ira" || 
-        subtypeName === "retirement" ||
-        name.includes("401k") || 
-        name.includes("401(k)") || 
-        name.includes("deferred") || 
-        name.includes("defined contribution") ||
-        name.includes("traditional") || 
-        name.includes("ira") ||
-        displayName.includes("401k") || 
-        displayName.includes("401(k)") || 
-        displayName.includes("deferred") || 
-        displayName.includes("defined contribution") ||
-        displayName.includes("traditional") || 
-        displayName.includes("ira")
-      );
-      isTaxable = !isRoth && !isHsa && !is401k && (
-        subtypeName === "brokerage" || 
-        subtypeName === "investment" ||
-        name.includes("brokerage") || 
-        name.includes("taxable") || 
-        name.includes("individual") || 
-        name.includes("joint") ||
-        displayName.includes("brokerage") || 
-        displayName.includes("taxable") || 
-        displayName.includes("individual") || 
-        displayName.includes("joint")
-      );
+      isHsa = subtypeName === "hsa" ||
+              searchableName.includes("hsa") ||
+              searchableName.includes("health savings");
+
+      if (!isHsa) {
+        const is401kPattern = (
+          subtypeName.includes("401k") ||
+          subtypeName.includes("401(k)") ||
+          subtypeName.includes("401a") ||
+          subtypeName.includes("403b") ||
+          subtypeName.includes("sep_ira") ||
+          subtypeName.includes("simple_ira") ||
+          subtypeName.includes("traditional_ira") ||
+          subtypeName === "retirement" ||
+          searchableName.includes("401k") ||
+          searchableName.includes("401(k)") ||
+          searchableName.includes("403b") ||
+          searchableName.includes("deferred") ||
+          searchableName.includes("defined contribution") ||
+          searchableName.includes("traditional")
+        );
+
+        const isRothIraPattern = (
+          subtypeName === "roth" ||
+          subtypeName === "roth_ira" ||
+          searchableName.includes("roth ira") ||
+          (searchableName.includes("roth") && !is401kPattern)
+        );
+
+        if (isRothIraPattern) {
+          isRoth = true;
+        } else if (is401kPattern) {
+          is401k = true;
+        } else if (
+          subtypeName.includes("brokerage") ||
+          subtypeName.includes("investment") ||
+          searchableName.includes("brokerage") ||
+          searchableName.includes("taxable") ||
+          searchableName.includes("individual") ||
+          searchableName.includes("joint") ||
+          typeName === "investment"
+        ) {
+          isTaxable = true;
+        }
+      }
     }
 
     const balance = Number(acc.currentBalance ?? 0);
@@ -214,6 +247,8 @@ async function performMonarchSync(userId: string) {
       console.warn("Skipped an account with a non-numeric current balance.");
       return;
     }
+
+    console.info(`Sync Account: "${acc.displayName || acc.name}" | Subtype: "${subtypeName}" | Type: "${typeName}" | Balance: $${Math.round(balance)} | Spouse: ${isSpouse} | Categorized -> Roth: ${isRoth}, 401k: ${is401k}, Taxable: ${isTaxable}, HSA: ${isHsa}`);
 
     if (isRoth) {
       if (isSpouse) {
