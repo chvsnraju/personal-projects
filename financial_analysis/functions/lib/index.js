@@ -7,7 +7,7 @@ const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
 const monarch_money_ts_1 = require("monarch-money-ts");
 (0, app_1.initializeApp)();
-const db = (0, firestore_1.getFirestore)();
+const db = (0, firestore_1.getFirestore)("raju-planner");
 /**
  * Helper to fetch accounts using raw GraphQL request to bypass strict Zod validation failures
  * on fields like logoUrl and institution that might be null in the user's Monarch account.

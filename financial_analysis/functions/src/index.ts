@@ -9,7 +9,7 @@ import {
 } from "monarch-money-ts";
 
 initializeApp();
-const db = getFirestore();
+const db = getFirestore("raju-planner");
 
 /**
  * Helper to fetch accounts using raw GraphQL request to bypass strict Zod validation failures
