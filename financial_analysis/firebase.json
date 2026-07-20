@@ -1,7 +1,7 @@
 {
   "firestore": [
     {
-      "database": "raju-planner",
+      "database": "(default)",
       "rules": "firestore.rules",
       "indexes": "firestore.indexes.json"
     }
