@@ -250,8 +250,61 @@ async function performMonarchSync(userId) {
             inputs.taxableBalance = String(Math.round(totalTaxable));
         if (hasTaxableSpouse)
             inputs.taxableBalanceSpouse = String(Math.round(totalTaxableSpouse));
+        // Automated Weekly Snapshot Logic:
+        // If no portfolio_history exists, or if the latest snapshot in portfolio_history is >= 7 days old,
+        // automatically append a new weekly portfolio snapshot.
+        const portfolioHistory = docData.portfolio_history || [];
+        const now = new Date();
+        let shouldCaptureSnapshot = false;
+        if (portfolioHistory.length === 0) {
+            shouldCaptureSnapshot = true;
+        }
+        else {
+            const latestTs = portfolioHistory.reduce((max, snap) => {
+                const t = new Date(snap.timestamp).getTime();
+                return t > max ? t : max;
+            }, 0);
+            const daysDiff = (now.getTime() - latestTs) / (1000 * 60 * 60 * 24);
+            if (daysDiff >= 6.8) {
+                shouldCaptureSnapshot = true;
+            }
+        }
+        if (shouldCaptureSnapshot) {
+            const k401P1 = has401k ? Math.round(total401k) : (parseFloat(inputs.k401Balance) || 0);
+            const k401P2 = has401kSpouse ? Math.round(total401kSpouse) : (parseFloat(inputs.k401BalanceSpouse) || 0);
+            const rothP1 = hasRoth ? Math.round(totalRoth) : (parseFloat(inputs.rothBalance) || 0);
+            const rothP2 = hasRothSpouse ? Math.round(totalRothSpouse) : (parseFloat(inputs.rothBalanceSpouse) || 0);
+            const hsa = parseFloat(inputs.hsaBalance) || 0;
+            const taxableP1 = hasTaxable ? Math.round(totalTaxable) : (parseFloat(inputs.taxableBalance) || 0);
+            const taxableP2 = hasTaxableSpouse ? Math.round(totalTaxableSpouse) : (parseFloat(inputs.taxableBalanceSpouse) || 0);
+            const k401Tot = k401P1 + k401P2;
+            const rothTot = rothP1 + rothP2;
+            const hsaTot = hsa;
+            const taxableTot = taxableP1 + taxableP2;
+            const netWorth = k401Tot + rothTot + hsaTot + taxableTot;
+            const dateLabel = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            portfolioHistory.unshift({
+                id: 'snap_' + Date.now(),
+                timestamp: now.toISOString(),
+                dateLabel,
+                note: 'Automated Weekly Snapshot (Monarch Sync)',
+                favorite: false,
+                balances: {
+                    k401P1, k401P2, rothP1, rothP2, hsa, taxableP1, taxableP2
+                },
+                totals: {
+                    k401Total: k401Tot,
+                    rothTotal: rothTot,
+                    hsaTotal: hsaTot,
+                    taxableTotal: taxableTot,
+                    netWorth
+                }
+            });
+            console.log(`Auto-captured weekly portfolio snapshot on ${dateLabel} with Net Worth: $${netWorth}`);
+        }
         transaction.update(docRef, {
-            "config.inputs": inputs
+            "config.inputs": inputs,
+            "portfolio_history": portfolioHistory
         });
     });
     console.log("Firestore update committed successfully.");
