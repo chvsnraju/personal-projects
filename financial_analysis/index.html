@@ -1493,6 +1493,10 @@
                             <label for="withdrawalMonthly">Monthly Retirement Budget</label>
                             <div class="input-wrap"><span>$</span><input id="withdrawalMonthly" type="number" min="0" step="250" value="4000"></div>
                         </div>
+                        <div class="field">
+                            <label for="retirementStepUp">Retirement Budget Inflation Step-Up</label>
+                            <div class="input-wrap"><input id="retirementStepUp" type="number" min="0" max="10" step="0.5" value="3.0"><span>%</span></div>
+                        </div>
                     </div>
                     <div class="checkbox-wrapper">
                         <span class="checkbox-label">Cap IRS limits & overflow excess</span>
@@ -2668,6 +2672,7 @@
         contributionStepUp: document.getElementById('contributionStepUp'),
         targetAge: document.getElementById('targetAge'),
         withdrawalMonthly: document.getElementById('withdrawalMonthly'),
+        retirementStepUp: document.getElementById('retirementStepUp'),
         capLimits: document.getElementById('capLimits'),
         k401Balance: document.getElementById('k401Balance'),
         k401BalanceSpouse: document.getElementById('k401BalanceSpouse'),
@@ -4594,6 +4599,7 @@
             contributionStepUp: Math.max(0, num('contributionStepUp')) / 100,
             retirementAge: Math.max(num('currentAge'), Math.round(num('targetAge'))),
             withdrawalMonthly: Math.max(0, num('withdrawalMonthly')),
+            retirementStepUp: Math.max(0, num('retirementStepUp')) / 100,
             k401Biweekly: Math.max(0, num('k401Biweekly')),
             k401MatchBiweekly: Math.max(0, num('k401MatchBiweekly')),
             hsaBiweekly: Math.max(0, num('hsaBiweekly')),
@@ -4905,7 +4911,10 @@
                 row.taxable += currentTaxable;
                 row.taxableBasis += currentTaxable;
             } else if (!row.depleted && withdrawalMonthly > 0) {
-                let rem = withdrawalMonthly;
+                const retiredYears = Math.floor(yearIndex - Math.max(0, retirementAge - currentAge));
+                const retirementBudgetStepUp = inp.retirementStepUp !== undefined ? inp.retirementStepUp : inp.inflationRate;
+                const currentWithdrawalMonthly = withdrawalMonthly * Math.pow(1 + retirementBudgetStepUp, Math.max(0, retiredYears));
+                let rem = currentWithdrawalMonthly;
                 const taxableWithdrawal = withdrawFromTaxable(row, rem, capGainsTaxRate);
                 rem = taxableWithdrawal.remaining;
                 yearlyTaxPaid += taxableWithdrawal.taxPaid;
@@ -4917,12 +4926,12 @@
                 if (rem > 1) {
                     row.depleted = true;
                     row.depletedAge = currentAge + (month / 12);
-                    monthlyWithdrawal = withdrawalMonthly - rem;
+                    monthlyWithdrawal = currentWithdrawalMonthly - rem;
                     cumulativeWithdrawals += monthlyWithdrawal;
                     row.k401 = 0; row.roth = 0; row.hsa = 0; row.taxable = 0; row.taxableBasis = 0;
                 } else {
-                    monthlyWithdrawal = withdrawalMonthly;
-                    cumulativeWithdrawals += withdrawalMonthly;
+                    monthlyWithdrawal = currentWithdrawalMonthly;
+                    cumulativeWithdrawals += currentWithdrawalMonthly;
                 }
             }
             yearlyWithdrawals += monthlyWithdrawal;
