@@ -3043,7 +3043,7 @@
 
         try {
             const docRef = db.collection('user_configs').doc(fbUser.uid);
-            await docRef.set({ config: state }, { merge: true });
+            await docRef.set({ config: state, history: settingsHistory }, { merge: true });
         } catch (e) {
             console.error("Autosave state to Firestore failed:", e);
         }
