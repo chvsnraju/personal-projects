@@ -2132,18 +2132,18 @@
                             <h3 class="column-title"><i class="fa-solid fa-user-tie"></i> Person 1 (Primary)</h3>
                             <div class="form-group">
                                 <label for="name1">First Name</label>
-                                <input type="text" id="name1" value="" placeholder="Enter name" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
+                                <input type="text" id="name1" value="Raju V. Chekuri" placeholder="Enter name" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
                             </div>
                             <div class="form-group" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
                                 <div>
                                     <label for="birthMonth1">Birth Month</label>
                                     <select id="birthMonth1" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
-                                        <option value="" disabled selected>Month</option>
+                                        <option value="" disabled>Month</option>
                                         <option value="1">Jan</option>
                                         <option value="2">Feb</option>
                                         <option value="3">Mar</option>
                                         <option value="4">Apr</option>
-                                        <option value="5">May</option>
+                                        <option value="5" selected>May</option>
                                         <option value="6">Jun</option>
                                         <option value="7">Jul</option>
                                         <option value="8">Aug</option>
@@ -2155,21 +2155,62 @@
                                 </div>
                                 <div>
                                     <label for="birthYear1">Birth Year</label>
-                                    <input type="number" id="birthYear1" placeholder="YYYY" min="1940" max="2015" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
+                                    <input type="number" id="birthYear1" placeholder="YYYY" min="1940" max="2015" value="1975" required style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom: 8px;">
                                 <label for="pia1">Full Retirement Benefit (PIA)</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="pia1" value="" placeholder="e.g. 3000" min="0" max="6000" required>
+                                    <input type="number" id="pia1" value="4127" placeholder="e.g. 3000" min="0" max="6000" required>
                                 </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px;">
+                                <details style="border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 8px 12px; background: var(--surface-container-low);">
+                                    <summary style="font-size: 0.72rem; font-weight: 700; color: var(--primary); cursor: pointer; user-select: none;">
+                                        <i class="fa-solid fa-list-check"></i> Customize Estimates (Ages 62-70)
+                                    </summary>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;">
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 62</label>
+                                            <input type="number" id="ssa_p1_62" value="2744" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 63</label>
+                                            <input type="number" id="ssa_p1_63" value="2970" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 64</label>
+                                            <input type="number" id="ssa_p1_64" value="3208" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 65</label>
+                                            <input type="number" id="ssa_p1_65" value="3519" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 66</label>
+                                            <input type="number" id="ssa_p1_66" value="3826" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 68</label>
+                                            <input type="number" id="ssa_p1_68" value="4377" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 69</label>
+                                            <input type="number" id="ssa_p1_69" value="4725" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 70</label>
+                                            <input type="number" id="ssa_p1_70" value="5186" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                             <div class="form-group">
                                 <label for="salary1">Ongoing Annual Salary</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="salary1" value="" placeholder="0.00" required>
+                                    <input type="number" id="salary1" value="176100" placeholder="0.00" required>
                                 </div>
                             </div>
                         </div>
@@ -2178,13 +2219,13 @@
                             <h3 class="column-title"><i class="fa-solid fa-user"></i> Person 2 (Spouse)</h3>
                             <div class="form-group">
                                 <label for="name2">First Name</label>
-                                <input type="text" id="name2" value="" placeholder="Optional" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
+                                <input type="text" id="name2" value="Anuradha Chekuri" placeholder="Optional" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit;">
                             </div>
                             <div class="form-group" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
                                 <div>
                                     <label for="birthMonth2">Birth Month</label>
                                     <select id="birthMonth2" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
-                                        <option value="" disabled selected>Month</option>
+                                        <option value="" disabled>Month</option>
                                         <option value="1">Jan</option>
                                         <option value="2">Feb</option>
                                         <option value="3">Mar</option>
@@ -2194,28 +2235,69 @@
                                         <option value="7">Jul</option>
                                         <option value="8">Aug</option>
                                         <option value="9">Sep</option>
-                                        <option value="10">Oct</option>
+                                        <option value="10" selected>Oct</option>
                                         <option value="11">Nov</option>
                                         <option value="12">Dec</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label for="birthYear2">Birth Year</label>
-                                    <input type="number" id="birthYear2" placeholder="YYYY" min="1940" max="2015" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
+                                    <input type="number" id="birthYear2" placeholder="YYYY" min="1940" max="2015" value="1979" style="width: 100%; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 10px 14px; background: var(--surface); color: var(--text); font-weight: 500; font-family: inherit; height: 42px;">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom: 8px;">
                                 <label for="pia2">Full Retirement Benefit (PIA)</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="pia2" value="" placeholder="0.00" min="0" max="6000">
+                                    <input type="number" id="pia2" value="1536" placeholder="0.00" min="0" max="6000">
                                 </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 14px;">
+                                <details style="border: 1px solid var(--outline-variant); border-radius: var(--shape-md); padding: 8px 12px; background: var(--surface-container-low);">
+                                    <summary style="font-size: 0.72rem; font-weight: 700; color: var(--primary); cursor: pointer; user-select: none;">
+                                        <i class="fa-solid fa-list-check"></i> Customize Estimates (Ages 62-70)
+                                    </summary>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;">
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 62</label>
+                                            <input type="number" id="ssa_p2_62" value="970" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 63</label>
+                                            <input type="number" id="ssa_p2_63" value="1057" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 64</label>
+                                            <input type="number" id="ssa_p2_64" value="1153" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 65</label>
+                                            <input type="number" id="ssa_p2_65" value="1277" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 66</label>
+                                            <input type="number" id="ssa_p2_66" value="1404" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 68</label>
+                                            <input type="number" id="ssa_p2_68" value="1599" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 69</label>
+                                            <input type="number" id="ssa_p2_69" value="1759" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                        <div>
+                                            <label style="font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 2px;">Age 70</label>
+                                            <input type="number" id="ssa_p2_70" value="2021" placeholder="Est" style="width: 100%; font-size: 0.75rem; padding: 4px 6px; border: 1px solid var(--outline-variant); border-radius: var(--shape-sm); background: var(--surface); color: var(--text);">
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                             <div class="form-group">
                                 <label for="salary2">Ongoing Annual Salary</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="salary2" value="" placeholder="0.00">
+                                    <input type="number" id="salary2" value="41419" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
@@ -2367,6 +2449,24 @@
                     </div>
                 </form>
             </div>
+
+            <!-- Settings History Card -->
+            <div class="onboarding-modal glass-card" style="max-width: 900px; margin: 24px auto 0; box-shadow: none; border: 1px solid var(--outline-variant); background: var(--surface-variant);">
+                <div class="onboarding-header" style="border-bottom: 1px solid var(--outline-variant); padding-bottom: 16px;">
+                    <div class="logo-icon" style="background: linear-gradient(135deg, var(--primary), #003366);">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h2>Saved Settings History</h2>
+                        <p>Restore or manage previous versions of your configuration state.</p>
+                    </div>
+                </div>
+                <div style="padding: 24px;">
+                    <div id="settingsHistoryContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                        <p style="color: var(--muted); text-align: center; margin: 0; font-style: italic;">No saved history available yet.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -2410,8 +2510,8 @@
 
     // User Profile Configuration (Authoritative state)
     let userConfig = {
-        p1: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '' },
-        p2: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '' },
+        p1: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '', ssa_estimates: {} },
+        p2: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '', ssa_estimates: {} },
         defaults: { return: '', cola: '', tax: '' }
     };
     let activeProfile = 'p1';
@@ -2612,6 +2712,71 @@
         });
     }
 
+    // Reusable Custom Confirm Modal
+    function showConfirm(title, message, onOk, okButtonText = "Confirm", isDanger = false) {
+        const overlay = document.getElementById('confirmOverlay');
+        const titleEl = document.getElementById('confirmTitle');
+        const messageEl = document.getElementById('confirmMessage');
+        const okBtn = document.getElementById('confirmOkBtn');
+        const cancelBtn = document.getElementById('confirmCancelBtn');
+
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        okBtn.textContent = okButtonText;
+
+        // Apply danger vs primary color styles
+        if (isDanger) {
+            okBtn.style.background = '#ef4444';
+            okBtn.style.color = '#ffffff';
+            okBtn.style.borderColor = 'transparent';
+            const iconBg = document.querySelector('#confirmOverlay .logo-icon');
+            if (iconBg) iconBg.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            const icon = document.querySelector('#confirmOverlay .logo-icon i');
+            if (icon) icon.className = 'fa-solid fa-triangle-exclamation';
+        } else {
+            okBtn.style.background = 'var(--primary)';
+            okBtn.style.color = '#ffffff';
+            okBtn.style.borderColor = 'transparent';
+            const iconBg = document.querySelector('#confirmOverlay .logo-icon');
+            if (iconBg) iconBg.style.background = 'linear-gradient(135deg, var(--primary), #003366)';
+            const icon = document.querySelector('#confirmOverlay .logo-icon i');
+            if (icon) icon.className = 'fa-solid fa-circle-question';
+        }
+
+        // Clean up previous event listeners (by cloning)
+        const newOkBtn = okBtn.cloneNode(true);
+        okBtn.parentNode.replaceChild(newOkBtn, okBtn);
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+
+        newOkBtn.disabled = false;
+        newCancelBtn.disabled = false;
+
+        const handleCancel = () => {
+            overlay.style.display = 'none';
+        };
+
+        newCancelBtn.addEventListener('click', handleCancel);
+
+        const handleOk = async () => {
+            newOkBtn.disabled = true;
+            newCancelBtn.disabled = true;
+            const originalText = newOkBtn.textContent;
+            newOkBtn.textContent = 'Processing...';
+            try {
+                await onOk();
+            } catch (e) {
+                console.error(e);
+            } finally {
+                newOkBtn.textContent = originalText;
+                overlay.style.display = 'none';
+            }
+        };
+
+        newOkBtn.addEventListener('click', handleOk);
+        overlay.style.display = 'flex';
+    }
+
     // Dynamic age calculation from month and year of birth
     function calculateAge(birthMonth, birthYear) {
         if (!birthMonth || !birthYear) return 0;
@@ -2768,6 +2933,16 @@
             }
             
             const data = docSnap.data();
+            if (data) {
+                if (data.history) {
+                    settingsHistory = data.history;
+                    saveHistoryToStorage();
+                } else {
+                    loadHistoryFromStorage();
+                }
+                renderSettingsHistory();
+            }
+
             if (!data || !data.config || Object.keys(data.config).length === 0) {
                 return false;
             }
@@ -2981,15 +3156,38 @@
         document.getElementById('pia1').value = userConfig.p1.pia;
         document.getElementById('salary1').value = userConfig.p1.salary;
         
+        const ssa_p1 = userConfig.p1.ssa_estimates || {};
+        document.getElementById('ssa_p1_62').value = ssa_p1[62] || '';
+        document.getElementById('ssa_p1_63').value = ssa_p1[63] || '';
+        document.getElementById('ssa_p1_64').value = ssa_p1[64] || '';
+        document.getElementById('ssa_p1_65').value = ssa_p1[65] || '';
+        document.getElementById('ssa_p1_66').value = ssa_p1[66] || '';
+        document.getElementById('ssa_p1_68').value = ssa_p1[68] || '';
+        document.getElementById('ssa_p1_69').value = ssa_p1[69] || '';
+        document.getElementById('ssa_p1_70').value = ssa_p1[70] || '';
+
         document.getElementById('name2').value = userConfig.p2.name;
         document.getElementById('birthMonth2').value = userConfig.p2.birthMonth || '';
         document.getElementById('birthYear2').value = userConfig.p2.birthYear || '';
         document.getElementById('pia2').value = userConfig.p2.pia;
         document.getElementById('salary2').value = userConfig.p2.salary;
         
+        const ssa_p2 = userConfig.p2.ssa_estimates || {};
+        document.getElementById('ssa_p2_62').value = ssa_p2[62] || '';
+        document.getElementById('ssa_p2_63').value = ssa_p2[63] || '';
+        document.getElementById('ssa_p2_64').value = ssa_p2[64] || '';
+        document.getElementById('ssa_p2_65').value = ssa_p2[65] || '';
+        document.getElementById('ssa_p2_66').value = ssa_p2[66] || '';
+        document.getElementById('ssa_p2_68').value = ssa_p2[68] || '';
+        document.getElementById('ssa_p2_69').value = ssa_p2[69] || '';
+        document.getElementById('ssa_p2_70').value = ssa_p2[70] || '';
+
         document.getElementById('defaultReturn').value = userConfig.defaults.return;
         document.getElementById('defaultCola').value = userConfig.defaults.cola;
         document.getElementById('defaultTax').value = userConfig.defaults.tax;
+
+        loadedStateSnapshot = compileCurrentFormState();
+        checkFormChanges();
     }
 
     function setupNavigation() {
@@ -3026,6 +3224,8 @@
     // Onboarding Form (Settings Tab Form Setup)
     function setupOnboarding() {
         const form = document.getElementById('onboardingForm');
+        form.addEventListener('input', checkFormChanges);
+        form.addEventListener('change', checkFormChanges);
         
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -3042,6 +3242,16 @@
             userConfig.p1.age = calculateAge(userConfig.p1.birthMonth, userConfig.p1.birthYear) || 67;
             userConfig.p1.pia = Math.max(0, parseFloat(document.getElementById('pia1').value) || 0);
             userConfig.p1.salary = Math.max(0, parseFloat(document.getElementById('salary1').value) || 0);
+            userConfig.p1.ssa_estimates = {
+                62: parseFloat(document.getElementById('ssa_p1_62').value) || 0,
+                63: parseFloat(document.getElementById('ssa_p1_63').value) || 0,
+                64: parseFloat(document.getElementById('ssa_p1_64').value) || 0,
+                65: parseFloat(document.getElementById('ssa_p1_65').value) || 0,
+                66: parseFloat(document.getElementById('ssa_p1_66').value) || 0,
+                68: parseFloat(document.getElementById('ssa_p1_68').value) || 0,
+                69: parseFloat(document.getElementById('ssa_p1_69').value) || 0,
+                70: parseFloat(document.getElementById('ssa_p1_70').value) || 0
+            };
             
             userConfig.p2.name = document.getElementById('name2').value.trim() || '';
             userConfig.p2.birthMonth = parseInt(document.getElementById('birthMonth2').value, 10) || '';
@@ -3049,6 +3259,16 @@
             userConfig.p2.age = calculateAge(userConfig.p2.birthMonth, userConfig.p2.birthYear) || 0;
             userConfig.p2.pia = Math.max(0, parseFloat(document.getElementById('pia2').value) || 0);
             userConfig.p2.salary = Math.max(0, parseFloat(document.getElementById('salary2').value) || 0);
+            userConfig.p2.ssa_estimates = {
+                62: parseFloat(document.getElementById('ssa_p2_62').value) || 0,
+                63: parseFloat(document.getElementById('ssa_p2_63').value) || 0,
+                64: parseFloat(document.getElementById('ssa_p2_64').value) || 0,
+                65: parseFloat(document.getElementById('ssa_p2_65').value) || 0,
+                66: parseFloat(document.getElementById('ssa_p2_66').value) || 0,
+                68: parseFloat(document.getElementById('ssa_p2_68').value) || 0,
+                69: parseFloat(document.getElementById('ssa_p2_69').value) || 0,
+                70: parseFloat(document.getElementById('ssa_p2_70').value) || 0
+            };
             
             userConfig.defaults.return = parseFloat(document.getElementById('defaultReturn').value) || 11.2;
             userConfig.defaults.cola = parseFloat(document.getElementById('defaultCola').value) || 2.5;
@@ -3125,8 +3345,33 @@
                             ddEnableSS: el.ddEnableSS?.checked
                         }
                     };
+
+                    const isDifferent = !settingsHistory.length || JSON.stringify(settingsHistory[settingsHistory.length - 1].config) !== JSON.stringify(state);
+                    if (isDifferent) {
+                        const timestamp = new Date().toISOString();
+                        const formattedTime = new Date().toLocaleString();
+                        const p1Name = userConfig.p1.name || 'User 1';
+                        const hasP2 = !!(userConfig.p2.name || userConfig.p2.age > 0);
+                        const names = hasP2 ? `${p1Name} & ${userConfig.p2.name || 'Spouse'}` : p1Name;
+                        const label = `${formattedTime} - ${names}'s Plan (Return: ${userConfig.defaults.return}%, Tax: ${userConfig.defaults.tax}%)`;
+
+                        settingsHistory.push({
+                            id: String(Date.now()),
+                            timestamp,
+                            label,
+                            config: JSON.parse(JSON.stringify(state))
+                        });
+
+                        if (settingsHistory.length > 20) {
+                            settingsHistory.shift();
+                        }
+
+                        saveHistoryToStorage();
+                        renderSettingsHistory();
+                    }
+
                     const docRef = db.collection('user_configs').doc(fbUser.uid);
-                    const writePromise = docRef.set({ config: state }, { merge: true });
+                    const writePromise = docRef.set({ config: state, history: settingsHistory }, { merge: true });
                     await timeoutPromise(
                         writePromise,
                         5000,
@@ -3141,8 +3386,11 @@
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalHtml;
             
-            // Redirect back to main portfolio tab upon save
-            switchToTab('portfolio');
+            loadedStateSnapshot = compileCurrentFormState();
+            checkFormChanges();
+            
+            // Show success notification and stay on the settings tab
+            showAlert("Settings Saved", "Your settings and assumptions have been updated successfully.", false, 2000);
         });
 
         // Dynamic age-based IRS limit default populator
@@ -3204,10 +3452,34 @@
             }
         });
         
-        // Confirmation Modals
-        const confirmOverlay = document.getElementById('confirmOverlay');
         const resetHandler = () => {
-            confirmOverlay.style.display = 'flex';
+            showConfirm(
+                "Confirm Reset",
+                "Are you sure you want to clear all data? This will restore initial defaults.",
+                async () => {
+                    if (db && fbUser) {
+                        try {
+                            const emptyState = {
+                                userConfig: {
+                                    p1: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '' },
+                                    p2: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '' },
+                                    defaults: { return: '', cola: '', tax: '' }
+                                },
+                                activeProfile: 'p1',
+                                inputs: {}
+                            };
+                            const docRef = db.collection('user_configs').doc(fbUser.uid);
+                            await docRef.set({ config: emptyState });
+                        } catch (e) {
+                            console.error("Failed to reset Firestore state:", e);
+                        }
+                    }
+                    localStorage.removeItem('unified_planner_state');
+                    window.location.reload();
+                },
+                "Reset All",
+                true
+            );
         };
         
         const syncMonarchBtn = document.getElementById('syncMonarchBtn');
@@ -3237,35 +3509,6 @@
         }
         
         document.getElementById('onboardingResetBtn').addEventListener('click', resetHandler);
-        document.getElementById('confirmCancelBtn').addEventListener('click', () => confirmOverlay.style.display = 'none');
-        document.getElementById('confirmOkBtn').addEventListener('click', async () => {
-            const okBtn = document.getElementById('confirmOkBtn');
-            const cancelBtn = document.getElementById('confirmCancelBtn');
-            okBtn.disabled = true;
-            cancelBtn.disabled = true;
-            okBtn.textContent = 'Resetting...';
-
-            if (db && fbUser) {
-                try {
-                    const emptyState = {
-                        userConfig: {
-                            p1: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '' },
-                            p2: { name: '', birthMonth: '', birthYear: '', age: '', pia: '', salary: '' },
-                            defaults: { return: '', cola: '', tax: '' }
-                        },
-                        activeProfile: 'p1',
-                        inputs: {}
-                    };
-                    const docRef = db.collection('user_configs').doc(fbUser.uid);
-                    await docRef.set({ config: emptyState });
-                } catch (e) {
-                    console.error("Failed to reset Firestore state:", e);
-                }
-            }
-
-            localStorage.removeItem('unified_planner_state');
-            window.location.reload();
-        });
     }
 
     function syncAuthProfilesToInputs() {
@@ -3590,6 +3833,198 @@
             return false;
         }
     }
+
+    // Settings History Management
+    let settingsHistory = [];
+
+    function saveHistoryToStorage() {
+        localStorage.setItem('unified_planner_history', JSON.stringify(settingsHistory));
+    }
+
+    function loadHistoryFromStorage() {
+        const savedHistory = localStorage.getItem('unified_planner_history');
+        if (savedHistory) {
+            try {
+                settingsHistory = JSON.parse(savedHistory) || [];
+            } catch (e) {
+                console.error("Failed to load history from LocalStorage:", e);
+            }
+        }
+    }
+
+    async function saveHistoryToFirebase() {
+        if (!db || !fbUser) return;
+        try {
+            const docRef = db.collection('user_configs').doc(fbUser.uid);
+            await docRef.set({ history: settingsHistory }, { merge: true });
+        } catch (e) {
+            console.error("Failed to save history to Firebase:", e);
+        }
+    }
+
+    function renderSettingsHistory() {
+        const container = document.getElementById('settingsHistoryContainer');
+        if (!container) return;
+
+        if (!settingsHistory || settingsHistory.length === 0) {
+            container.innerHTML = `<p style="color: var(--muted); text-align: center; margin: 0; font-style: italic;">No saved history available yet.</p>`;
+            return;
+        }
+
+        // Sort: favorites first, then newest first
+        const sortedHistory = [...settingsHistory].sort((a, b) => {
+            const favA = a.favorite ? 1 : 0;
+            const favB = b.favorite ? 1 : 0;
+            if (favA !== favB) {
+                return favB - favA;
+            }
+            return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+
+        let html = '';
+        sortedHistory.forEach(record => {
+            html += `
+                <div class="history-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid var(--outline-variant); border-radius: var(--shape-md); background: var(--surface); transition: background 0.2s; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <button type="button" class="action-btn-favorite" onclick="toggleHistoryFavorite('${record.id}')" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1.0)'" aria-label="Toggle Favorite">
+                            <i class="${record.favorite ? 'fa-solid fa-star' : 'fa-regular fa-star'}" style="color: ${record.favorite ? '#f59e0b' : 'var(--outline)'};"></i>
+                        </button>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <span style="font-weight: 600; color: var(--text); font-size: 0.9rem;">${record.label}</span>
+                            <span style="font-size: 0.72rem; color: var(--muted);"><i class="fa-regular fa-calendar"></i> ${new Date(record.timestamp).toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="action-btn-restore" onclick="restoreHistorySettings('${record.id}')" style="background: var(--primary-container); color: var(--on-primary-container); border: none; padding: 6px 12px; border-radius: var(--shape-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-arrows-rotate"></i> Restore
+                        </button>
+                        <button type="button" class="action-btn-delete" onclick="deleteHistoryRecord('${record.id}')" style="background: #fee2e2; color: #991b1b; border: none; padding: 6px 12px; border-radius: var(--shape-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-trash-can"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    async function toggleHistoryFavorite(id) {
+        const record = settingsHistory.find(r => r.id === id);
+        if (!record) return;
+
+        record.favorite = !record.favorite;
+        saveHistoryToStorage();
+        await saveHistoryToFirebase();
+        renderSettingsHistory();
+    }
+
+    window.toggleHistoryFavorite = toggleHistoryFavorite;
+
+    // Form Change Detection & Save Button Toggle
+    let loadedStateSnapshot = null;
+
+    function compileCurrentFormState() {
+        const form = document.getElementById('onboardingForm');
+        if (!form) return '';
+        const stateObj = {};
+        const inputs = form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            if (input.id) {
+                stateObj[input.id] = input.type === 'checkbox' ? input.checked : input.value;
+            }
+        });
+        return JSON.stringify(stateObj);
+    }
+
+    function checkFormChanges() {
+        const form = document.getElementById('onboardingForm');
+        if (!form) return;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!submitBtn) return;
+
+        if (!loadedStateSnapshot) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            return;
+        }
+
+        const currentState = compileCurrentFormState();
+        if (currentState !== loadedStateSnapshot) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    function restoreHistorySettings(id) {
+        const record = settingsHistory.find(r => r.id === id);
+        if (!record) return;
+
+        showConfirm(
+            "Restore Settings",
+            "Are you sure you want to restore settings from this version? This will overwrite your active configuration.",
+            async () => {
+                const state = record.config;
+                userConfig = JSON.parse(JSON.stringify(state.userConfig)) || userConfig;
+                activeProfile = state.activeProfile || activeProfile;
+
+                // Reapply inputs to elements
+                if (state.inputs) {
+                    for (const [key, val] of Object.entries(state.inputs)) {
+                        const element = el[key];
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = val;
+                            } else {
+                                element.value = val;
+                            }
+                        }
+                    }
+                }
+
+                saveStateToStorage();
+                if (db && fbUser) {
+                    try {
+                        const docRef = db.collection('user_configs').doc(fbUser.uid);
+                        await docRef.set({ config: state }, { merge: true });
+                    } catch (e) {
+                        console.error("Failed to save restored state to Firebase:", e);
+                    }
+                }
+
+                syncAuthProfilesToInputs();
+                updateAll();
+                populateSettingsInputs();
+                showAlert("Success", "Settings restored successfully!", false, 2000);
+            },
+            "Restore Settings",
+            false
+        );
+    }
+
+    function deleteHistoryRecord(id) {
+        showConfirm(
+            "Delete History Record",
+            "Are you sure you want to delete this history record? This cannot be undone.",
+            async () => {
+                settingsHistory = settingsHistory.filter(r => r.id !== id);
+                saveHistoryToStorage();
+                await saveHistoryToFirebase();
+                renderSettingsHistory();
+                showAlert("Deleted", "History record deleted successfully.", false, 2000);
+            },
+            "Delete",
+            true
+        );
+    }
+
+    window.restoreHistorySettings = restoreHistorySettings;
+    window.deleteHistoryRecord = deleteHistoryRecord;
 
     /**
      * Tab 1: Portfolio Growth Projections & Canvas Chart Drawing
@@ -4453,11 +4888,15 @@
      */
     function getSSBaseMultiplierForProfile(targetAge, profile) {
         const age = parseInt(targetAge, 10);
-        const map = (profile === 'p1') 
-            ? { 62: 2744 / 4127, 63: 2970 / 4127, 64: 3208 / 4127, 65: 3519 / 4127, 66: 3826 / 4127, 67: 1.0, 68: 4377 / 4127, 69: 4725 / 4127, 70: 5186 / 4127 }
-            : { 62: 970 / 1536, 63: 1057 / 1536, 64: 1153 / 1536, 65: 1277 / 1536, 66: 1404 / 1536, 67: 1.0, 68: 1599 / 1536, 69: 1759 / 1536, 70: 2021 / 1536 };
+        const pConf = (profile === 'p1') ? userConfig.p1 : userConfig.p2;
+        const pia = parseFloat(pConf.pia) || 0;
+        const customEstimates = pConf.ssa_estimates || {};
+        const customVal = parseFloat(customEstimates[age]) || 0;
+
+        if (customVal > 0 && pia > 0) {
+            return customVal / pia;
+        }
         
-        if (map[age] !== undefined) return map[age];
         if (age === 67) return 1.00;
         if (age < 67) {
             const monthsEarly = (67 - age) * 12;
