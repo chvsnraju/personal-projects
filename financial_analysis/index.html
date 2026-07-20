@@ -3077,7 +3077,15 @@
                 fbApp = firebase.app();
             }
             auth = fbApp.auth();
-            db = fbApp.firestore('raju-planner');
+            db = fbApp.firestore();
+            try {
+                const modularDb = fbApp.container.getProvider('firestore').getImmediate({ identifier: 'raju-planner' });
+                if (modularDb) {
+                    db._delegate = modularDb;
+                }
+            } catch (err) {
+                console.warn("Could not bind raju-planner database instance:", err);
+            }
         } catch (e) {
             console.error("Failed to initialize Firebase:", e);
             setupDbConnection();
