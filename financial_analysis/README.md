@@ -73,7 +73,7 @@ To ensure accurate review by developers and AI agents, the table below categoriz
 | **User Profiles** | Names, Birth Month & Year | Primary (`p1`) and Spouse (`p2`). Ages are computed dynamically relative to current date. |
 | **Social Security Statements** | PIA & SSA Estimates | Primary and Spouse Primary Insurance Amount (PIA) at FRA (67), plus custom statement estimates for ages 62–70. |
 | **Account Balances** | 401(k), Roth IRA, HSA, Brokerage | Primary and spouse balances. Monarch sync updates matched retirement, Roth, and brokerage accounts; HSA remains manual. |
-| **Contributions & Matches** | Monthly Additions & Matches | 401(k) monthly contributions, employer match %, Roth IRA monthly additions, and Taxable Brokerage monthly additions. |
+| **Contributions & Matches** | Additions & Employer Matches | 401(k) employee & employer additions (bi-weekly, 26 pay periods/yr), HSA additions (bi-weekly), Roth IRA additions (monthly), and Brokerage additions (monthly). |
 | **Global Assumptions** | Return Rate (%) | Annual portfolio compound return rate (synced across all views). |
 | **Global Assumptions** | Inflation / COLA (%) | Annual inflation rate used for Cost-of-Living-Adjustments (COLA) and real-dollar purchasing power views. |
 | **Global Assumptions** | Withdrawal Tax Rate (%) | Effective tax rate on 401(k) / Tax-Deferred withdrawals in retirement. |
@@ -106,8 +106,15 @@ To ensure accurate review by developers and AI agents, the table below categoriz
            ▼
   Cloud Function: performMonarchSync()
            │
-           ├─► Matches account names/subtypes using generic rules plus MONARCH_ACCOUNT_RULES
-           ├─► Calculates aggregate totals for Primary & Spouse
+           ├─► Dynamically extracts spouse first name from user_configs/{userId}.config.userConfig.p2.name (e.g. "Anuradha")
+           ├─► Matches account names/subtypes using precedence:
+           │     1. MONARCH_ACCOUNT_RULES (explicit taxable/retirement/roth overrides)
+           │     2. HSA subtype / health savings keywords
+           │     3. Workplace 401(k)/403b/retirement patterns (prevents Roth 401k misclassification)
+           │     4. Standalone Roth IRA patterns
+           │     5. Taxable Brokerage / Investment accounts
+           ├─► Filters out excluded accounts (529, Education, Coverdell ESA, dependent accounts like "ritsika")
+           ├─► Calculates aggregate totals for Primary & Spouse and updates config.lastMonarchSync timestamp
            ├─► Updates user_configs/{userId}.config.inputs in 'raju-planner' database
            │
            └─► Automated Weekly Snapshot Check:
@@ -279,10 +286,11 @@ npx -y firebase-tools functions:secrets:set MONARCH_ACCOUNT_RULES
 ```json
 {
   "include": ["additional institution or plan"],
-  "exclude": ["529", "education"],
-  "spouse": ["spouse display-name keyword"],
+  "exclude": ["529", "education", "esa", "coverdell", "ritsika"],
+  "spouse": ["spouse", "anuradha"],
   "retirement": ["retirement account suffix"],
-  "taxable": ["taxable account suffix"]
+  "taxable": ["taxable account suffix"],
+  "roth": ["roth ira explicit account name"]
 }
 ```
 
