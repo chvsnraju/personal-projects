@@ -379,7 +379,9 @@ async function performMonarchSync(userId: string) {
 
     transaction.update(docRef, {
       "config.inputs": inputs,
-      "portfolio_history": portfolioHistory
+      "config.lastMonarchSync": now.toISOString(),
+      lastUpdated: now.toISOString(),
+      portfolio_history: portfolioHistory
     });
   });
 
@@ -389,6 +391,7 @@ async function performMonarchSync(userId: string) {
     success: true,
     relevantAccountsCount: targetAccounts.length,
     appliedAccountsCount,
+    lastMonarchSync: new Date().toISOString(),
     balances: {
       k401k: has401k ? Math.round(total401k) : null,
       roth: hasRoth ? Math.round(totalRoth) : null,

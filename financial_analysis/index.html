@@ -1507,46 +1507,49 @@
             <main class="content">
                 <section class="summary-grid-portfolio" aria-label="Portfolio metrics summary">
                     <!-- Row 1: Current Portfolio Values -->
-                    <div class="metric" style="grid-column: span 3;">
+                    <div class="metric" style="grid-column: span 3; border-left: 4px solid var(--blue); position: relative;">
+                        <span class="tag blue" style="position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 800; border-radius: 999px; padding: 2px 8px;">LIVE SYNCED</span>
                         <div class="metric-label">Current Gross Value</div>
                         <div class="metric-value" id="currentGrossTotal">$0</div>
                         <div class="metric-sub" id="currentGrossSub">Total starting balance</div>
                     </div>
-                    <div class="metric" style="grid-column: span 3;">
+                    <div class="metric" style="grid-column: span 3; border-left: 4px solid var(--cyan); position: relative;">
+                        <span class="tag cyan" style="position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 800; border-radius: 999px; padding: 2px 8px; background: #e0f7fa; color: #00838f;">CURRENT</span>
                         <div class="metric-label">Current After-Tax Value</div>
                         <div class="metric-value" id="currentAfterTaxTotal">$0</div>
                         <div class="metric-sub" id="currentAfterTaxSub">Current spendable balance</div>
                     </div>
 
                     <!-- Row 2: Projected Portfolio Values -->
-                    <div class="metric" style="grid-column: span 2;">
+                    <div class="metric" style="grid-column: span 2; border-left: 4px solid var(--green); position: relative;">
+                        <span class="tag green" style="position: absolute; top: 12px; right: 12px; font-size: 0.65rem; font-weight: 800; border-radius: 999px; padding: 2px 8px; background: #e8f5e9; color: #2e7d32;">FORECAST</span>
                         <div class="metric-label">Projected Gross Value</div>
                         <div class="metric-value" id="grossTotal">$0</div>
                         <div class="metric-sub" id="grossSub">Before exit taxes</div>
                     </div>
-                    <div class="metric" style="grid-column: span 2;">
+                    <div class="metric" style="grid-column: span 2; border-left: 4px solid var(--green); position: relative;">
                         <div class="metric-label">Projected After-Tax Value</div>
                         <div class="metric-value" id="afterTaxTotal">$0</div>
                         <div class="metric-sub" id="afterTaxSub">Spendable at selected horizon</div>
                     </div>
-                    <div class="metric" style="grid-column: span 2;">
+                    <div class="metric" style="grid-column: span 2; border-left: 4px solid var(--amber);">
                         <div class="metric-label">After-Tax (Today's Dollars)</div>
                         <div class="metric-value" id="realAfterTaxTotal">$0</div>
                         <div class="metric-sub" id="realAfterTaxSub">Inflation-discounted purchasing power</div>
                     </div>
 
                     <!-- Row 3: Contributions, Growth & Withdrawal Rate -->
-                    <div class="metric" style="grid-column: span 2;">
+                    <div class="metric" style="grid-column: span 2; border-left: 4px solid var(--violet);">
                         <div class="metric-label">Total Contributions</div>
                         <div class="metric-value" id="contributionTotal">$0</div>
                         <div class="metric-sub">Accumulated employee + employer additions</div>
                     </div>
-                    <div class="metric" style="grid-column: span 2;">
+                    <div class="metric" style="grid-column: span 2; border-left: 4px solid var(--violet);">
                         <div class="metric-label">Investment Growth</div>
                         <div class="metric-value" id="growthTotal">$0</div>
                         <div class="metric-sub" id="growthSub">Total compounded returns</div>
                     </div>
-                    <div class="metric" style="grid-column: span 2;">
+                    <div class="metric" style="grid-column: span 2; border-left: 4px solid var(--primary);">
                         <div class="metric-label">Retirement Withdrawal Rate</div>
                         <div class="metric-value" id="withdrawalRateMetric">0.0%</div>
                         <div class="metric-sub" id="withdrawalRateSub">Drawdown divided by asset base</div>
@@ -2381,10 +2384,12 @@
                                     <div class="field">
                                         <label for="k401Biweekly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Bi-Weekly Contribution</label>
                                         <div class="input-wrapper"><span>$</span><input id="k401Biweekly" type="number" min="0" step="any" value="942.31"></div>
+                                        <div id="k401AnnualSub" style="font-size: 0.68rem; font-weight: 600; color: var(--blue); margin-top: 3px;">~$24,500 / yr</div>
                                     </div>
                                     <div class="field">
                                         <label for="k401MatchBiweekly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Employer Match / bi-weekly</label>
                                         <div class="input-wrapper"><span>$</span><input id="k401MatchBiweekly" type="number" min="0" step="any" value="0"></div>
+                                        <div id="k401MatchAnnualSub" style="font-size: 0.68rem; font-weight: 600; color: var(--muted); margin-top: 3px;">$0 / yr</div>
                                     </div>
                                     <div class="field">
                                         <label for="retirementTax" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Withdrawal Tax Rate</label>
@@ -2395,7 +2400,7 @@
  
                             <!-- Roth IRA Card -->
                             <div class="account-card" style="border: 1px solid var(--outline-variant); border-left: 4px solid var(--green); background: var(--surface); border-radius: var(--shape-md); padding: 20px; box-shadow: var(--elevation-1);">
-                                <div class="account-heading" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                                <div class="account-heading" style="display: flex; justify-space-between; align-items: center; margin-bottom: 14px;">
                                     <strong style="font-size: 0.95rem; color: var(--text);"><i class="fa-solid fa-piggy-bank"></i> Roth IRA / Tax-Free</strong>
                                     <span class="tag green" style="font-size: 0.65rem; font-weight: 800; border-radius: 999px; padding: 2px 8px; background: #e8f5e9; color: #2e7d32;">Tax-Free</span>
                                 </div>
@@ -2411,10 +2416,12 @@
                                     <div class="field">
                                         <label for="rothMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Primary Monthly Addition</label>
                                         <div class="input-wrapper"><span>$</span><input id="rothMonthly" type="number" min="0" step="any" value="625.00"></div>
+                                        <div id="rothAnnualSub" style="font-size: 0.68rem; font-weight: 600; color: var(--green); margin-top: 3px;">~$7,500 / yr</div>
                                     </div>
                                     <div class="field">
                                         <label for="rothMonthlySpouse" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Spouse Monthly Addition</label>
                                         <div class="input-wrapper"><span>$</span><input id="rothMonthlySpouse" type="number" min="0" step="any" value="625.00"></div>
+                                        <div id="rothSpouseAnnualSub" style="font-size: 0.68rem; font-weight: 600; color: var(--green); margin-top: 3px;">~$7,500 / yr</div>
                                     </div>
                                 </div>
                             </div>
@@ -2433,6 +2440,7 @@
                                     <div class="field">
                                         <label for="hsaBiweekly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Bi-Weekly Addition</label>
                                         <div class="input-wrapper"><span>$</span><input id="hsaBiweekly" type="number" min="0" step="any" value="336.54"></div>
+                                        <div id="hsaAnnualSub" style="font-size: 0.68rem; font-weight: 600; color: var(--cyan); margin-top: 3px;">~$8,750 / yr</div>
                                     </div>
                                 </div>
                             </div>
@@ -2459,6 +2467,7 @@
                                     <div class="field">
                                         <label for="taxableMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
                                         <div class="input-wrapper"><span>$</span><input id="taxableMonthly" type="number" min="0" step="any" value="0"></div>
+                                        <div id="taxableAnnualSub" style="font-size: 0.68rem; font-weight: 600; color: var(--violet); margin-top: 3px;">$0 / yr</div>
                                     </div>
                                     <div class="field">
                                         <label for="taxDrag" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Annual Tax Drag</label>
@@ -2475,9 +2484,12 @@
                     </div>
 
                     <div class="onboarding-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
-                        <button type="button" class="reset-btn" id="syncMonarchBtn" aria-label="Sync Monarch Money" style="min-height: 42px; border-radius: var(--shape-md); padding: 0 20px; border-color: var(--teal); color: var(--teal); background: transparent; display: flex; align-items: center; gap: 8px; font-weight: 600;">
-                            <i class="fa-solid fa-arrows-rotate"></i> Sync Monarch Money
-                        </button>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 4px;">
+                            <button type="button" class="reset-btn" id="syncMonarchBtn" aria-label="Sync Monarch Money" style="min-height: 42px; border-radius: var(--shape-md); padding: 0 20px; border-color: var(--teal); color: var(--teal); background: transparent; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                                <i class="fa-solid fa-arrows-rotate"></i> Sync Monarch Money
+                            </button>
+                            <span id="monarchSyncTime" style="font-size: 0.68rem; color: var(--muted); margin-top: 4px; font-weight: 500;"></span>
+                        </div>
                         <button type="button" class="reset-btn" id="onboardingResetBtn" aria-label="Reset All Data" style="min-height: 42px; border-radius: var(--shape-md); padding: 0 20px;">
                             <i class="fa-solid fa-rotate-left"></i> Reset Defaults
                         </button>
@@ -3128,6 +3140,9 @@
                     }
                 }
             }
+            if (state.lastMonarchSync) {
+                updateMonarchSyncTimeDisplay(state.lastMonarchSync);
+            }
             return true;
         } catch (e) {
             console.error("Failed to load state from Firestore:", e);
@@ -3666,7 +3681,10 @@
                 
                 try {
                     const syncFn = firebase.functions().httpsCallable('syncBalancesOnDemand');
-                    await syncFn();
+                    const res = await syncFn();
+                    if (res && res.data && res.data.lastMonarchSync) {
+                        updateMonarchSyncTimeDisplay(res.data.lastMonarchSync);
+                    }
                     await showAlert("Success", "Monarch Money data synced successfully! Click OK or wait a moment to reload...", false, 3500);
                     window.location.reload();
                 } catch (err) {
@@ -5242,8 +5260,47 @@
         });
     }
 
+    function updateAnnualContributionBadges() {
+        const k401Bw = Math.max(0, num('k401Biweekly'));
+        const k401Mb = Math.max(0, num('k401MatchBiweekly'));
+        const rothM = Math.max(0, num('rothMonthly'));
+        const rothMs = Math.max(0, num('rothMonthlySpouse'));
+        const hsaBw = Math.max(0, num('hsaBiweekly'));
+        const taxM = Math.max(0, num('taxableMonthly'));
+
+        const setSub = (id, text) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = text;
+        };
+
+        setSub('k401AnnualSub', `(~${money(k401Bw * 26)} / yr)`);
+        setSub('k401MatchAnnualSub', `(~${money(k401Mb * 26)} / yr)`);
+        setSub('rothAnnualSub', `(~${money(rothM * 12)} / yr)`);
+        setSub('rothSpouseAnnualSub', `(~${money(rothMs * 12)} / yr)`);
+        setSub('hsaAnnualSub', `(~${money(hsaBw * 26)} / yr)`);
+        setSub('taxableAnnualSub', `(~${money(taxM * 12)} / yr)`);
+    }
+
+    function updateMonarchSyncTimeDisplay(isoTimestamp) {
+        const syncEl = document.getElementById('monarchSyncTime');
+        if (!syncEl) return;
+        if (!isoTimestamp) {
+            syncEl.textContent = '';
+            return;
+        }
+        try {
+            const d = new Date(isoTimestamp);
+            const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            syncEl.textContent = `Last synced: ${dateStr} at ${timeStr}`;
+        } catch {
+            syncEl.textContent = '';
+        }
+    }
+
     function runPortfolioProjections() {
         validateRetirementAge();
+        updateAnnualContributionBadges();
         const result = projectPortfolio();
         const annualReturn = result.annualReturn;
         const retirementAge = Math.max(result.currentAge, Math.round(num('targetAge')));

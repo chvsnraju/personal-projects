@@ -348,7 +348,9 @@ async function performMonarchSync(userId) {
         }
         transaction.update(docRef, {
             "config.inputs": inputs,
-            "portfolio_history": portfolioHistory
+            "config.lastMonarchSync": now.toISOString(),
+            lastUpdated: now.toISOString(),
+            portfolio_history: portfolioHistory
         });
     });
     console.info("Firestore balance update committed successfully.");
@@ -356,6 +358,7 @@ async function performMonarchSync(userId) {
         success: true,
         relevantAccountsCount: targetAccounts.length,
         appliedAccountsCount,
+        lastMonarchSync: new Date().toISOString(),
         balances: {
             k401k: has401k ? Math.round(total401k) : null,
             roth: hasRoth ? Math.round(totalRoth) : null,
