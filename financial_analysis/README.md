@@ -6,41 +6,41 @@ A high-performance, responsive single-page web application and serverless platfo
 
 ## 🏛️ System Architecture
 
-The application uses a hybrid serverless architecture combining a zero-compilation static client SPA with GCP/Firebase Cloud Functions for automated financial aggregation.
+The application uses a hybrid serverless architecture combining a zero-compilation static client SPA hosted on **Firebase Hosting** with **GCP/Firebase Cloud Functions (2nd Gen)** for automated financial data aggregation.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                                FRONTEND CLIENT                                  │
-│  index.html (Single Page App - Vanilla JS, CSS3, Chart.js, FontAwesome)         │
-│  - Interactive Projections, SS Breakeven Tool, Drawdown Simulator, History      │
-└────────────────────────┬────────────────────────────────┬───────────────────────┘
-                         │                                │
-        Firebase Auth    │                                │ Firestore Read/Write
-          (Google OAuth) │                                │ Target: 'raju-planner'
-                         ▼                                ▼
-              ┌─────────────────────┐          ┌──────────────────────────┐
-              │    Firebase Auth    │          │  Cloud Firestore (GCP)   │
-              │  Identity Platform  │          │  Database: raju-planner  │
-              └─────────────────────┘          │  Collection: user_configs│
-                                               └────────────▲─────────────┘
-                                                            │
-                                         Firestore Write    │ Automated Sync &
-                                       Target: raju-planner │ Snapshots
-                                                            │
-                                               ┌────────────┴─────────────┐
-                                               │   FIREBASE CLOUD FUNCTIONS│
-                                               │   Node.js 22 (2nd Gen)   │
-                                               │  - syncBalancesOnDemand  │
-                                               │  - dailyMonarchSync      │
-                                               └────────────▲─────────────┘
-                                                            │
-                                       GCP Secret Manager   │ GraphQL API Fetch
-                                       Credentials          │ (monarch-money-ts)
-                                                            │
-                                               ┌────────────┴─────────────┐
-                                               │   Monarch Money API      │
-                                               │   Financial Accounts     │
-                                               └──────────────────────────┘
+```mermaid
+graph TD
+    subgraph Client["Frontend Client (Firebase Hosting)"]
+        UI["index.html (Vanilla ES6+, CSS3, Chart.js)"]
+        State["In-Memory State & Form Controls"]
+        LocalStore["LocalStorage (Theme & Tab State)"]
+    end
+
+    subgraph Auth["Identity & Access"]
+        FBAuth["Firebase Auth (Google OAuth)"]
+    end
+
+    subgraph Database["Database Layer (GCP Firestore)"]
+        FS["Cloud Firestore (Database: 'raju-planner')<br>Collection: user_configs/{userId}"]
+    end
+
+    subgraph Serverless["Serverless Backend (Cloud Functions Gen 2 - Node 22)"]
+        Callable["syncBalancesOnDemand (HTTPS Callable)"]
+        Cron["dailyMonarchSync (Cloud Scheduler - 5:00 AM ET)"]
+        Secrets["GCP Secret Manager<br>(Monarch Email, Password, MFA, Account Rules)"]
+    end
+
+    subgraph External["External APIs"]
+        Monarch["Monarch Money GraphQL API"]
+    end
+
+    UI -->|Google Sign-In| FBAuth
+    UI <-->|Read / Write Config & History| FS
+    UI -->|Trigger Sync| Callable
+    Cron -->|Scheduled Daily Sync| Callable
+    Callable -->|Fetch Credentials| Secrets
+    Callable -->|Authenticated GraphQL Query| Monarch
+    Callable -->|Update Balances & Snapshots| FS
 ```
 
 ---
@@ -50,15 +50,92 @@ The application uses a hybrid serverless architecture combining a zero-compilati
 | Layer | Technology / Library | Purpose |
 | :--- | :--- | :--- |
 | **Frontend Framework** | Vanilla HTML5, ES6+ JavaScript | Zero-build, instant loading static client application |
-| **Styling & Design System** | Vanilla CSS3 (Custom Design Tokens) | Modern glassmorphism UI, light/dark mode support, responsive grid |
-| **Visualizations** | Chart.js | Dynamic canvas charts for portfolio projections & Social Security breakeven |
+| **Styling & Design System** | Vanilla CSS3 (Custom Design Tokens) | Glassmorphism UI, light/dark mode support, responsive grid, smooth animations |
+| **Visualizations** | Canvas API & Chart.js | Dynamic canvas charts for portfolio projections, hover crosshairs, & SS breakeven |
 | **Authentication** | Firebase Auth SDK (v10 compat) | Google OAuth session management |
-| **Database** | Cloud Firestore (`raju-planner` instance) | Remote document persistence for user states & history logs |
+| **Database** | Cloud Firestore (`raju-planner` instance) | Remote document persistence for user states & portfolio snapshot history |
 | **Cloud Hosting** | Firebase Hosting | CDN hosting under domain `https://rajuplanner.web.app` |
 | **Serverless Functions** | Firebase Cloud Functions (2nd Gen, Node 22) | Automated background sync & GraphQL data integration |
 | **External API Sync** | `monarch-money-ts` GraphQL Client | Fetch real-time account balances from Monarch Money |
 | **Secrets Manager** | GCP Secret Manager | Securely stores Monarch credentials & target user IDs |
 | **Scheduler** | GCP Cloud Scheduler | Triggers daily Monarch sync cron at 5:00 AM ET (`0 5 * * *`) |
+| **Accessibility & UX** | WAI-ARIA & Keyboard Shortcuts | Modal dialog accessibility, `Escape` dismissal, `⌘S` / `Ctrl+S` snapshot shortcut |
+
+---
+
+## 🔄 Monarch Aggregation & Classification Pipeline
+
+The diagram below outlines how the serverless background worker authenticates with Monarch Money, extracts account balances, applies regex & subtype precedence rules, categorizes holdings into Primary and Spouse accounts, and automatically records weekly net worth snapshots.
+
+```mermaid
+flowchart LR
+    subgraph Fetch["1. Authentication & Extraction"]
+        A[Cloud Function Trigger] --> B["Monarch GraphQL API Query"]
+        B --> C["Raw Accounts (Fidelity, Investments, IRAs)"]
+    end
+
+    subgraph Filter["2. Account Filtering & Classification"]
+        C --> D{"Excluded Rule Match?"}
+        D -- Yes (529, Education, ESA) --> E[Filtered Out]
+        D -- No --> F{"Match Account Precedence"}
+
+        F -->|Rule 1: Taxable Override / Subtype| G["Personal Brokerage"]
+        F -->|Rule 2: Workplace 401k / 403b / IRA| H["Tax-Deferred 401(k)"]
+        F -->|Rule 3: Standalone Roth IRA| I["Tax-Free Roth IRA"]
+        F -->|Rule 4: Subtype HSA| J["HSA (Preserved Manual)"]
+    end
+
+    subgraph Split["3. Spousal Assignment"]
+        G & H & I --> K{"Spouse Name Match?"}
+        K -- Primary --> L["Primary Balances"]
+        K -- Spouse --> M["Spouse Balances"]
+    end
+
+    subgraph Store["4. Database Persistence"]
+        L & M --> N["Update Firestore (user_configs/{userId})"]
+        N --> O{"Latest Snapshot >= 7 Days Old?"}
+        O -- Yes --> P["Append Weekly Snapshot to portfolio_history"]
+        O -- No --> Q["Complete Sync"]
+    end
+```
+
+---
+
+## 📊 Application Calculation & Drawdown Engine Flow
+
+The core application operates an interconnected financial simulation pipeline across portfolio growth, Social Security claiming optimization, and tax-aware retirement drawdown sequencing:
+
+```mermaid
+flowchart TD
+    subgraph Inputs["1. Input Parameters"]
+        P1["Primary Profile (Age, PIA, SSA Estimates, 401k, Roth, Brokerage)"]
+        P2["Spouse Profile (Age, PIA, SSA Estimates, 401k, Roth, Brokerage)"]
+        Assumptions["Global Assumptions (Return %, COLA %, Retirement Tax %, Tax Drag)"]
+    end
+
+    subgraph Engine1["2. Portfolio Projection Engine"]
+        P1 & P2 & Assumptions --> Growth["Annual Compound Growth<br>(401k + Roth + HSA + Brokerage Step-Up Additions)"]
+        Growth --> EndBal["Projected Ending Balances & Gross Net Worth"]
+    end
+
+    subgraph Engine2["3. Social Security Optimization Engine"]
+        SSA["PIA at Age 67 (FRA)"] --> ClaimAge["Claiming Age (62 - 70) Multipliers"]
+        ClaimAge --> TaxableSSA["Provisional Income Tier Calculation<br>(50% tier @ $32k, 85% tier @ $44k)"]
+        TaxableSSA --> NetSSA["Net After-Tax Social Security Income"]
+    end
+
+    subgraph Engine3["4. Retirement Drawdown Engine"]
+        EndBal & NetSSA --> TargetSpend["Inflation-Adjusted Spending Target"]
+        TargetSpend --> Order["Tax-Optimized Withdrawal Sequencing:<br>1. Taxable Brokerage (Capital Gains)<br>2. 401(k) / IRA (Ordinary Income)<br>3. Roth IRA (Tax-Free)"]
+        Order --> Depletion["Asset Depletion Age & Final Estate Balance"]
+    end
+
+    subgraph Output["5. Visualizations & Reports"]
+        Depletion --> Canvas["Canvas Growth Chart & Interactive Tooltip Crosshairs"]
+        Depletion --> CSV["Spreadsheet Export (Export CSV)"]
+        Depletion --> Snapshots["Weekly Portfolio Snapshots Ledger (⌘S / Ctrl+S)"]
+    end
+```
 
 ---
 
@@ -74,12 +151,12 @@ To ensure accurate review by developers and AI agents, the table below categoriz
 | **Social Security Statements** | PIA & SSA Estimates | Primary and Spouse Primary Insurance Amount (PIA) at FRA (67), plus custom statement estimates for ages 62–70. |
 | **Account Balances** | 401(k), Roth IRA, HSA, Brokerage | Primary and spouse balances. Monarch sync updates matched retirement, Roth, and brokerage accounts; HSA remains manual. |
 | **Contributions & Matches** | Additions & Employer Matches | 401(k) employee & employer additions (bi-weekly, 26 pay periods/yr), HSA additions (bi-weekly), Roth IRA additions (monthly), and Brokerage additions (monthly). |
-| **Global Assumptions** | Return Rate (%) | Annual portfolio compound return rate (synced across all views). |
+| **Global Assumptions** | Return Rate (%) | Annual portfolio compound return rate (synced across all views). Quick preset buttons available (8%, 9%, 10%, 11.2%, 12%). |
 | **Global Assumptions** | Inflation / COLA (%) | Annual inflation rate used for Cost-of-Living-Adjustments (COLA) and real-dollar purchasing power views. |
 | **Global Assumptions** | Withdrawal Tax Rate (%) | Effective tax rate on 401(k) / Tax-Deferred withdrawals in retirement. |
 | **Tax Settings** | Tax Drag & Capital Gains Rate | Annual drag % and final capital gains tax % on Taxable Brokerage accounts. |
 | **Retirement Parameters** | Target Retirement Age | Claiming age for Social Security, stop working age, and life expectancy (Primary & Spouse). |
-| **History & Snapshots** | Settings History & Portfolio History | User configurations version ledger and weekly portfolio net worth snapshots. |
+| **History & Snapshots** | Settings History & Portfolio History | User configurations version ledger and weekly portfolio net worth snapshots. Quick keyboard trigger via `⌘S` / `Ctrl+S`. |
 
 ### 2. Hardcoded / Financial Baseline Constants
 
@@ -92,141 +169,6 @@ To ensure accurate review by developers and AI agents, the table below categoriz
 | **401(k) Limit (2026)** | $24,500; $32,500 at 50+; $35,750 at ages 60-63 | IRS annual employee contribution limits. Employer match is modeled separately and is not capped by this employee limit. |
 | **IRA Limit (2026)** | $7,500; $8,600 at 50+ | IRS annual contribution limits. Roth income eligibility phase-outs are not modeled. |
 | **Family HSA Limit (2026)** | $8,750 plus $1,000 per eligible spouse age 55+ | Assumes family HDHP coverage and combines household catch-up amounts for projection purposes. |
-
----
-
-## 🔄 Data Sync & Serverless Pipelines
-
-### 1. Monarch Money GraphQL Aggregation Pipeline
-
-```
-  Monarch Money GraphQL API
-           │
-           │ (Authenticated via MONARCH_EMAIL, MONARCH_PASSWORD, MONARCH_MFA_SECRET)
-           ▼
-  Cloud Function: performMonarchSync()
-           │
-           ├─► Dynamically extracts spouse first name from user_configs/{userId}.config.userConfig.p2.name (e.g. "Anuradha")
-           ├─► Matches account names/subtypes using precedence:
-           │     1. MONARCH_ACCOUNT_RULES (explicit taxable/retirement/roth overrides)
-           │     2. HSA subtype / health savings keywords
-           │     3. Workplace 401(k)/403b/retirement patterns (prevents Roth 401k misclassification)
-           │     4. Standalone Roth IRA patterns
-           │     5. Taxable Brokerage / Investment accounts
-           ├─► Filters out excluded accounts (529, Education, Coverdell ESA, dependent accounts like "ritsika")
-           ├─► Calculates aggregate totals for Primary & Spouse and updates config.lastMonarchSync timestamp
-           ├─► Updates user_configs/{userId}.config.inputs in 'raju-planner' database
-           │
-           └─► Automated Weekly Snapshot Check:
-               If latest snapshot in portfolio_history is >= 7 days old,
-               appends new snapshot to portfolio_history array.
-```
-
-### 2. Firestore Multi-Database Binding (Client Fix)
-
-The web client uses the pinned Firebase JS SDK v10 compat build. Compat does not expose a public named-database constructor, so the client binds its delegate to **`raju-planner`**:
-
-```javascript
-db = fbApp.firestore();
-const modularDb = fbApp.container.getProvider('firestore').getImmediate({ identifier: 'raju-planner' });
-if (modularDb) {
-    db._delegate = modularDb;
-}
-```
-
-Similarly, the Cloud Functions backend passes `"raju-planner"` to Node Admin SDK:
-```typescript
-const db = getFirestore("raju-planner");
-```
-
-The client binding uses Firebase internals and must be regression-tested before changing the CDN SDK version. A future migration should use the modular SDK's public named-database API.
-
----
-
-## 🗄️ Database Data Schema (`raju-planner`)
-
-Document Path: `user_configs/{userId}`
-
-```json
-{
-  "config": {
-    "userConfig": {
-      "p1": {
-        "name": "Primary",
-        "birthMonth": 1,
-        "birthYear": 1980,
-        "age": 46,
-        "pia": 3000,
-        "salary": 100000,
-        "ssa_estimates": {
-          "62": 2100, "63": 2250, "64": 2400, "65": 2600,
-          "66": 2800, "68": 3240, "69": 3480, "70": 3720
-        }
-      },
-      "p2": {
-        "name": "Spouse",
-        "birthMonth": 3,
-        "birthYear": 1982,
-        "age": 44,
-        "pia": 1800,
-        "salary": 75000,
-        "ssa_estimates": {
-          "62": 1260, "63": 1350, "64": 1440, "65": 1560,
-          "66": 1680, "68": 1944, "69": 2088, "70": 2232
-        }
-      },
-      "defaults": {
-        "return": 6.0,
-        "cola": 3.0,
-        "tax": 20.0
-      }
-    },
-    "inputs": {
-      "k401Balance": "250000",
-      "k401BalanceSpouse": "100000",
-      "rothBalance": "50000",
-      "rothBalanceSpouse": "30000",
-      "hsaBalance": "30000",
-      "taxableBalance": "150000",
-      "taxableBalanceSpouse": "50000",
-      "retirementTax": "20"
-    }
-  },
-  "history": [
-    {
-      "id": "hist_1784500000000",
-      "timestamp": "2026-07-19T22:00:00.000Z",
-      "label": "Saved Configuration v1",
-      "favorite": true
-    }
-  ],
-  "portfolio_history": [
-    {
-      "id": "snap_1784500000000",
-      "timestamp": "2026-07-20T05:00:00.000Z",
-      "dateLabel": "Jul 20, 2026",
-      "note": "Automated Weekly Snapshot (Monarch Sync)",
-      "favorite": false,
-      "balances": {
-        "k401P1": 250000,
-        "k401P2": 100000,
-        "rothP1": 50000,
-        "rothP2": 30000,
-        "hsa": 30000,
-        "taxableP1": 150000,
-        "taxableP2": 50000
-      },
-      "totals": {
-        "k401Total": 350000,
-        "rothTotal": 80000,
-        "hsaTotal": 30000,
-        "taxableTotal": 200000,
-        "netWorth": 660000
-      }
-    }
-  ]
-}
-```
 
 ---
 
@@ -249,75 +191,25 @@ The `syncBalancesOnDemand` callable requires Firebase authentication and compare
 
 ---
 
-## Local Development
+## 🚀 Local Development & Deployment
 
-Prerequisites: Node.js 22, npm, and Firebase CLI authentication for emulator or deployment commands.
+Prerequisites: Node.js 22, npm, and Firebase CLI.
 
 ```bash
-cp config.json.example config.json
+# 1. Build Cloud Functions
 cd functions
 npm ci
-npm run lint
 npm run build
+
+# 2. Deploy Everything to Firebase
+npx -y firebase-tools deploy
 ```
 
-Fill `config.json` with the Firebase web configuration for local static hosting. Firebase web API keys identify a project and are not authorization secrets; Firestore rules and Firebase Auth enforce access. Do not place Monarch credentials or account rules in this file.
+Production Web Host: [https://rajuplanner.web.app](https://rajuplanner.web.app)
 
-Serve the repository root with a local HTTP server so `config.json` can be fetched. For example, from the project root:
+---
 
-```bash
-npx -y serve .
-```
-
-## Secrets
-
-Set all Functions secrets before deployment:
-
-```bash
-npx -y firebase-tools functions:secrets:set MONARCH_EMAIL
-npx -y firebase-tools functions:secrets:set MONARCH_PASSWORD
-npx -y firebase-tools functions:secrets:set MONARCH_MFA_SECRET
-npx -y firebase-tools functions:secrets:set TARGET_USER_ID
-npx -y firebase-tools functions:secrets:set MONARCH_ACCOUNT_RULES
-```
-
-`MONARCH_ACCOUNT_RULES` is a JSON object. Matching is case-insensitive and each array contains substrings:
-
-```json
-{
-  "include": ["additional institution or plan"],
-  "exclude": ["529", "education", "esa", "coverdell", "ritsika"],
-  "spouse": ["spouse", "anuradha"],
-  "retirement": ["retirement account suffix"],
-  "taxable": ["taxable account suffix"],
-  "roth": ["roth ira explicit account name"]
-}
-```
-
-## Deployment
-
-### 1. Build Cloud Functions TypeScript
-```bash
-cd functions
-npm run build
-```
-
-### 2. Deploy Cloud Functions
-```bash
-npx -y firebase-tools deploy --only functions
-```
-
-### 3. Deploy Firestore Rules and Indexes
-```bash
-npx -y firebase-tools deploy --only firestore
-```
-
-### 4. Deploy Web Application (Firebase Hosting)
-```bash
-npx -y firebase-tools deploy --only hosting:rajuplanner
-```
-
-## Model Scope and Limitations
+## ⚠️ Model Scope and Limitations
 
 - Results are deterministic planning estimates, not financial, tax, or Social Security advice.
 - FRA is fixed at 67; profiles born before 1960 require a birth-year-specific FRA implementation.
