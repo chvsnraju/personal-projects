@@ -2285,7 +2285,7 @@
                                 <label for="salary2">Ongoing Annual Salary</label>
                                 <div class="input-wrapper">
                                     <span>$</span>
-                                    <input type="number" id="salary2" value="75000" placeholder="0.00">
+                                    <input type="number" id="salary2" value="0" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
@@ -2409,7 +2409,7 @@
                                     </div>
                                     <div class="field">
                                         <label for="taxableBasis" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Cost Basis</label>
-                                        <div class="input-wrapper"><span>$</span><input id="taxableBasis" type="number" min="0" step="any" value="150000"></div>
+                                        <div class="input-wrapper"><span>$</span><input id="taxableBasis" type="number" min="0" step="any" value="0"></div>
                                     </div>
                                     <div class="field">
                                         <label for="taxableMonthly" style="font-size: 0.74rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 4px;">Monthly Addition</label>
@@ -3556,7 +3556,7 @@
             const bwUnder50 = parseFloat((limit401_under50 / 26).toFixed(2));
             const bwOver50 = parseFloat((limit401_over50 / 26).toFixed(2));
 
-            if (val401 === 0 || val401 === bwUnder50 || val401 === bwOver50) {
+            if (val401 === bwUnder50 || val401 === bwOver50) {
                 const limit401 = get401kContributionLimit(age1);
                 el.k401Biweekly.value = (limit401 / 26).toFixed(2);
             }
@@ -3565,14 +3565,14 @@
             const limitRoth_under50 = IRS_2026_IRA_LIMIT;
             const limitRoth_over50 = IRS_2026_IRA_AGE50_LIMIT;
             const valRoth1 = parseFloat(el.rothMonthly.value) || 0;
-            if (valRoth1 === 0 || valRoth1 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth1 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
+            if (valRoth1 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth1 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
                 const limitRoth1 = getIraContributionLimit(age1);
                 el.rothMonthly.value = (limitRoth1 / 12).toFixed(2);
             }
 
             // Roth Spouse
             const valRoth2 = parseFloat(el.rothMonthlySpouse.value) || 0;
-            if (valRoth2 === 0 || valRoth2 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth2 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
+            if (valRoth2 === parseFloat((limitRoth_under50 / 12).toFixed(2)) || valRoth2 === parseFloat((limitRoth_over50 / 12).toFixed(2))) {
                 const limitRoth2 = getIraContributionLimit(hasSpouse ? age2 : 0);
                 el.rothMonthlySpouse.value = (limitRoth2 / 12).toFixed(2);
             }
@@ -3584,7 +3584,7 @@
             const bwHsaUnder55 = parseFloat((limitHsa_under55 / 26).toFixed(2));
             const bwHsaOver55 = parseFloat((limitHsa_over55 / 26).toFixed(2));
 
-            if (valHsa === 0 || valHsa === bwHsaUnder55 || valHsa === bwHsaOver55) {
+            if (valHsa === bwHsaUnder55 || valHsa === bwHsaOver55) {
                 const limitHsa = getHsaFamilyContributionLimit(age1, age2, hasSpouse);
                 el.hsaBiweekly.value = (limitHsa / 26).toFixed(2);
             }
